@@ -1,4 +1,21 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+
+// Screens
+import {
+  routes,
+  Home,
+  Pomodoro,
+  TodoList,
+  HabitTracker,
+  Graphs,
+  Settings,
+} from './screens'
+
 import { Navbar, NavItem } from './components/nav'
 
 import { ReactComponent as PomIcon } from './icons/pomodoro.svg'
@@ -11,16 +28,37 @@ import { ReactComponent as SettingsIcon } from './icons/settings.svg'
 function App() {
   return (
     <div className="light">
-      <Navbar>
-        <NavItem Icon={<PomIcon />} />
-        <NavItem Icon={<TodoIcon />} />
-        <NavItem Icon={<HabitIcon />} />
-        <NavItem Icon={<GraphIcon />} />
-        <NavItem Icon={<SettingsIcon />} />
-      </Navbar>
-      <main>
-        Hello,World
-      </main>
+      <Router>
+        <Navbar>
+          <NavItem path={routes.POMODORO} Icon={<PomIcon />} />
+          <NavItem path={routes.TODOLIST} Icon={<TodoIcon />} />
+          <NavItem path={routes.HABITTRACKER} Icon={<HabitIcon />} />
+          <NavItem path={routes.GRAPHS} Icon={<GraphIcon />} />
+          <NavItem path={routes.SETTINGS} Icon={<SettingsIcon />} />
+        </Navbar>
+        <main>
+          <Switch>
+            <Route path={routes.POMODORO}>
+              <Pomodoro />
+            </Route>
+            <Route path={routes.TODOLIST}>
+              <TodoList />
+            </Route>
+            <Route path={routes.HABITTRACKER}>
+              <HabitTracker />
+            </Route>
+            <Route path={routes.GRAPHS}>
+              <Graphs />
+            </Route>
+            <Route path={routes.SETTINGS}>
+              <Settings />
+            </Route>
+            <Route path={routes.HOME}>
+              <Home />
+            </Route>
+          </Switch>
+        </main>
+      </Router>
     </div>
   );
 }
