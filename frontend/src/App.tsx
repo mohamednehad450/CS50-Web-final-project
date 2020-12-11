@@ -1,8 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
+  BrowserRouter as Router, 
 } from "react-router-dom";
 
 // Screens
@@ -14,6 +12,7 @@ import {
   HabitTracker,
   Graphs,
   Settings,
+  Screen
 } from './screens'
 
 import { Navbar, NavItem } from './components/nav'
@@ -37,26 +36,47 @@ function App() {
           <NavItem path={routes.SETTINGS} Icon={<SettingsIcon />} />
         </Navbar>
         <main>
-          <Switch>
-            <Route path={routes.POMODORO}>
-              <Pomodoro />
-            </Route>
-            <Route path={routes.TODOLIST}>
-              <TodoList />
-            </Route>
-            <Route path={routes.HABITTRACKER}>
-              <HabitTracker />
-            </Route>
-            <Route path={routes.GRAPHS}>
-              <Graphs />
-            </Route>
-            <Route path={routes.SETTINGS}>
-              <Settings />
-            </Route>
-            <Route path={routes.HOME}>
-              <Home />
-            </Route>
-          </Switch>
+          <Screen
+            route={routes.HOME}
+            exact
+            lazy
+            unmountOnExit
+          >
+            <Home />
+          </Screen>
+          <Screen
+            route={routes.POMODORO}
+            lazy
+          >
+            <Pomodoro />
+          </Screen>
+          <Screen
+            route={routes.TODOLIST}
+            lazy
+          >
+            <TodoList />
+          </Screen>
+          <Screen
+            route={routes.GRAPHS}
+            lazy
+            unmountOnExit
+          >
+            <Graphs />
+          </Screen>
+          <Screen
+            route={routes.HABITTRACKER}
+            lazy
+            unmountOnExit
+          >
+            <HabitTracker />
+          </Screen>
+          <Screen
+            route={routes.SETTINGS}
+            lazy
+            unmountOnExit
+          >
+            <Settings />
+          </Screen>
         </main>
       </Router>
     </div>

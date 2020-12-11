@@ -11,8 +11,9 @@ const TodoList = () => {
     }, [])
     const [expanded, setExpanded] = useState(-1);
     const todosLeft = todos.filter(t => !t.checked).length
+
     return (
-        <div className="container">
+        <>
             <div className="header">
                 <div className="header-titles">
                     <span className="header-title">Todo List</span>
@@ -40,7 +41,7 @@ const TodoList = () => {
                     />)
                 )}
             </div>
-        </div>
+        </>
     )
 }
 

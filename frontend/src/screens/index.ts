@@ -5,6 +5,7 @@ import HabitTracker from './HabitTracker'
 import Settings from './Settings'
 import TodoList from './TodoList'
 import Graphs from './Graphs'
+import Screen from './Screen'
 
 
-export { routes, Home, Pomodoro, TodoList, Graphs, HabitTracker, Settings }
+export { routes, Home, Pomodoro, TodoList, Graphs, HabitTracker, Settings , Screen}
