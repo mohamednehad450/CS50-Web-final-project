@@ -1,7 +1,7 @@
 import React from 'react'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
-import { Step } from '../../api'
+import type { Step } from '../../api'
 
 interface StepRowProps {
     step: Step,
@@ -30,7 +30,7 @@ const StepRow = (props: StepRowProps) => {
                     <span className={`step-title ${checked ? 'crossed' : ''}`}>{title}</span>
                 </div>
                 <div className="row-section">
-                    <span className="icon"><TimerIcon /></span>
+                    <span className="icon icon-gray"><TimerIcon /></span>
                 </div>
             </div>
         </div>

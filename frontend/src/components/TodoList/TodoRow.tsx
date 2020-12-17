@@ -1,24 +1,23 @@
 import React from 'react'
-import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
-import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
-import { ReactComponent as Circle } from '../../icons/circle.svg'
-import { ReactComponent as CircleOutline } from '../../icons/circle-outline.svg'
-
+import { ColorTag } from '../common'
 import StepRow from './Step'
 
+import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
+import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
+
 // Types
-import { Todo, Step } from '../../api'
+import type { Todo, Step } from '../../api'
 
 interface TodoRowProps {
     todo: Todo,
     expanded: boolean,
-    onClick?: (id: number) => void,
+    onClick?: (id: Step['id']) => void,
     onChange?: (todo: Todo) => void,
 }
 
 const TodoRow = (props: TodoRowProps) => {
     const { todo, onClick, expanded: exp, onChange } = props
-    const { title, colorTag, steps, id, checked, } = todo
+    const { title, tag, steps, id, checked, } = todo
 
     const expandable = !!steps.length
     const expanded = exp && expandable
@@ -30,7 +29,12 @@ const TodoRow = (props: TodoRowProps) => {
                 <div onClick={() => expandable && onClick && onClick(id)} className="row">
                     <div className="row-section">
                         <span className="checkbox">
-                            <input disabled={expandable} checked={checked} type="checkbox" onChange={() => onChange && onChange({ ...todo, checked: !checked })}></input>
+                            <input
+                                disabled={expandable}
+                                checked={checked}
+                                type="checkbox"
+                                onChange={() => onChange && onChange({ ...todo, checked: !checked })}
+                            ></input>
                         </span>
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
                     </div>
@@ -40,8 +44,8 @@ const TodoRow = (props: TodoRowProps) => {
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
                             </span>
                         }
-                        <span className="icon">{colorTag ? <Circle style={{ fill: colorTag }} /> : <CircleOutline />}</span>
-                        <span className={`icon ${expanded ? 'flip' : ''}`}>{expandable ? <ExpandIcon /> : <TimerIcon />}</span>
+                        <ColorTag tag={tag} /> 
+                        <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>{expandable ? <ExpandIcon /> : <TimerIcon />}</span>
                     </div>
                 </div>
                 <div className={`steps-container ${expanded ? "expanded" : ''}`}>

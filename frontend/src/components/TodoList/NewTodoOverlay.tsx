@@ -1,0 +1,80 @@
+import React, { useState, FC } from 'react'
+import { createEmptyTodo } from '../../api'
+import { Overlay, Button, ButtonsRow, TextInput, DatePicker, IconButton, } from '../common'
+import StepsInput from './StepsInput'
+import TagSelect from './TagSelect'
+
+import { ReactComponent as CancelIcon } from '../../icons/cancel-fill.svg'
+
+import type { Step, Todo } from '../../api'
+
+
+interface NewTodoOverlayProps {
+    close: () => void
+    onSubmit: (todo: Todo) => void
+}
+
+function getMaxDate(steps: Step[]): Date | undefined {
+    return steps.reduce<Date | undefined>((acc, { dueDate: date }) => (
+        acc ?
+            date && date.getTime() > acc.getTime() ?
+                date :
+                acc :
+            date
+    ), undefined)
+}
+
+const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
+
+    const [todo, setTodo] = useState(createEmptyTodo())
+    const [maxDate, setMaxDate] = useState<Date | undefined>()
+    return (
+        <Overlay>
+            <div className='overlay-container-lg'>
+                <div className='input-row header-margin'>
+                    <TagSelect selected={todo.tag} onChange={(tag) => setTodo({ ...todo, tag })} />
+                    <TextInput
+                        onChange={(title) => setTodo({ ...todo, title })}
+                        value={todo.title}
+                        placeholder="New Todo"
+                        className='textinput-lg'
+                    />
+                </div>
+                <div className='input-row padding'>
+                    <DatePicker
+                        disabled={!!maxDate}
+                        emptyPlaceholder="set a deadline (optional)"
+                        date={maxDate || todo.dueDate}
+                        onChange={(dueDate) => setTodo({ ...todo, dueDate })}
+                    />
+                    {todo.dueDate && !maxDate &&
+                        <IconButton
+                            onClick={() => setTodo({ ...todo, dueDate: undefined })}
+                            className="icon-gray"
+                            icon={<CancelIcon />}
+                        />
+                    }
+                </div>
+                <StepsInput
+                    onChange={(steps) => {
+                        setTodo({ ...todo, steps, })
+                        setTimeout(() => setMaxDate(getMaxDate(steps)), 0)
+                    }}
+                    steps={todo.steps}
+                />
+                <ButtonsRow>
+                    <Button type='secondary' onClick={close}>Cancel</Button>
+                    <Button
+                        disabled={!todo.title || !todo.steps.reduce<boolean>((acc, { title }) => acc && !!title, true)}
+                        type='primary'
+                        onClick={() => { onSubmit(todo); close(); }}
+                    >
+                        Add
+                    </Button>
+                </ButtonsRow>
+            </div>
+        </Overlay>
+    )
+}
+
+export default NewTodoOverlay

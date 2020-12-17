@@ -1,19 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
-import { TodoRow } from '../components/TodoList'
+import { TodoRow, NewTodoOverlay } from '../components/TodoList'
+import { getTodos, updateTodo, addNewTodo } from '../api'
 
-import { getTodos, updateTodo, Todo } from '../api'
+import type { Todo, Step } from '../api'
 
-const TodoList = () => {
+
+const TodoList: FC = () => {
+    
     const [todos, setTodos] = useState<Todo[]>([])
     useEffect(() => {
         getTodos().then(todos => setTodos(todos))
     }, [])
-    const [expanded, setExpanded] = useState(-1);
+
+    const [expanded, setExpanded] = useState<Step['id']>('');
     const todosLeft = todos.filter(t => !t.checked).length
+    const [newOverlay, setNewOverlay] = useState(false)
 
     return (
         <>
+            {newOverlay &&
+                <NewTodoOverlay
+                    onSubmit={(todo) => {
+                        addNewTodo(todo).then(setTodos)
+                        setTodos([todo, ...todos])
+                    }}
+                    close={() => setNewOverlay(false)}
+                />
+            }
             <div className="header">
                 <div className="header-titles">
                     <span className="header-title">Todo List</span>
@@ -24,7 +38,7 @@ const TodoList = () => {
                 </div>
                 <div className="header-actions">
                     <span className="header-actions-icon">
-                        <AddIcon />
+                        <AddIcon onClick={() => setNewOverlay(true)} />
                     </span>
                 </div>
             </div>
