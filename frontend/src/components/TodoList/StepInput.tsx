@@ -3,7 +3,7 @@ import { IconButton, TextInput, DatePicker } from '../common'
 
 import { ReactComponent as CancelIcon } from '../../icons/cancel-fill.svg'
 
-import type { Step } from '../../api'
+import type { Step } from '../../API'
 
 interface StepInputProps {
     step: Step

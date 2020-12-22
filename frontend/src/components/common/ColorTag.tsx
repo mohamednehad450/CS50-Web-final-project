@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { ReactComponent as Circle } from '../../icons/circle.svg'
 
-import type { Tag } from '../../api'
+import type { Tag } from '../../API'
 
 interface ColorTagProps {
     tag: Tag

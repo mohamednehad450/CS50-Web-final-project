@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
 import { SliderPicker } from 'react-color'
-import { createEmptyTag } from '../../api'
+import { createEmptyTag } from '../../API'
 
 import { Overlay, Button, ButtonsRow, TextInput, ColorTag } from '../common'
 
-import type { Tag } from '../../api'
+import type { Tag } from '../../API'
 
 
 

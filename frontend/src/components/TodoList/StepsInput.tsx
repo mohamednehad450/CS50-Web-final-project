@@ -1,11 +1,11 @@
 import React, { FC, } from 'react'
 import { IconButton } from '../common'
-import { createEmptyStep } from '../../api'
+import { createEmptyStep } from '../../API'
 import StepInput from './StepInput'
 
 import { ReactComponent as Add } from '../../icons/add-fill.svg'
 
-import type { Step } from '../../api'
+import type { Step } from '../../API'
 
 
 interface StepsInputProps {

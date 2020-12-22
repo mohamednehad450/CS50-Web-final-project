@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
 import { TodoRow, NewTodoOverlay } from '../components/TodoList'
-import { getTodos, updateTodo, addNewTodo } from '../api'
+import { getTodos, addNewTodo } from '../API'
 
-import type { Todo, Step } from '../api'
+import type { Todo, Step } from '../API'
 
 
 const TodoList: FC = () => {
-    
+
     const [todos, setTodos] = useState<Todo[]>([])
     useEffect(() => {
         getTodos().then(todos => setTodos(todos))
@@ -33,7 +33,8 @@ const TodoList: FC = () => {
                     <span className="header-title">Todo List</span>
                     <span className="header-subtitle">{todosLeft ?
                         `${todosLeft} todo${todosLeft > 1 ? "s" : ''} left` :
-                        'all done'}
+                        'all done'
+                    }
                     </span>
                 </div>
                 <div className="header-actions">
@@ -49,9 +50,6 @@ const TodoList: FC = () => {
                         todo={todo}
                         expanded={todo.id === expanded}
                         onClick={(id) => setExpanded(expanded === todo.id ? -1 : id)}
-                        onChange={(todo) => {
-                            updateTodo(todo).then((todos) => setTodos([...todos]))
-                        }}
                     />)
                 )}
             </div>

@@ -1,23 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ColorTag } from '../common'
 import StepRow from './Step'
+import { updateTodo } from '../../API'
 
 import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
 // Types
-import type { Todo, Step } from '../../api'
+import { Todo, Step, } from '../../API'
 
 interface TodoRowProps {
     todo: Todo,
     expanded: boolean,
     onClick?: (id: Step['id']) => void,
-    onChange?: (todo: Todo) => void,
 }
 
 const TodoRow = (props: TodoRowProps) => {
-    const { todo, onClick, expanded: exp, onChange } = props
-    const { title, tag, steps, id, checked, } = todo
+    const { todo, onClick, expanded: exp } = props
+    const [{ title, tag, steps, id, checked, }, setTodo] = useState<Todo>(todo)
 
     const expandable = !!steps.length
     const expanded = exp && expandable
@@ -33,7 +33,7 @@ const TodoRow = (props: TodoRowProps) => {
                                 disabled={expandable}
                                 checked={checked}
                                 type="checkbox"
-                                onChange={() => onChange && onChange({ ...todo, checked: !checked })}
+                                onChange={() => updateTodo({ id, checked: !checked }).then(setTodo)}
                             ></input>
                         </span>
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
@@ -44,17 +44,21 @@ const TodoRow = (props: TodoRowProps) => {
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
                             </span>
                         }
-                        <ColorTag tag={tag} /> 
+                        <ColorTag tag={tag} />
                         <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>{expandable ? <ExpandIcon /> : <TimerIcon />}</span>
                     </div>
                 </div>
                 <div className={`steps-container ${expanded ? "expanded" : ''}`}>
-                    {steps?.map(step => (
+                    {steps?.map((step, index) => (
                         <StepRow
                             key={step.id}
                             step={step}
                             onChange={(step) => {
-                                onChange && onChange(updeteStep(todo, step))
+                                steps[index] = step
+                                setTodo({
+                                    ...todo,
+                                    checked: steps.reduce((acc, { checked }) => acc && checked, steps[0].checked)
+                                })
                             }}
                         />))}
                 </div>
@@ -63,11 +67,5 @@ const TodoRow = (props: TodoRowProps) => {
     )
 }
 
-const updeteStep = (todo: Todo, step: Step): Todo => {
-    const index = todo.steps?.findIndex(({ id }) => step.id === id);
-    todo.steps[index] = step
-    const checked = todo.steps.reduce((acc, step) => acc && step.checked, true)
-    return { ...todo, checked }
-}
 
 export default TodoRow

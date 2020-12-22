@@ -114,11 +114,23 @@ const mockTags: Tag[] = [
 ]
 
 
-export const getTodos = async () => mockTodos;
-export const updateTodo = async (todo: Todo) => {
-    const index = mockTodos.findIndex(t => t.id === todo.id)
-    mockTodos[index] = todo;
+export const getTodos = async () => {
     return mockTodos
+};
+export const updateTodo = async (todo: Partial<Todo>): Promise<Todo> => {
+    const t = mockTodos.find(({ id }) => id === todo.id)
+    if (t) {
+        return { ...t, ...todo }
+    } else throw Error('missing todo')
+}
+export const updateStep = async (step: Partial<Step>) => {
+    for (let todo of mockTodos) {
+        const s = todo.steps.find(({ id }) => step.id === id)
+        if (s) {
+            return { ...s, ...step }
+        }
+    }
+    throw Error('missing step')
 }
 export const addNewTodo = async (todo: Todo) => {
     mockTodos.unshift(todo)

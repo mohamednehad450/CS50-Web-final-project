@@ -1,12 +1,12 @@
 import React, { useState, FC } from 'react'
-import { createEmptyTodo } from '../../api'
+import { createEmptyTodo } from '../../API'
 import { Overlay, Button, ButtonsRow, TextInput, DatePicker, IconButton, } from '../common'
 import StepsInput from './StepsInput'
 import TagSelect from './TagSelect'
 
 import { ReactComponent as CancelIcon } from '../../icons/cancel-fill.svg'
 
-import type { Step, Todo } from '../../api'
+import type { Step, Todo } from '../../API'
 
 
 interface NewTodoOverlayProps {

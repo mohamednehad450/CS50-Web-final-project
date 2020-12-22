@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
-import { addNewTag, getTages } from '../../api'
+import { addNewTag, getTages } from '../../API/api'
 import { IconButton, Select } from '../common'
 import NewTagOverlay from './NewTagOverlay'
 
 import { ReactComponent as Circle } from '../../icons/circle.svg'
 import { ReactComponent as Add } from '../../icons/add-fill.svg'
 
-import type { Tag } from '../../api'
+import type { Tag } from '../../API'
 
 interface TagSelectProps {
     selected: Tag
@@ -54,7 +54,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                         label={option.label}
                     />
                 )}
-                headerOption={({close}) => (
+                headerOption={({ close }) => (
                     <IconButton
                         className="select-item icon-prime"
                         icon={<Add />}
