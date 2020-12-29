@@ -6,6 +6,8 @@ interface TextInputProps {
     className?: string
     value?: string
     autofocus?: boolean
+    type?: string
+    autoComplete?: string
     onChange?: (value: string) => void
 }
 
@@ -13,8 +15,10 @@ const TextInput: FC<TextInputProps> = ({
     placeholder,
     onChange,
     value = '',
-    className = "", 
-    autofocus = false
+    className = "",
+    type = "",
+    autofocus = false,
+    autoComplete = ""
 }) => {
     const [valid, setValid] = useState(true)
     return (
@@ -27,6 +31,8 @@ const TextInput: FC<TextInputProps> = ({
             placeholder={placeholder}
             value={value}
             autoFocus={autofocus}
+            type={type || 'text'}
+            autoComplete={autoComplete}
         >
         </input>
     )

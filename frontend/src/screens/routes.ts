@@ -1,8 +1,11 @@
 export enum routes {
-    HOME="/",
-    SETTINGS="/settings",
-    TODOLIST="/todo-list",
-    HABITTRACKER="/habit-tracker",
-    GRAPHS="/graphs",
-    POMODORO="/pomodoro"
+    ROOT = "/",
+    APP = "/app",
+    SETTINGS = "/app/settings",
+    TODOLIST = "/app/todo-list",
+    HABITTRACKER = "/app/habit-tracker",
+    GRAPHS = "/app/graphs",
+    POMODORO = "/app/pomodoro",
+    SIGININ = "/auth/signin",
+    REGISTER = "/auth/register",
 }
