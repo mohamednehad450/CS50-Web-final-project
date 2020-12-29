@@ -23,10 +23,13 @@ const StepsInput: FC<StepsInputProps> = ({ onChange, steps }) => {
                 onClick={() => onChange([createEmptyStep(), ...steps])}
             />
             <div className="indent scroll">
-                {steps.map(step => (
+                {steps.map((step, index) => (
                     <StepInput
                         step={step}
-                        onChange={() => onChange([...steps])}
+                        onChange={(s) => {
+                            steps[index] = s
+                            onChange([...steps])
+                        }}
                         remove={(step) => onChange(steps.filter(({ id }) => id !== step.id))}
                     />
                 ))}
