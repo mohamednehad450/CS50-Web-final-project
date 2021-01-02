@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { updateStep } from '../../API'
+import { updateStep, useAuth } from '../../API'
 
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
@@ -13,6 +13,7 @@ interface StepRowProps {
 
 const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
     const [{ title, checked, id }, setStep] = useState<Step>(step)
+    const auth = useAuth()
     return (
         <div className="step-container">
             <hr />
@@ -22,9 +23,11 @@ const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
                         <input
                             checked={checked}
                             type="checkbox"
-                            onChange={() => updateStep({ id, checked: !checked }).then((step) => {
-                                setStep(step)
-                                onChange(step)
+                            onChange={() => updateStep({ id, checked: !checked }, auth).then((step) => {
+                                if (step) {
+                                    setStep(step)
+                                    onChange(step)
+                                }
                             })}
                         ></input>
                     </span>

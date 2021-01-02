@@ -11,7 +11,7 @@ import type { Step, Todo } from '../../API'
 
 interface NewTodoOverlayProps {
     close: () => void
-    onSubmit: (todo: Todo) => void
+    onSubmit: (todo: Partial<Todo>) => void
 }
 
 function getMaxDate(steps: Step[]): Date | undefined {
@@ -26,7 +26,7 @@ function getMaxDate(steps: Step[]): Date | undefined {
 
 const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
 
-    const [todo, setTodo] = useState(createEmptyTodo())
+    const [todo, setTodo] = useState<Partial<Todo>>(createEmptyTodo())
     const [maxDate, setMaxDate] = useState<Date | undefined>()
     return (
         <Overlay>
@@ -60,12 +60,12 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
                         setTodo({ ...todo, steps, })
                         setTimeout(() => setMaxDate(getMaxDate(steps)), 0)
                     }}
-                    steps={todo.steps}
+                    steps={todo.steps || []}
                 />
                 <ButtonsRow>
                     <Button type='secondary' onClick={close}>Cancel</Button>
                     <Button
-                        disabled={!todo.title || !todo.steps.reduce<boolean>((acc, { title }) => acc && !!title, true)}
+                        disabled={!todo.tag || !todo.title || !todo.steps?.reduce<boolean>((acc, { title }) => acc && !!title, true)}
                         type='primary'
                         onClick={() => { onSubmit(todo); close(); }}
                     >

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ColorTag } from '../common'
 import StepRow from './Step'
-import { updateTodo } from '../../API'
+import { updateTodo, useAuth } from '../../API'
 
 import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
@@ -22,6 +22,9 @@ const TodoRow = (props: TodoRowProps) => {
     const expandable = !!steps.length
     const expanded = exp && expandable
     const stepsLeft: number = steps.length && steps.filter(step => !step.checked).length
+
+    const auth = useAuth()
+
     return (
         <>
             <hr></hr>
@@ -33,7 +36,7 @@ const TodoRow = (props: TodoRowProps) => {
                                 disabled={expandable}
                                 checked={checked}
                                 type="checkbox"
-                                onChange={() => updateTodo({ id, checked: !checked }).then(setTodo)}
+                                onChange={() => updateTodo({ id, checked: !checked }, auth).then(t => t && setTodo(t))}
                             ></input>
                         </span>
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>

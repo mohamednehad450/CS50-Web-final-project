@@ -11,8 +11,8 @@ interface Option {
 interface SelectProps<T extends Option> {
     onChange: (arg: T) => void;
     options: T[]
-    selected: T
-    customInput?: (props: { selected: T, onClick: () => void }) => ReactNode
+    selected?: T
+    customInput?: (props: { selected?: T, onClick: () => void }) => ReactNode
     customRow?: (props: { onClick: () => void, option: T, isSelected: boolean }) => ReactNode
     headerOption?: (arg: { close: () => void }) => ReactNode
 }
@@ -37,7 +37,7 @@ function Select<T extends Option>({
                         {options.map(option => (
                             customRow &&
                             customRow({
-                                isSelected: option.id === selected.id,
+                                isSelected: option.id === selected?.id,
                                 option,
                                 onClick: () => {
                                     onChange(option)

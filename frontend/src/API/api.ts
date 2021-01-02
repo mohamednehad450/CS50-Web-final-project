@@ -1,4 +1,7 @@
+import Axios from 'axios'
 import { v4 } from 'uuid'
+
+import type { AuthContext, } from './auth'
 
 export interface Tag {
     color: string
@@ -18,9 +21,11 @@ export interface Todo {
     checked: boolean,
     tag: Tag,
     dueDate?: Date,
+    date: Date,
     id: number | string,
     steps: Step[],
 }
+
 
 export const createEmptyStep = (): Step => {
     return {
@@ -30,13 +35,12 @@ export const createEmptyStep = (): Step => {
     }
 }
 
-export const createEmptyTodo = (): Todo => {
+export const createEmptyTodo = (): Partial<Todo> => {
     return {
         title: '',
         steps: [],
-        checked: false,
-        tag: noneTag,
-        id: v4()
+        id: v4(),
+        date: new Date(),
     }
 }
 
@@ -48,97 +52,92 @@ export const createEmptyTag = (): Tag => {
     }
 }
 
-export const noneTag: Tag = {
-    label: 'None',
-    color: '#fff',
-    id: v4()
-}
 
-
-const mockTodos: Todo[] = [
-    {
-        title: "Todo 1",
-        tag: {
-            color: "#FF8E6A",
-            label: 'work',
-            id: v4()
-        },
-        steps: [
-            {
-                title: 'step x',
-                checked: true,
-                id: v4(),
-            },
-            {
-                title: 'step y',
-                checked: true,
-                id: v4(),
-            },
-        ],
-        checked: true,
-        id: v4(),
-    },
-    {
-        title: "Todo 2",
-        checked: false,
-        id: v4(),
-        steps: [],
-        tag: noneTag
-    },
-    {
-        title: "Todo 3",
-        checked: false,
-        id: v4(),
-        steps: [],
-        tag: noneTag,
-    },
-]
-
-const mockTags: Tag[] = [
-    noneTag,
-    {
-        color: "#FF8E6A",
-        label: 'work',
-        id: v4(),
-    },
-    {
-        color: "#5A92FF",
-        label: 'project alpha',
-        id: v4(),
-    },
-    {
-        color: "#e91e63",
-        label: 'hobby',
-        id: v4(),
-    },
-]
-
-
-export const getTodos = async () => {
-    return mockTodos
-};
-export const updateTodo = async (todo: Partial<Todo>): Promise<Todo> => {
-    const t = mockTodos.find(({ id }) => id === todo.id)
-    if (t) {
-        return { ...t, ...todo }
-    } else throw Error('missing todo')
-}
-export const updateStep = async (step: Partial<Step>) => {
-    for (let todo of mockTodos) {
-        const s = todo.steps.find(({ id }) => step.id === id)
-        if (s) {
-            return { ...s, ...step }
-        }
+export const getTodos = async (auth: AuthContext): Promise<Todo[] | undefined> => {
+    try {
+        const { data } =
+            await Axios.get<Todo[]>('/api/todos', {
+                headers: {
+                    "Authorization": `JWT ${auth.user?.token}`
+                }
+            })
+        return data
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
     }
-    throw Error('missing step')
+
+};
+export const updateTodo = async (todo: Partial<Todo>, auth: AuthContext): Promise<Todo | undefined> => {
+    try {
+        const { data } =
+            await Axios.patch<Todo>(`/api/todos/${todo.id}/`, todo, {
+                headers: {
+                    "Authorization": `JWT ${auth.user?.token}`
+                }
+            })
+        return data
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
+    }
+
 }
-export const addNewTodo = async (todo: Todo) => {
-    mockTodos.unshift(todo)
-    return [...mockTodos]
+export const updateStep = async (step: Partial<Step>, auth: AuthContext): Promise<Step | undefined> => {
+    try {
+        const { data } =
+            await Axios.patch<Step>(`/api/steps/${step.id}/`, step, {
+                headers: {
+                    "Authorization": `JWT ${auth.user?.token}`
+                }
+            })
+        return data
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
+    }
+}
+export const addNewTodo = async (todo: Partial<Todo>, auth: AuthContext): Promise<Todo | undefined> => {
+    try {
+        const { data } =
+            await Axios.post<Todo>('/api/todos/', todo, {
+                headers: {
+                    "Authorization": `JWT ${auth.user?.token}`
+                }
+            })
+        return data
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
+    }
 };
 
-export const getTages = async () => mockTags;
-export const addNewTag = async (tag: Tag) => {
-    mockTags.push(tag)
-    return [...mockTags]
+export const getTages = async (auth: AuthContext): Promise<Tag[] | undefined> => {
+    try {
+        const { data } = await
+            Axios.get<Tag[]>('/api/tags/', {
+                headers: {
+                    "Authorization": `JWT ${auth.user?.token}`
+                }
+            })
+        return data
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
+    }
+
+};
+export const addNewTag = async (tag: Tag, auth: AuthContext): Promise<Tag | undefined> => {
+    try {
+        const { data } =
+            await Axios.post<Tag>('/api/tags/', tag, {
+                headers: {
+                    "Authorization": `JWT ${auth.user?.token}`
+                }
+            })
+        return data
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
+    }
 };

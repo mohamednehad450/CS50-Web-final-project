@@ -16,6 +16,7 @@ import { useAuth } from './auth'
 
 // Types
 import type { Todo, Step, Tag } from './api'
+import type { User, AuthContext } from './auth'
 
 
 export {
@@ -37,4 +38,6 @@ export type {
     Todo,
     Step,
     Tag,
+    User,
+    AuthContext
 }

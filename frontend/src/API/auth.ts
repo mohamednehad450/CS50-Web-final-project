@@ -1,4 +1,5 @@
-import { useState, useContext, createContext, } from 'react'
+import Axios from 'axios';
+import { useState, useContext, createContext, useEffect, } from 'react'
 import { getItemFromStorage, removeItemFromStorage, setItemToStorage } from '../utils';
 
 // Types
@@ -37,9 +38,48 @@ const useAuth = () => {
     return useContext(authContext);
 }
 
+const refreshToken = async (oldToken: string) => {
+    try {
+        const { data: { token } }
+            = await Axios.post<{ token: string }>('/api/auth/refresh_token', {
+                token: oldToken,
+            }, {
+                headers: {
+                    "Authorization": `JWT ${oldToken}`,
+                    "Content-Type": "application/json"
+                }
+            })
+        return token
+    } catch (error) {
+        return false
+    }
+}
+
+const AUTH_REFRESH_INTERVAL = 3 * 60 * 1000
 const useProvideAuth = (): AuthContext => {
 
     const [user, setUser] = useState<User | undefined>(getItemFromStorage('user'));
+    const [lastRefreshed, setLastRefreshed] = useState(0)
+
+    // Refreshing Token
+    useEffect(() => {
+        const updateToken = async () => {
+            if (Date.now() > lastRefreshed + AUTH_REFRESH_INTERVAL) {
+                setLastRefreshed(Date.now())
+                if (user) {
+                    const res = await refreshToken(user.token)
+                    if (res) {
+                        updateUser({ ...user, token: res })
+                    }
+                    else {
+                        updateUser(undefined)
+                    }
+                }
+            }
+        }
+        const interval = setInterval(updateToken, 3 * 1000)
+        return () => clearInterval(interval)
+    }, [user, lastRefreshed])
 
     const updateUser = (user: User | undefined) => {
         if (user) {
@@ -54,25 +94,24 @@ const useProvideAuth = (): AuthContext => {
 
 
     const register: Register = async (username, password, cb) => {
-        // TODO: Register logic here
-        setTimeout(() => {
-            updateUser({ token: '123', username })
-            cb && cb()
-        }, 100)
+        // TODO
     };
     const signin: SignIn = async (username, password, cb) => {
-        // TODO: Signin logic here
-        setTimeout(() => {
-            updateUser({ token: '123', username })
+        try {
+            const { data } = await Axios.post<{ token: string }>('/api/auth/get_token', {
+                username,
+                password
+            })
+            updateUser({ username, token: data.token })
             cb && cb()
-        }, 100)
+        } catch (error) {
+            // TODO: handle error
+            console.log(error.response)
+        }
     };
     const signout: SignOut = async (cb) => {
-        // TODO: Signout logic here
-        setTimeout(() => {
-            updateUser(undefined)
-            cb && cb()
-        }, 100)
+        updateUser(undefined)
+        cb && cb()
     };
     return {
         user,
