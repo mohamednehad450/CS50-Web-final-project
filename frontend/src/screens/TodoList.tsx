@@ -31,9 +31,11 @@ const TodoList: FC = () => {
             <div className="header">
                 <div className="header-titles">
                     <span className="header-title">Todo List</span>
-                    <span className="header-subtitle">{todosLeft ?
-                        `${todosLeft} todo${todosLeft > 1 ? "s" : ''} left` :
-                        'all done'
+                    <span className="header-subtitle">{todos.length ?
+                        todosLeft ?
+                            `${todosLeft} todo${todosLeft > 1 ? "s" : ''} left` :
+                            'all done' :
+                        'no current todos'
                     }
                     </span>
                 </div>
