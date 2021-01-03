@@ -11,7 +11,7 @@ const TodoList: FC = () => {
     const auth = useAuth()
     const [todos, setTodos] = useState<Todo[]>([])
     useEffect(() => {
-        !todos.length && getTodos(auth).then(todos => todos && setTodos(todos))
+        !todos.length && getTodos(auth).then(todos => todos?.length && setTodos(todos))
     }, [auth, todos])
 
     const [expanded, setExpanded] = useState<Step['id']>('');
