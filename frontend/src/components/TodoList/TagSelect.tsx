@@ -62,6 +62,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                 }
                 customRow={({ option, onClick, isSelected }) => (
                     <IconButton
+                        key={option.id}
                         className={`${isSelected ? 'selected' : 'select-item'}`}
                         onClick={onClick}
                         icon={<Circle fill={option.color} />}
