@@ -51,7 +51,7 @@ const Register: FC = () => {
                         type="primary"
                         className="btn-row"
                         onClick={() => {
-                            auth.signin(
+                            auth.register(
                                 username,
                                 password,
                             )

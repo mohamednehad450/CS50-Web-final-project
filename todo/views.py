@@ -7,10 +7,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+from rest_framework import permissions, authentication, viewsets, response
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework_jwt.views import obtain_jwt_token
 
-from rest_framework import permissions, authentication, viewsets, response
-from .serializers import TagSerializer, TodoSerializer, StepSerializer
+from .serializers import TagSerializer, TodoSerializer, StepSerializer, UserSerializer
 from .models import Todo, Step, Tag
 
 
@@ -151,3 +152,18 @@ class StepViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         pass
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def create_auth(request):
+    user = UserSerializer(data=request.data)
+    if user.is_valid():
+        data = user.validated_data
+        user = User.objects.create(
+            username=data['username'])
+        user.set_password(data['password'])
+        user.save()
+        return response.Response(status=201)
+    else:
+        return response.Response(serialized._errors, status=400)

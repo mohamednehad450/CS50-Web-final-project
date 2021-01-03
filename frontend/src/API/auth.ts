@@ -94,7 +94,16 @@ const useProvideAuth = (): AuthContext => {
 
 
     const register: Register = async (username, password, cb) => {
-        // TODO
+        try {
+            await Axios.post('/api/auth/create_auth', {
+                username,
+                password,
+            })
+            signin(username, password)
+
+        } catch (error) {
+            // TODO: handle error
+        }
     };
     const signin: SignIn = async (username, password, cb) => {
         try {

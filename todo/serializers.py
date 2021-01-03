@@ -27,3 +27,9 @@ class TodoSerializer(serializers.ModelSerializer):
     steps = StepSerializer(many=True)
 
     id = serializers.UUIDField()
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']

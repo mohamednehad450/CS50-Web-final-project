@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
-from todo.views import TodoViewSet, TagViewSet, StepViewSet
+from todo.views import TodoViewSet, TagViewSet, StepViewSet, create_auth
 
 router = routers.DefaultRouter()
 router.register(r'todos', TodoViewSet, basename='todo')
@@ -29,6 +29,7 @@ router.register(r'steps', StepViewSet, basename='step')
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/auth/create_auth', create_auth),
     path('api/auth/get_token', obtain_jwt_token),
     path('api/auth/refresh_token', refresh_jwt_token),
     path('admin/', admin.site.urls),
