@@ -25,6 +25,7 @@ const StepsInput: FC<StepsInputProps> = ({ onChange, steps }) => {
             <div className="indent scroll">
                 {steps.map((step, index) => (
                     <StepInput
+                        key={step.id}
                         step={step}
                         onChange={(s) => {
                             steps[index] = s
