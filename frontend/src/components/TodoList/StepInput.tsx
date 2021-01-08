@@ -14,7 +14,6 @@ interface StepInputProps {
 const StepInput: FC<StepInputProps> = ({ step, onChange, remove }) => {
     return (
         <>
-            <hr></hr>
             <div className='input-row wrap'>
                 <IconButton
                     className='icon-gray'
@@ -32,6 +31,7 @@ const StepInput: FC<StepInputProps> = ({ step, onChange, remove }) => {
                     emptyPlaceholder="set a deadline (optional)"
                 />
             </div>
+            <hr></hr>
         </>
     )
 }

@@ -40,7 +40,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
                         className='textinput-lg'
                     />
                 </div>
-                <div className='input-row padding'>
+                <div className='input-row'>
                     <DatePicker
                         disabled={!!maxDate}
                         emptyPlaceholder="set a deadline (optional)"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ColorTag } from '../common'
+import { Checkbox, ColorTag } from '../common'
 import StepRow from './Step'
 import { updateTodo, useAuth } from '../../API'
 
@@ -27,18 +27,14 @@ const TodoRow = (props: TodoRowProps) => {
 
     return (
         <>
-            <hr></hr>
             <div className={`row-container ${expanded ? 'gray-bg' : ''}`}>
                 <div onClick={() => expandable && onClick && onClick(id)} className="row">
                     <div className="row-section">
-                        <span className="checkbox">
-                            <input
-                                disabled={expandable}
-                                checked={checked}
-                                type="checkbox"
-                                onChange={() => updateTodo({ id, checked: !checked }, auth).then(t => t && setTodo(t))}
-                            ></input>
-                        </span>
+                        <Checkbox
+                            disabled={expandable}
+                            checked={checked}
+                            onChange={(checked) => updateTodo({ id, checked, }, auth).then(t => t && setTodo(t))}
+                        />
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
                     </div>
                     <div className="row-section">
@@ -48,7 +44,14 @@ const TodoRow = (props: TodoRowProps) => {
                             </span>
                         }
                         <ColorTag tag={tag} />
-                        <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>{expandable ? <ExpandIcon /> : <TimerIcon />}</span>
+                        {expandable ?
+                            <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>
+                                <ExpandIcon />
+                            </span> :
+                            <span className={`icon icon-pomodoro`}>
+                                <TimerIcon />
+                            </span>
+                        }
                     </div>
                 </div>
                 <div className={`steps-container ${expanded ? "expanded" : ''}`}>
@@ -58,13 +61,16 @@ const TodoRow = (props: TodoRowProps) => {
                             step={step}
                             onChange={(step) => {
                                 steps[index] = step
-                                setTodo({
-                                    ...todo,
-                                    checked: steps.reduce((acc, { checked }) => acc && checked, steps[0].checked)
-                                })
+                                const newChecked = steps.reduce((acc, { checked }) => acc && checked, steps[0].checked)
+                                if (newChecked !== checked) {
+                                    updateTodo({ id, checked: newChecked }, auth).then((t) => {
+                                        t && setTodo({ ...t })
+                                    })
+                                }
                             }}
                         />))}
                 </div>
+                <hr></hr>
             </div>
         </>
     )

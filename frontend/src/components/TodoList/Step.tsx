@@ -5,6 +5,7 @@ import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
 // Types
 import type { Step } from '../../API'
+import { Checkbox } from '../common'
 
 interface StepRowProps {
     step: Step,
@@ -19,22 +20,19 @@ const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
             <hr />
             <div className="step-row">
                 <div className="row-section">
-                    <span className="checkbox">
-                        <input
-                            checked={checked}
-                            type="checkbox"
-                            onChange={() => updateStep({ id, checked: !checked }, auth).then((step) => {
-                                if (step) {
-                                    setStep(step)
-                                    onChange(step)
-                                }
-                            })}
-                        ></input>
-                    </span>
+                    <Checkbox
+                        checked={checked}
+                        onChange={(checked) => updateStep({ id, checked }, auth).then((step) => {
+                            if (step) {
+                                setStep(step)
+                                onChange(step)
+                            }
+                        })}
+                    />
                     <span className={`step-title ${checked ? 'crossed' : ''}`}>{title}</span>
                 </div>
                 <div className="row-section">
-                    <span className="icon icon-gray"><TimerIcon /></span>
+                    <span className="icon icon-sm icon-pomodoro"><TimerIcon /></span>
                 </div>
             </div>
         </div>
