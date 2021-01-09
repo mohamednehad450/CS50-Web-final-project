@@ -1,20 +1,18 @@
-import React, { FC, useState } from 'react'
-import { updateStep, useAuth } from '../../API'
+import React, { FC } from 'react'
+import { Checkbox } from '../common'
 
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
 // Types
 import type { Step } from '../../API'
-import { Checkbox } from '../common'
 
 interface StepRowProps {
     step: Step,
-    onChange: (step: Step) => void
+    onChange: (step: Partial<Step>) => void
 }
 
 const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
-    const [{ title, checked, id }, setStep] = useState<Step>(step)
-    const auth = useAuth()
+    const { title, checked, id } = step
     return (
         <div className="step-container">
             <hr />
@@ -22,12 +20,7 @@ const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
                 <div className="row-section">
                     <Checkbox
                         checked={checked}
-                        onChange={(checked) => updateStep({ id, checked }, auth).then((step) => {
-                            if (step) {
-                                setStep(step)
-                                onChange(step)
-                            }
-                        })}
+                        onChange={(checked) => onChange({ id, checked })}
                     />
                     <span className={`step-title ${checked ? 'crossed' : ''}`}>{title}</span>
                 </div>

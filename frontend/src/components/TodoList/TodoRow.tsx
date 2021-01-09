@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Checkbox, ColorTag } from '../common'
 import StepRow from './Step'
-import { updateTodo, useAuth } from '../../API'
+import { updateStep, updateTodo, useAuth } from '../../API'
 
 import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
@@ -60,15 +60,20 @@ const TodoRow = (props: TodoRowProps) => {
                             key={step.id}
                             step={step}
                             onChange={(step) => {
-                                steps[index] = step
-                                const newChecked = steps.reduce((acc, { checked }) => acc && checked, steps[0].checked)
-                                if (newChecked !== checked) {
-                                    updateTodo({ id, checked: newChecked }, auth).then((t) => {
-                                        t && setTodo({ ...t })
-                                    })
-                                }
+                                updateStep(step, auth).then(s => {
+                                    if (s) {
+                                        steps[index] = s
+                                        const newChecked = steps.reduce((acc, { checked }) => acc && checked, steps[0].checked)
+                                        if (newChecked !== checked) {
+                                            updateTodo({ id, checked: newChecked }, auth).then((t) => {
+                                                t && setTodo({ ...t })
+                                            })
+                                        } else setTodo((old) => ({ ...old, }))
+                                    }
+                                })
                             }}
-                        />))}
+                        />
+                    ))}
                 </div>
                 <hr></hr>
             </div>
