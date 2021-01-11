@@ -588,6 +588,28 @@ main {
   flex-direction: column;
 }
 
+.rotate90 {
+  z-index: 1;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+
+.progress-tint {
+  stroke: #C3BCC8;
+}
+
+.progress-main {
+  stroke: #5A92FF;
+}
+
+.progress-head {
+  stroke: #5A92FF;
+}
+
+.progress-text {
+  font-size: 3rem;
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     bottom: 0;
