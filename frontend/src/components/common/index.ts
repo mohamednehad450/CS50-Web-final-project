@@ -7,6 +7,7 @@ import ColorTag from './ColorTag'
 import Select from './Select'
 import DatePicker from './CustomDatePicker'
 import Checkbox from './Checkbox'
+import Header from './Header'
 
 
-export { Button, Overlay, ButtonsRow, IconButton, TextInput, ColorTag, DatePicker, Select, Checkbox }
+export { Button, Overlay, ButtonsRow, IconButton, TextInput, ColorTag, DatePicker, Select, Checkbox, Header }

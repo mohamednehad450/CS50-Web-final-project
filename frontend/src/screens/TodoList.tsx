@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
 import { TodoRow, NewTodoOverlay } from '../components/TodoList'
 import { getTodos, addNewTodo, useAuth } from '../API'
+import { Header } from '../components/common'
 
 import type { Todo, Step, } from '../API'
 
@@ -28,23 +29,20 @@ const TodoList: FC = () => {
                     close={() => setNewOverlay(false)}
                 />
             }
-            <div className="header">
-                <div className="header-titles">
-                    <span className="header-title">Todo List</span>
-                    <span className="header-subtitle">{todos.length ?
-                        todosLeft ?
-                            `${todosLeft} todo${todosLeft > 1 ? "s" : ''} left` :
-                            'all done' :
-                        'no current todos'
-                    }
-                    </span>
-                </div>
-                <div className="header-actions">
+            <Header
+                title="Todo List"
+                subtitle={todos.length ?
+                    todosLeft ?
+                        `${todosLeft} todo${todosLeft > 1 ? "s" : ''} left` :
+                        'all done' :
+                    'no current todos'
+                }
+                actions={
                     <span className="header-actions-icon">
                         <AddIcon onClick={() => setNewOverlay(true)} />
                     </span>
-                </div>
-            </div>
+                }
+            />
             <div className="list-container">
                 {todos.map(todo => (
                     <TodoRow
