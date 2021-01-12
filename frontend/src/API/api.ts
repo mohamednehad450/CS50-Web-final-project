@@ -56,7 +56,7 @@ export const createEmptyTag = (): Tag => {
 export const getTodos = async (auth: AuthContext): Promise<Todo[] | undefined> => {
     try {
         const { data } =
-            await Axios.get<Todo[]>('/api/todos', {
+            await Axios.get<Todo[]>('/api/todos/', {
                 headers: {
                     "Authorization": `JWT ${auth.user?.token}`
                 }
