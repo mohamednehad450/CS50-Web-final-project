@@ -3,8 +3,12 @@ import { Spring } from 'react-spring/renderprops'
 interface CircularProgressProps {
     progress: number;
     innerText?: string
-    // Used to rapidly update the innerText with the animation, negates InnerText prop
+    size?: number
+
+    // Used to rapidly update the innerText with the animation, override innerText prop
     setText?: (progress: number) => string
+
+    // Override innerText, and setText
     children?: ReactNode
 }
 
@@ -17,14 +21,14 @@ const STROKE_WIDTH = 8
 const HEAD_SIZE = 24
 const circumference = r * 2 * PI
 
-const CircularProgress: FC<CircularProgressProps> = ({ progress, innerText, setText }) => {
+const CircularProgress: FC<CircularProgressProps> = ({ children, progress, innerText, setText, size }) => {
 
     const theta = (1 - progress) * (2 * PI)
 
     return (
         <Spring from={{ theta: 0 }} to={{ theta, }}>
             {({ theta }) =>
-                <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}
+                <svg width={size || SIZE} height={size || SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}
                     className="progress"
                 >
                     {/* Tint */}
@@ -37,9 +41,12 @@ const CircularProgress: FC<CircularProgressProps> = ({ progress, innerText, setT
                         strokeWidth={STROKE_WIDTH}
                         className="progress-tint"
                     />
-                    <text className="progress-text" x="50%" y="50%" dominantBaseline="middle" textAnchor="middle">
-                        {setText ? setText(((2 * PI) - theta) / (2 * PI)) : innerText}
-                    </text>
+                    {children ?
+                        children :
+                        <text className="progress-text" x="50%" y="50%" dominantBaseline="middle" textAnchor="middle">
+                            {setText ? setText(((2 * PI) - theta) / (2 * PI)) : innerText}
+                        </text>
+                    }
                     {/* Progress */}
                     <circle
                         cx={CENTER}

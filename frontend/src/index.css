@@ -17,6 +17,10 @@ body {
   --gray6: #2A252C;
   --gray-dim: rgba(135, 120, 145, 0.2);
   --blue1: #5A92FF;
+  --orange1: #f4845f;
+  --orange2: #F05E2D;
+  --green1: #96E072;
+  --green2: #58B828;
 }
 
 .light {
@@ -36,6 +40,11 @@ body {
   --btn-prime-bg: var(--blue1);
   --btn-second-bg: var(--gray3);
   --btn-text: var(--gray0);
+  --pomodoro-work: var(--orange2);
+  --pomodoro-break: var(--green2);
+  --pomodoro-longbreak: var(--gray5);
+  --pomodoro-tint: var(--gray1);
+  --pomodoro-head: var(--gray0)
 }
 
 .dark {
@@ -55,6 +64,11 @@ body {
   --btn-prime-bg: var(--blue1);
   --btn-second-bg: var(--gray1);
   --btn-text: var(--gray5);
+  --pomodoro-work: var(--orange1);
+  --pomodoro-break: var(--green1);
+  --pomodoro-longbreak: var(--gray0);
+  --pomodoro-tint: var(--gray5);
+  --pomodoro-head: var(--gray6)
 }
 
 .navbar {
@@ -594,20 +608,91 @@ main {
   transform: rotate(-90deg);
 }
 
-.progress-tint {
-  stroke: #C3BCC8;
+.pomodoro-work .progress-tint {
+  stroke: var(--pomodoro-tint);
+  transition: stroke 200ms ease;
 }
 
-.progress-main {
-  stroke: #5A92FF;
+.pomodoro-work .progress-main {
+  stroke: var(--pomodoro-work);
+  transition: stroke 500ms ease;
 }
 
-.progress-head {
-  stroke: #5A92FF;
+.pomodoro-work .progress-head {
+  stroke: var(--pomodoro-work);
+  transition: stroke 500ms ease;
+}
+
+.pomodoro-work .progress-text {
+  fill: var(--pomodoro-work);
+  transition: fill 250ms ease;
+}
+
+.pomodoro-work .pomodoro-icon {
+  fill: var(--pomodoro-work);
+  transition: fill 250ms ease;
+}
+
+.pomodoro-break .progress-tint {
+  stroke: var(--pomodoro-tint);
+  transition: stroke 200ms ease;
+}
+
+.pomodoro-break .progress-main {
+  stroke: var(--pomodoro-break);
+  transition: stroke 500ms ease;
+}
+
+.pomodoro-break .progress-head {
+  stroke: var(--pomodoro-break);
+  transition: stroke 500ms ease;
+}
+
+.pomodoro-break .progress-text {
+  fill: var(--pomodoro-break);
+  transition: fill 250ms ease;
+}
+
+.pomodoro-break .pomodoro-icon {
+  fill: var(--pomodoro-break);
+  transition: fill 250ms ease;
+}
+
+.pomodoro-longbreak .progress-tint {
+  stroke: var(--pomodoro-tint);
+  transition: stroke 200ms ease;
+}
+
+.pomodoro-longbreak .progress-main {
+  stroke: var(--pomodoro-longbreak);
+  transition: stroke 500ms ease;
+}
+
+.pomodoro-longbreak .progress-head {
+  stroke: var(--pomodoro-longbreak);
+  transition: stroke 500ms ease;
+}
+
+.pomodoro-longbreak .progress-text {
+  fill: var(--pomodoro-longbreak);
+  transition: fill 250ms ease;
+}
+
+.pomodoro-longbreak .pomodoro-icon {
+  fill: var(--pomodoro-longbreak);
+  transition: fill 250ms ease;
 }
 
 .progress-text {
   font-size: 3rem;
+}
+
+.progress-head {
+  fill: var(--pomodoro-head);
+}
+
+.pomodoro-icon {
+  z-index: 1;
 }
 
 @media only screen and (max-width: 799px) {

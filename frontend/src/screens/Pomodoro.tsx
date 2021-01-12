@@ -1,34 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Header } from '../components/common'
-import { CircularProgress } from '../components/Pomodoro'
+import React from 'react'
+import { Header } from '../components/common'
+import { PomodoroClock, ProvidePomodoro } from '../components/Pomodoro'
 
 const Pomodoro = () => {
-    const [p, setP] = useState(0)
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setP(p => (p + 0.005) % 1)
-        }, 1000)
-        return () => clearInterval(interval)
-    }, [p])
     return (
-        <>
+        <ProvidePomodoro>
             <Header
                 title="Pomodoro Timer"
             />
             <div className="center">
-                <Button
-                    onClick={() => setP(Math.random())}
-                >
-                    random P
-                </Button>
+                <PomodoroClock />
             </div>
-            <div className="center">
-                <CircularProgress
-                    progress={p}
-                    innerText="TEST"
-                />
-            </div>
-        </>
+        </ProvidePomodoro>
     )
 }
 

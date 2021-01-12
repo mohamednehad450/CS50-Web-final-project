@@ -32,3 +32,10 @@ export const validateUsername = (username: string): boolean => {
     const re = /^(\w|[@_*+-]){1,150}$/
     return re.test(username)
 }
+
+export const formatTime = (time: number): string => {
+    const t = time / 1000
+    const min = Math.floor(t / 60)
+    const sec = Math.floor(t % 60)
+    return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`
+}
