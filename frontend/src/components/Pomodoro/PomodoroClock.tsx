@@ -18,7 +18,6 @@ const PomodoroClock: FC<PomodoroClockProps> = () => {
     return (
         <div className={`center pomodoro-${mode}`} onClick={() => running ? stop() : start()}>
             <CircularProgress
-                size={420}
                 progress={timeLeft / defaultTime}
             >
                 <text className="progress-text" x="50%" y="40%" dominantBaseline="middle" textAnchor="middle">

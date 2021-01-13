@@ -16,7 +16,7 @@ interface DatePickerProps {
 
 const CustomInput = ({ value, onClick, emptyPlaceholder = '', disabled }: any) => {
     return (
-        <IconButton disabled={disabled} icon={<CalendarIcon />} onClick={onClick} label={value || emptyPlaceholder} />
+        <IconButton className="icon-gray" disabled={disabled} icon={<CalendarIcon />} onClick={onClick} label={value || emptyPlaceholder} />
     );
 }
 

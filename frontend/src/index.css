@@ -14,7 +14,8 @@ body {
   --gray3: #877891;
   --gray4: #685C70;
   --gray5: #49404F;
-  --gray6: #2A252C;
+  --gray6: #342E38;
+  --gray7: #1F1C22;
   --gray-dim: rgba(135, 120, 145, 0.2);
   --blue1: #5A92FF;
   --orange1: #f4845f;
@@ -29,16 +30,16 @@ body {
   --fg-dim: var(--gray-dim);
   --titles: var(--blue1);
   --subtitle: var(--gray3);
-  --icons: var(--gray2);
+  --icons: var(--gray3);
   --bg-nav: var(--gray5);
   --text-nav: var(--gray0);
   --shadow-nav1: var(--gray4);
   --shadow-nav2: var(--gray3);
   --active-navitem: var(--blue1);
-  --text: var(--gray4);
+  --text: var(--gray5);
   --hr: var(--gray1);
   --btn-prime-bg: var(--blue1);
-  --btn-second-bg: var(--gray3);
+  --btn-second-bg: var(--gray4);
   --btn-text: var(--gray0);
   --pomodoro-work: var(--orange2);
   --pomodoro-break: var(--green2);
@@ -53,17 +54,17 @@ body {
   --fg-dim: var(--gray-dim);
   --titles: var(--blue1);
   --subtitle: var(--gray1);
-  --icons: var(--gray2);
-  --bg-nav: var(--gray6);
+  --icons: var(--gray1);
+  --bg-nav: var(--gray7);
   --text-nav: var(--gray0);
   --shadow-nav1: var(--gray5);
   --shadow-nav2: var(--gray3);
   --active-navitem: var(--blue1);
-  --text: var(--gray1);
+  --text: var(--gray0);
   --hr: var(--gray4);
   --btn-prime-bg: var(--blue1);
-  --btn-second-bg: var(--gray1);
-  --btn-text: var(--gray5);
+  --btn-second-bg: var(--gray3);
+  --btn-text: var(--gray0);
   --pomodoro-work: var(--orange1);
   --pomodoro-break: var(--green1);
   --pomodoro-longbreak: var(--gray0);
@@ -253,7 +254,7 @@ main {
 }
 
 .checkbox svg {
-  fill: var(--bg-nav);
+  fill: var(--text);
 }
 
 .checkbox-disabled {
@@ -725,6 +726,12 @@ main {
     left: 0;
     bottom: 5rem;
   }
+  .progress {
+    width: 20rem;
+    height: 20rem;
+    max-width: 90vw;
+    max-height: 90vw;
+  }
 }
 
 @media only screen and (min-width: 800px) {
@@ -747,9 +754,13 @@ main {
     margin-top: auto;
   }
   main {
-    padding-left: 6rem;
+    padding-left: 5rem;
   }
   .overlay {
     left: 5rem;
+  }
+  .progress {
+    width: 25rem;
+    height: 25rem;
   }
 }
