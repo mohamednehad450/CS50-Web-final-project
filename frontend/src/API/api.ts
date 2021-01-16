@@ -12,7 +12,7 @@ export interface Tag {
 export interface Step {
     id: number | string,
     title: string,
-    dueDate?: Date,
+    dueDate?: Date | string,
     checked: boolean,
 }
 
@@ -20,7 +20,7 @@ export interface Todo {
     title: string,
     checked: boolean,
     tag: Tag,
-    dueDate?: Date,
+    dueDate?: string | Date,
     date: Date,
     id: number | string,
     steps: Step[],

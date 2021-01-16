@@ -15,13 +15,16 @@ interface NewTodoOverlayProps {
 }
 
 function getMaxDate(steps: Step[]): Date | undefined {
-    return steps.reduce<Date | undefined>((acc, { dueDate: date }) => (
-        acc ?
-            date && date.getTime() > acc.getTime() ?
-                date :
-                acc :
-            date
-    ), undefined)
+    return steps.reduce<Date | undefined>((acc, { dueDate }) => {
+        const date = dueDate ? new Date(dueDate) : undefined
+        return (
+            acc ?
+                date && date.getTime() > acc.getTime() ?
+                    date :
+                    acc :
+                date
+        )
+    }, undefined)
 }
 
 const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
@@ -44,7 +47,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
                     <DatePicker
                         disabled={!!maxDate}
                         emptyPlaceholder="set a deadline (optional)"
-                        date={maxDate || todo.dueDate}
+                        date={maxDate || (todo.dueDate ? new Date(todo.dueDate) : undefined)}
                         onChange={(dueDate) => setTodo({ ...todo, dueDate })}
                     />
                     {todo.dueDate && !maxDate &&

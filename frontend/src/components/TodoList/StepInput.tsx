@@ -26,7 +26,7 @@ const StepInput: FC<StepInputProps> = ({ step, onChange, remove }) => {
                     value={step.title}
                 />
                 <DatePicker
-                    date={step.dueDate}
+                    date={step.dueDate ? new Date(step.dueDate) : undefined}
                     onChange={(dueDate) => onChange({ ...step, dueDate })}
                     emptyPlaceholder="set a deadline (optional)"
                 />
