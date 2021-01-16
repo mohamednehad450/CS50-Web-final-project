@@ -23,10 +23,10 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
         !tags.length && getTages(auth).then((tags) => {
             if (tags) {
                 setTags(tags)
-                onChange(tags[0])
+                onChange(selected || tags[0])
             }
         })
-    }, [auth, tags, onChange])
+    }, [auth, tags, onChange, selected])
 
     return (
         <>
@@ -44,6 +44,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                 />
             }
             <Select
+                scroll
                 options={tags}
                 selected={selected}
                 onChange={onChange}
@@ -63,7 +64,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                 customRow={({ option, onClick, isSelected }) => (
                     <IconButton
                         key={option.id}
-                        className={`${isSelected ? 'selected' : 'select-item'}`}
+                        className={`select-item ${isSelected ? 'select-item-selected' : ''}`}
                         onClick={onClick}
                         icon={<Circle fill={option.color} />}
                         label={option.label}

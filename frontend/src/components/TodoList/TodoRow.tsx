@@ -1,32 +1,48 @@
 import React, { useState } from 'react'
-import { Checkbox, ColorTag } from '../common'
+import { Checkbox, ColorTag, } from '../common'
 import StepRow from './Step'
-import { updateStep, updateTodo, useAuth } from '../../API'
+import { updateStep, useAuth, updateTodo } from '../../API'
 
 import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
 // Types
-import { Todo, Step, } from '../../API'
+import { Todo, } from '../../API'
+import ActionSelect from './ActionSelect'
+import { NewTodoOverlay } from '.'
 
 interface TodoRowProps {
     todo: Todo,
     expanded: boolean,
-    onClick?: (id: Step['id']) => void,
+    onClick?: (id: Todo['id']) => void,
+    delete: (todo: Todo) => void,
 }
 
+
+
 const TodoRow = (props: TodoRowProps) => {
-    const { todo, onClick, expanded: exp } = props
-    const [{ title, tag, steps, id, checked, }, setTodo] = useState<Todo>(todo)
+    const { todo: initialTodo, onClick, expanded: exp, delete: del } = props
+    const [todo, setTodo] = useState<Todo>(initialTodo)
+    const { title, tag, steps, id, checked, } = todo
 
     const expandable = !!steps.length
     const expanded = exp && expandable
+
     const stepsLeft: number = steps.length && steps.filter(step => !step.checked).length
+
+    const [editing, setEditing] = useState(false)
 
     const auth = useAuth()
 
     return (
         <>
+            {editing && (
+                <NewTodoOverlay
+                    close={() => setEditing(false)}
+                    onSubmit={(todo) => updateTodo(todo, auth).then((t) => t && setTodo(t))}
+                    initialTodo={todo}
+                />
+            )}
             <div className={`row-container ${expanded ? 'gray-bg' : ''}`}>
                 <div onClick={() => expandable && onClick && onClick(id)} className="row">
                     <div className="row-section">
@@ -52,6 +68,13 @@ const TodoRow = (props: TodoRowProps) => {
                                 <TimerIcon />
                             </span>
                         }
+                        <ActionSelect
+                            actions={[
+                                { label: 'Edit', action: () => setEditing(true) },
+                                { label: 'Delete', action: () => del(todo) },
+                            ]}
+                            id={id}
+                        />
                     </div>
                 </div>
                 <div className={`steps-container ${expanded ? "expanded" : ''}`}>

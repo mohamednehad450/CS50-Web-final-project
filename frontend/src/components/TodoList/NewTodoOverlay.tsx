@@ -1,3 +1,4 @@
+
 import React, { useState, FC } from 'react'
 import { createEmptyTodo } from '../../API'
 import { Overlay, Button, ButtonsRow, TextInput, DatePicker, IconButton, } from '../common'
@@ -12,6 +13,7 @@ import type { Step, Todo } from '../../API'
 interface NewTodoOverlayProps {
     close: () => void
     onSubmit: (todo: Partial<Todo>) => void
+    initialTodo?: Todo
 }
 
 function getMaxDate(steps: Step[]): Date | undefined {
@@ -27,10 +29,10 @@ function getMaxDate(steps: Step[]): Date | undefined {
     }, undefined)
 }
 
-const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
+const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, initialTodo }) => {
 
-    const [todo, setTodo] = useState<Partial<Todo>>(createEmptyTodo())
-    const [maxDate, setMaxDate] = useState<Date | undefined>()
+    const [todo, setTodo] = useState<Partial<Todo>>(initialTodo || createEmptyTodo())
+    const [maxDate, setMaxDate] = useState<Date | undefined>(getMaxDate(initialTodo?.steps || []))
     return (
         <Overlay>
             <div className='overlay-container-lg'>
@@ -72,7 +74,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit }) => {
                         type='primary'
                         onClick={() => { onSubmit(todo); close(); }}
                     >
-                        Add
+                        {initialTodo ? 'Save' : 'Add'}
                     </Button>
                 </ButtonsRow>
             </div>

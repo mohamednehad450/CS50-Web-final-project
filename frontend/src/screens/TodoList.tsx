@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
 import { TodoRow, NewTodoOverlay } from '../components/TodoList'
-import { getTodos, addNewTodo, useAuth } from '../API'
+import { getTodos, addNewTodo, useAuth, deleteTodo } from '../API'
 import { Header } from '../components/common'
 
 import type { Todo, Step, } from '../API'
@@ -50,6 +50,7 @@ const TodoList: FC = () => {
                         todo={todo}
                         expanded={todo.id === expanded}
                         onClick={(id) => setExpanded(expanded === todo.id ? -1 : id)}
+                        delete={(todo) => deleteTodo({ id: todo.id }, auth).then(() => getTodos(auth).then((t) => t && setTodos(t)))}
                     />)
                 )}
             </div>

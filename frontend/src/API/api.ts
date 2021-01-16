@@ -81,8 +81,21 @@ export const updateTodo = async (todo: Partial<Todo>, auth: AuthContext): Promis
         // TODO: Handle error
         auth.signout()
     }
-
 }
+
+export const deleteTodo = async (todo: Partial<Todo>, auth: AuthContext): Promise<void> => {
+    try {
+        await Axios.delete<void>(`/api/todos/${todo.id}/`, {
+            headers: {
+                "Authorization": `JWT ${auth.user?.token}`
+            }
+        })
+    } catch (error) {
+        // TODO: Handle error
+        auth.signout()
+    }
+}
+
 export const updateStep = async (step: Partial<Step>, auth: AuthContext): Promise<Step | undefined> => {
     try {
         const { data } =
