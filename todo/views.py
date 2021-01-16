@@ -46,27 +46,14 @@ class TodoViewSet(viewsets.ViewSet):
         return response.Response(serializer.data)
 
     def create(self, request):
-        data = request.data
-        t = TodoSerializer(data=data)
-        if (t.is_valid()):
-            data = t.validated_data
-
-            steps = data['steps']
-            del data['steps']
-
-            tag = Tag.objects.get(pk=data['tag']['id'])
-            del data['tag']
-            todo = Todo.objects.create(**data, tag=tag, user=request.user)
-            todo.save()
-
-            for step in steps:
-                Step.objects.create(**step, todo=todo).save()
-
-            serializer = TodoSerializer(todo)
-
-            return response.Response({**serializer.data})
+        data = {**request.data, 'user': request.user.id}
+        ser = TodoSerializer(data=data)
+        if (ser.is_valid()):
+            ser.save()
+            ser.validated_data.pop('user')
+            return response.Response(ser.validated_data)
         else:
-            return response.Response({'details': 'bad request'}, status=400)
+            return response.Response({'details': 'bad request', **ser._errors}, status=400)
 
     def retrieve(self, request, pk=None):
         todo = get_object_or_404(Todo, user=request.user,  pk=pk)
@@ -78,13 +65,19 @@ class TodoViewSet(viewsets.ViewSet):
 
     def partial_update(self, request, pk=None):
         todo = get_object_or_404(Todo, user=request.user,  pk=pk)
-        todo.__dict__.update(request.data)
-        todo.save()
-        data = TodoSerializer(todo).data
-        return response.Response(data)
+        serializer = TodoSerializer(todo, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data = serializer.data
+            del data['user']
+            return response.Response(data)
+        else:
+            return response.Response(ser._errors)
 
     def destroy(self, request, pk=None):
-        pass
+        todo = get_object_or_404(Todo, user=request.user,  pk=pk)
+        todo.delete()
+        return response.Response(status=200)
 
 
 class TagViewSet(viewsets.ViewSet):
