@@ -20,7 +20,7 @@ const TodoList: FC = () => {
     const [newOverlay, setNewOverlay] = useState(false)
 
     return (
-        <>
+        <div className="container">
             {newOverlay &&
                 <NewTodoOverlay
                     onSubmit={(todo) => {
@@ -54,7 +54,7 @@ const TodoList: FC = () => {
                     />)
                 )}
             </div>
-        </>
+        </div>
     )
 }
 

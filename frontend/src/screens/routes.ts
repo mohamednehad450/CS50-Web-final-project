@@ -6,6 +6,6 @@ export enum routes {
     HABITTRACKER = "/app/habit-tracker",
     GRAPHS = "/app/graphs",
     POMODORO = "/app/pomodoro",
-    SIGININ = "/auth/signin",
-    REGISTER = "/auth/register",
+    SIGININ = "/signin",
+    REGISTER = "/register",
 }

@@ -1,17 +1,17 @@
 import React from 'react'
 import { Header } from '../components/common'
-import { PomodoroClock, ProvidePomodoro } from '../components/Pomodoro'
+import { PomodoroClock } from '../components/Pomodoro'
 
 const Pomodoro = () => {
     return (
-        <ProvidePomodoro>
+        <div className="container">
             <Header
                 title="Pomodoro Timer"
             />
             <div className="center">
                 <PomodoroClock />
             </div>
-        </ProvidePomodoro>
+        </div>
     )
 }
 

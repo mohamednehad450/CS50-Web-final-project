@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/auth/get_token', obtain_jwt_token),
     path('api/auth/refresh_token', refresh_jwt_token),
     path('admin/', admin.site.urls),
+    # must be last: contains catch all path
     path('', include('todo.urls')),
 ]

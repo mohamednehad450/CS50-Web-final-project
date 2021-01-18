@@ -3,20 +3,18 @@ import {
   BrowserRouter as Router, Redirect, Route, Switch,
 } from "react-router-dom";
 
+import { ProvidePomodoro } from './components/Pomodoro';
 // Screens
 import {
   routes,
-  Home,
   Pomodoro,
   TodoList,
   HabitTracker,
   Graphs,
   Settings,
   SignIn,
-  Screen,
   Register
 } from './screens'
-
 import { Navbar, NavItem } from './components/nav'
 
 import { ReactComponent as PomIcon } from './icons/pomodoro.svg'
@@ -32,74 +30,82 @@ function App() {
     <div className="light">
       <ProvideAuth>
         <Router>
-          <PrivateRoute path={routes.APP}>
-            <Navbar>
-              <NavItem path={routes.POMODORO} Icon={<PomIcon />} />
-              <NavItem path={routes.TODOLIST} Icon={<TodoIcon />} />
-              <NavItem path={routes.HABITTRACKER} Icon={<HabitIcon />} />
-              <NavItem path={routes.GRAPHS} Icon={<GraphIcon />} />
-              <NavItem path={routes.SETTINGS} Icon={<SettingsIcon />} />
-            </Navbar>
-          </PrivateRoute>
-          <main>
-            <Switch>
-              <PrivateRoute path={routes.APP}>
-                <Screen
-                  route={routes.APP}
-                  exact
-                  lazy
-                  unmountOnExit
-                >
-                  <Home />
-                </Screen>
-                <Screen
-                  route={routes.POMODORO}
-                  lazy
-                >
-                  <Pomodoro />
-                </Screen>
-                <Screen
-                  route={routes.TODOLIST}
-                  lazy
-                >
-                  <TodoList />
-                </Screen>
-                <Screen
-                  route={routes.GRAPHS}
-                  lazy
-                  unmountOnExit
-                >
-                  <Graphs />
-                </Screen>
-                <Screen
-                  route={routes.HABITTRACKER}
-                  lazy
-                  unmountOnExit
-                >
-                  <HabitTracker />
-                </Screen>
-                <Screen
-                  route={routes.SETTINGS}
-                  lazy
-                  unmountOnExit
-                >
-                  <Settings />
-                </Screen>
-              </PrivateRoute>
-              <Route path={routes.SIGININ}>
+          <Switch>
+            <PrivateRoute path={routes.APP}>
+              <Navbar>
+                <NavItem path={routes.POMODORO} Icon={<PomIcon />} />
+                <NavItem path={routes.TODOLIST} Icon={<TodoIcon />} />
+                <NavItem path={routes.HABITTRACKER} Icon={<HabitIcon />} />
+                <NavItem path={routes.GRAPHS} Icon={<GraphIcon />} />
+                <NavItem path={routes.SETTINGS} Icon={<SettingsIcon />} />
+              </Navbar>
+              <main>
+                {/* Main App */}
+                <ProvidePomodoro>
+                  <Switch>
+                    <Route
+                      path={routes.APP}
+                      exact
+                    >
+                      <Redirect to={routes.TODOLIST} />
+                    </Route>
+                    <Route
+                      path={routes.POMODORO}
+                      exact
+                    >
+                      <Pomodoro />
+                    </Route>
+                    <Route
+                      path={routes.TODOLIST}
+                      exact
+                    >
+                      <TodoList />
+                    </Route>
+                    <Route
+                      path={routes.GRAPHS}
+                      exact
+                    >
+                      <Graphs />
+                    </Route>
+                    <Route
+                      path={routes.HABITTRACKER}
+                      exact
+                    >
+                      <HabitTracker />
+                    </Route>
+                    <Route
+                      path={routes.SETTINGS}
+                      exact
+                    >
+                      <Settings />
+                    </Route>
+                    {/* Catch all route */}
+                    <Route path='*' >
+                      404 not found
+                    </Route>
+                  </Switch>
+                </ProvidePomodoro>
+              </main>
+            </PrivateRoute>
+            {/* Authentication */}
+            <Route path={routes.SIGININ}>
+              <main>
                 <SignIn />
-              </Route>
-              <Route path={routes.REGISTER}>
+              </main>
+            </Route>
+            <Route path={routes.REGISTER}>
+              <main>
                 <Register />
-              </Route>
-              <Route path={routes.ROOT} exact>
-                <Redirect to={routes.APP} />
-              </Route>
-              <Route path='*' >
-                404 not found
-              </Route>
-            </Switch>
-          </main>
+              </main>
+            </Route>
+            <Route path={routes.ROOT} exact>
+              <Redirect to={routes.APP} />
+            </Route>
+            {/* Catch all route */}
+            <Route path='*' >
+              404 not found
+            </Route>
+          </Switch>
         </Router>
       </ProvideAuth>
     </div>
