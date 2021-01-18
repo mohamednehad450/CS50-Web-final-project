@@ -1,45 +1,44 @@
 import React, { useState } from 'react'
 import { Checkbox, ColorTag, } from '../common'
 import StepRow from './Step'
-import { updateStep, useAuth, updateTodo } from '../../API'
+import { NewTodoOverlay, useTodo } from '.'
+import ActionSelect from './ActionSelect'
 
 import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
 // Types
 import { Todo, } from '../../API'
-import ActionSelect from './ActionSelect'
-import { NewTodoOverlay } from '.'
 
 interface TodoRowProps {
     todo: Todo,
     expanded: boolean,
     onClick?: (id: Todo['id']) => void,
-    delete: (todo: Todo) => void,
 }
 
 
 
 const TodoRow = (props: TodoRowProps) => {
-    const { todo: initialTodo, onClick, expanded: exp, delete: del } = props
-    const [todo, setTodo] = useState<Todo>(initialTodo)
-    const { title, tag, steps, id, checked, } = todo
+    const { todo, onClick, expanded: exp, } = props
+    const { title, tag, steps, id, } = todo
 
     const expandable = !!steps.length
     const expanded = exp && expandable
 
     const stepsLeft: number = steps.length && steps.filter(step => !step.checked).length
+    const checked = steps.length ? !stepsLeft : todo.checked
 
     const [editing, setEditing] = useState(false)
 
-    const auth = useAuth()
+    const { updateTodo, updateStep, deleteTodo } = useTodo()
+
 
     return (
         <>
             {editing && (
                 <NewTodoOverlay
                     close={() => setEditing(false)}
-                    onSubmit={(todo) => updateTodo(todo, auth).then((t) => t && setTodo(t))}
+                    onSubmit={updateTodo}
                     initialTodo={todo}
                 />
             )}
@@ -49,7 +48,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <Checkbox
                             disabled={expandable}
                             checked={checked}
-                            onChange={(checked) => updateTodo({ id, checked, }, auth).then(t => t && setTodo(t))}
+                            onChange={(checked) => updateTodo({ id, checked, })}
                         />
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
                     </div>
@@ -71,7 +70,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <ActionSelect
                             actions={[
                                 { label: 'Edit', action: () => setEditing(true) },
-                                { label: 'Delete', action: () => del(todo) },
+                                { label: 'Delete', action: () => deleteTodo(todo) },
                             ]}
                             id={id}
                         />
@@ -82,19 +81,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <StepRow
                             key={step.id}
                             step={step}
-                            onChange={(step) => {
-                                updateStep(step, auth).then(s => {
-                                    if (s) {
-                                        steps[index] = s
-                                        const newChecked = steps.reduce((acc, { checked }) => acc && checked, steps[0].checked)
-                                        if (newChecked !== checked) {
-                                            updateTodo({ id, checked: newChecked }, auth).then((t) => {
-                                                t && setTodo({ ...t })
-                                            })
-                                        } else setTodo((old) => ({ ...old, }))
-                                    }
-                                })
-                            }}
+                            onChange={updateStep}
                         />
                     ))}
                 </div>

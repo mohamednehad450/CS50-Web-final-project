@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
-import { addNewTag, getTages, useAuth } from '../../API/'
 import { IconButton, Select } from '../common'
 import NewTagOverlay from './NewTagOverlay'
+import { useTodo } from '.'
 
 import { ReactComponent as Circle } from '../../icons/circle.svg'
 import { ReactComponent as Add } from '../../icons/add-fill.svg'
 
-import { Tag } from '../../API'
+import type { Tag } from '../../API'
 
 interface TagSelectProps {
     selected?: Tag
@@ -15,31 +15,18 @@ interface TagSelectProps {
 
 const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
 
-    const auth = useAuth();
     const [addTagOverlay, setAddTagOverlay] = useState(false)
 
-    const [tags, setTags] = useState<Tag[]>([])
+    const { getTags, tags, addNewTag } = useTodo()
     useEffect(() => {
-        !tags.length && getTages(auth).then((tags) => {
-            if (tags) {
-                setTags(tags)
-                onChange(selected || tags[0])
-            }
-        })
-    }, [auth, tags, onChange, selected])
+        !tags.length && getTags()
+    }, [tags, getTags])
 
     return (
         <>
             {addTagOverlay &&
                 <NewTagOverlay
-                    onSubmit={(tag) => {
-                        addNewTag(tag, auth).then((tag) => {
-                            if (tag) {
-                                setTags([...tags, tag])
-                                onChange(tag)
-                            }
-                        })
-                    }}
+                    onSubmit={(t) => { addNewTag(t); onChange(t) }}
                     close={() => setAddTagOverlay(false)}
                 />
             }

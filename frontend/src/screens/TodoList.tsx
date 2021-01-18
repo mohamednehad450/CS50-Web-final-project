@@ -1,19 +1,17 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
-import { TodoRow, NewTodoOverlay } from '../components/TodoList'
-import { getTodos, addNewTodo, useAuth, deleteTodo } from '../API'
+import { TodoRow, NewTodoOverlay, useTodo } from '../components/TodoList'
 import { Header } from '../components/common'
 
-import type { Todo, Step, } from '../API'
+import type { Step, } from '../API'
 
 
 const TodoList: FC = () => {
 
-    const auth = useAuth()
-    const [todos, setTodos] = useState<Todo[]>([])
+    const { todos, getTodos, addNewTodo } = useTodo()
     useEffect(() => {
-        !todos.length && getTodos(auth).then(todos => todos?.length && setTodos(todos))
-    }, [auth, todos])
+        !todos.length && getTodos()
+    }, [todos, getTodos])
 
     const [expanded, setExpanded] = useState<Step['id']>('');
     const todosLeft = todos.filter(t => !t.checked).length
@@ -23,9 +21,7 @@ const TodoList: FC = () => {
         <div className="container">
             {newOverlay &&
                 <NewTodoOverlay
-                    onSubmit={(todo) => {
-                        addNewTodo(todo, auth).then((t) => t && setTodos([t, ...todos]))
-                    }}
+                    onSubmit={addNewTodo}
                     close={() => setNewOverlay(false)}
                 />
             }
@@ -50,7 +46,6 @@ const TodoList: FC = () => {
                         todo={todo}
                         expanded={todo.id === expanded}
                         onClick={(id) => setExpanded(expanded === todo.id ? -1 : id)}
-                        delete={(todo) => deleteTodo({ id: todo.id }, auth).then(() => getTodos(auth).then((t) => t && setTodos(t)))}
                     />)
                 )}
             </div>
