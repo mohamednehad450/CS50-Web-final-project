@@ -20,13 +20,14 @@ const ActionSelect: FC<ActionSelectProps> = ({
         <div>
             <Select
                 right
+                border
                 options={actions.map(a => ({ ...a, id: a.label }))}
-                customInput={({ onClick }) => (
+                CustomInput={({ onClick }) => (
                     <span onClick={(e) => { e.stopPropagation(); onClick() }} className="icon icon-gray">
                         <MoreIcon />
                     </span>
                 )}
-                customRow={({ onClick, option }) => (<div onClick={(e) => { e.stopPropagation(); onClick() }} className="select-item select-item-sm align-row">{option.label}</div>)}
+                CustomRow={({ onClick, option }) => (<div onClick={(e) => { e.stopPropagation(); onClick() }} className="select-item select-item-sm align-row">{option.label}</div>)}
                 onChange={(o) => o.action()}
             />
         </div>

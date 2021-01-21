@@ -582,13 +582,15 @@ main {
   z-index: 1;
   position: absolute;
   background-color: var(--fg);
-  border: 1px solid var(--gray-dim);
   border-top: 0;
-  transform: translateY(60%);
+}
+
+.border {
+  border: 1px solid var(--gray-dim);
 }
 
 .dropdown-scroll {
-  max-height: 20rem;
+  max-height: 15rem;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -715,6 +717,61 @@ main {
 
 .pomodoro-icon {
   z-index: 1;
+}
+
+.default-select-input {
+  background-color: var(--btn-prime-bg);
+  width: 12rem;
+  height: 2rem;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.default-select-input:hover {
+  cursor: pointer;
+}
+
+.default-select-input-title {
+  color: var(--btn-text);
+  text-overflow: ellipsis;
+  width: 10rem;
+  overflow: hidden;
+}
+
+.default-select-input-icon {
+  display: flex;
+  align-items: center;
+}
+
+.default-select-input-icon svg {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--btn-text);
+}
+
+.default-select-row {
+  background-color: var(--btn-second-bg);
+  color: var(--btn-text);
+  width: 11rem;
+  height: 2rem;
+  padding: 0 1rem;
+  padding-left: 2rem;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--btn-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.default-select-row-selected {
+  background-color: var(--btn-prime-bg);
+}
+
+.default-select-row:hover {
+  cursor: pointer;
+  background-color: rgba(90, 146, 255, 0.7)!important;
 }
 
 @media only screen and (max-width: 799px) {

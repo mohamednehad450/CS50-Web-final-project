@@ -31,11 +31,12 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                 />
             }
             <Select
+                border
                 scroll
                 options={tags}
                 selected={selected}
                 onChange={onChange}
-                customInput={({ selected, onClick }) => selected ? (
+                CustomInput={({ selected, onClick }) => selected ? (
                     <IconButton
                         className='select-input'
                         onClick={onClick}
@@ -48,7 +49,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                         icon={<Add />}
                     />)
                 }
-                customRow={({ option, onClick, isSelected }) => (
+                CustomRow={({ option, onClick, isSelected }) => (
                     <IconButton
                         key={option.id}
                         className={`select-item ${isSelected ? 'select-item-selected' : ''}`}
@@ -57,9 +58,9 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                         label={option.label}
                     />
                 )}
-                headerOption={({ close }) => (
+                Header={({ close }) => (
                     <IconButton
-                        className="select-item icon-prime"
+                        className="select-item icon-gray"
                         icon={<Add />}
                         onClick={() => { setAddTagOverlay(true); close() }}
                         label="New Tag"

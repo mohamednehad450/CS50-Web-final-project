@@ -1,12 +1,10 @@
-import React, { ReactNode, useState, } from 'react'
+import { FC, useState, } from 'react'
+import { SelectItem } from '.'
+
+import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 
 
-// TODO: Implement default behavior
-
-interface Option {
-    id: number | string
-    label?: string
-}
+import type { SelectItemProps, Option } from '.'
 
 interface SelectProps<T extends Option> {
     onChange: (arg: T) => void;
@@ -14,51 +12,61 @@ interface SelectProps<T extends Option> {
     selected?: T
     scroll?: boolean
     right?: boolean
-    customInput?: (props: { selected?: T, onClick: () => void }) => ReactNode
-    customRow?: (props: { onClick: () => void, option: T, isSelected: boolean }) => ReactNode
-    headerOption?: (arg: { close: () => void }) => ReactNode
+    border?: boolean
+    CustomInput?: FC<{ selected?: T, onClick: () => void }>
+    CustomRow?: FC<SelectItemProps<T>>
+    Header?: FC<{ close: () => void }>
 }
 
 function Select<T extends Option>({
-    customInput,
+    CustomInput,
+    CustomRow = SelectItem,
+    Header,
     selected,
     options,
-    customRow,
     onChange,
-    headerOption,
     scroll = false,
     right = false,
+    border = false
 }: SelectProps<T>) {
     const [open, setOpen] = useState(false)
     return (
-        <>
-            {customInput && customInput({ onClick: () => setOpen(!open), selected })}
+        <div className="padding">
+            {CustomInput ?
+                <CustomInput selected={selected} onClick={() => setOpen(!open)} /> :
+                (<div className='default-select-input' onClick={() => setOpen(!open)}>
+                    <span className='default-select-input-title'>{selected ? selected.label : ' - Select'}</span>
+                    <span className={`default-select-input-icon ${open ? 'flip' : ''}`}><ExpandIcon /></span>
+                </div>)
+            }
             {open && (
                 <>
-                    <div className="dismiss" onClick={(e) => { e.stopPropagation(); setOpen(false) }}></div>
                     <div
                         className={`
                         dropdown 
                         ${right ? 'dropdown-right' : ''}
                         ${scroll ? 'dropdown-scroll' : ''}
+                        ${border ? 'border' : ''}
                         `}
                     >
-                        {headerOption && headerOption({ close: () => setOpen(false) })}
+                        {Header &&
+                            <Header close={() => setOpen(false)} />
+                        }
                         {options.map(option => (
-                            customRow &&
-                            customRow({
-                                isSelected: option.id === selected?.id,
-                                option,
-                                onClick: () => {
+                            <CustomRow
+                                onClick={() => {
                                     onChange(option)
                                     setOpen(false)
-                                }
-                            })
+                                }}
+                                option={option}
+                                isSelected={option.id === selected?.id}
+                            />
                         ))}
                     </div>
+                    <div className="dismiss" onClick={(e) => { e.stopPropagation(); setOpen(false) }}></div>
                 </>
             )}
-        </>
+        </div>
     )
 }
 
