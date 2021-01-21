@@ -17,7 +17,7 @@ body {
   --gray6: #342E38;
   --gray7: #1F1C22;
   --gray-dim: rgba(135, 120, 145, 0.2);
-  --blue1: #5A92FF;
+  --blue1: #4B7CDA;
   --orange1: #f4845f;
   --orange2: #F05E2D;
   --green1: #96E072;
@@ -789,6 +789,7 @@ main {
     width: 100%;
     min-width: 0;
     overflow-y: scroll;
+    padding-bottom: 5rem;
   }
   .container-sm {
     transform: none;
