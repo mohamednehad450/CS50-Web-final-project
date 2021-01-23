@@ -12,18 +12,18 @@ interface PomodoroClockProps { }
 
 const PomodoroClock: FC<PomodoroClockProps> = () => {
 
-    const { state: { timeLeft, defaultTime, running, mode, }, start, stop } = usePomodoro()
-
+    const { state, isRunning, start, stop } = usePomodoro()
+    const { timeLeft, defaultTime, mode, } = state
 
     return (
-        <div className={`center pomodoro-${mode}`} onClick={() => running ? stop() : start()}>
+        <div className={`center pomodoro-${mode}`} onClick={() => isRunning ? stop() : start()}>
             <CircularProgress
                 progress={timeLeft / defaultTime}
             >
                 <text className="progress-text" x="50%" y="40%" dominantBaseline="middle" textAnchor="middle">
                     {formatTime(timeLeft)}
                 </text>
-                {running ?
+                {isRunning ?
                     <PauseIcon className="pomodoro-icon" width={64} height={64} x="41%" y="60%" /> :
                     <PlayIcon className="pomodoro-icon" width={64} height={64} x="41%" y="60%" />
                 }

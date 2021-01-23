@@ -439,6 +439,10 @@ main {
   -moz-appearance: none;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 .btn-row {
   margin: 1rem 0 !important;
   width: 100% !important;
@@ -774,6 +778,58 @@ main {
   background-color: rgba(90, 146, 255, 0.7)!important;
 }
 
+.pomodoro-container {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  padding: 0 0rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  flex: 1 1 auto;
+}
+
+.pomodoro-section {
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pomodoro-stats {
+  margin: 2rem 0;
+  height: 4rem;
+  width: 12rem;
+  align-self: flex-start;
+  background-color: var(--btn-prime-bg);
+  color: var(--btn-text);
+  padding: 0.5rem 0;
+  display: flex;
+}
+
+.pomodoro-count {
+  width: 4rem;
+  padding: 0 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.pomodoro-count-title {
+  font-size: 0.75rem;
+}
+
+.pomodoro-count:last-child {
+  border-left: 1px solid var(--btn-text);
+}
+
+.section-header {
+  color: var(--text);
+  font-size: 2rem;
+  align-self: flex-start;
+  padding: 0.5rem 0;
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     bottom: 0;
@@ -813,6 +869,9 @@ main {
   }
   .icon {
     margin: 0 0.5rem;
+  }
+  .pomodoro-section {
+    padding: 1rem;
   }
 }
 
