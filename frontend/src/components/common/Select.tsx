@@ -54,6 +54,7 @@ function Select<T extends Option>({
                         }
                         {options.map(option => (
                             <CustomRow
+                                key={option.id}
                                 onClick={() => {
                                     onChange(option)
                                     setOpen(false)

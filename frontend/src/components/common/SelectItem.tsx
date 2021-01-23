@@ -18,7 +18,6 @@ function SelectItem<T extends Option>({
 }: SelectItemProps<T>) {
     return (
         <div
-            key={option.id}
             className={`default-select-row ${isSelected ? "default-select-row-selected" : ''}`}
             onClick={onClick}
         >
