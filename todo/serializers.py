@@ -1,4 +1,7 @@
+import uuid
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from .models import Tag, Todo, Step
 
@@ -8,7 +11,7 @@ class StepSerializer(serializers.ModelSerializer):
         model = Step
         fields = ['id', 'title', 'dueDate', 'checked']
 
-    id = serializers.UUIDField()
+    id = serializers.UUIDField(default=uuid.uuid4)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -16,19 +19,17 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'label', 'color']
 
-    id = serializers.UUIDField()
+    id = serializers.UUIDField(default=uuid.uuid4)
 
 
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = ['id', 'user', 'title', 'checked',
+        fields = ['id', 'title', 'checked',
                   'tag', 'dueDate', 'steps', 'date']
 
-    tag = TagSerializer()
-    steps = StepSerializer(many=True)
-
-    id = serializers.UUIDField()
+    steps = StepSerializer(many=True, required=False)
+    date = serializers.DateTimeField(default=timezone.now, read_only=True)
 
     def update(self, instance, validated_data):
 
@@ -39,15 +40,11 @@ class TodoSerializer(serializers.ModelSerializer):
         instance.checked = checked
         dueDate = validated_data.get('dueDate', instance.dueDate)
         instance.dueDate = dueDate
+        tag = validated_data.get('tag', instance.tag)
+        instance.tag = tag
 
-        # Forgin Objects
-        tag = validated_data.get('tag')
-        if tag is not None:
-            tag = Tag.objects.get_or_create(**tag)
-            instance.tag = tag[0]
-
-        steps = validated_data.get('steps')
-        if steps is not None:
+        steps = validated_data.get('steps', [])
+        if len(steps) > 0:
             Step.objects.filter(todo=instance).delete()
             new_steps = []
             for step in steps:
@@ -59,13 +56,15 @@ class TodoSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        steps = validated_data.pop('steps')
+        steps = validated_data.get('steps', None)
+        if steps is not None:
+            del validated_data['steps']
+        else:
+            steps = []
 
-        tag = validated_data.pop('tag')
-        tag = Tag.objects.get_or_create(**tag)
-
+        print(validated_data)
         todo = Todo.objects.create(
-            **validated_data, tag=tag[0])
+            **validated_data, user=self.context.get('user', None))
 
         new_steps = []
         for step in steps:

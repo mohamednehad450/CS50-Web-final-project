@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 from rest_framework import permissions, authentication, viewsets, response
 from rest_framework.decorators import api_view, permission_classes
@@ -37,114 +37,105 @@ class TodoViewSet(viewsets.ViewSet):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self, request):
+    def get_queryset(self):
         user = self.request.user
         return Todo.objects.filter(user=user).order_by('-date').all()
 
     def list(self, request):
-        serializer = TodoSerializer(self.get_queryset(request), many=True)
+        serializer = TodoSerializer(self.get_queryset(), many=True)
         return response.Response(serializer.data)
 
     def create(self, request):
-        data = {**request.data, 'user': request.user.id}
-        ser = TodoSerializer(data=data)
+        ser = TodoSerializer(
+            data=request.data,
+            context={
+                'user': request.user
+            }
+        )
         if (ser.is_valid()):
-            ser.save()
-            ser.validated_data.pop('user')
-            return response.Response(ser.validated_data)
-        else:
-            return response.Response({'details': 'bad request', **ser._errors}, status=400)
-
-    def retrieve(self, request, pk=None):
-        todo = get_object_or_404(Todo, user=request.user,  pk=pk)
-        data = TodoSerializer(todo).data
-        return response.Response(data)
-
-    def update(self, request, pk=None):
-        pass
-
-    def partial_update(self, request, pk=None):
-        todo = get_object_or_404(Todo, user=request.user,  pk=pk)
-        serializer = TodoSerializer(todo, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            data = serializer.data
-            del data['user']
+            todo = ser.save()
+            data = TodoSerializer(todo).data
             return response.Response(data)
         else:
-            return response.Response(ser._errors)
+            return response.Response(ser._errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        try:
+            todo = get_object_or_404(Todo, user=request.user,  pk=pk)
+            data = TodoSerializer(todo).data
+            return response.Response(data)
+        except ValidationError as err:
+            return response.Response([f"'{pk}' is not a valid Todo ID"], status=400)
+
+    def partial_update(self, request, pk=None):
+        try:
+            todo = get_object_or_404(Todo, user=request.user,  pk=pk)
+            ser = TodoSerializer(todo, data=request.data, partial=True)
+            if ser.is_valid():
+                todo = ser.save()
+                data = TodoSerializer(todo).data
+                return response.Response(data)
+            else:
+                return response.Response(ser._errors)
+        except ValidationError:
+            return response.Response([f"'{pk}' is not a valid Todo ID"], status=400)
 
     def destroy(self, request, pk=None):
-        todo = get_object_or_404(Todo, user=request.user,  pk=pk)
-        todo.delete()
-        return response.Response(status=200)
+        try:
+            todo = get_object_or_404(Todo, user=request.user,  pk=pk)
+            todo.delete()
+            return response.Response(status=200)
+        except ValidationError:
+            return response.Response([f"'{pk}' is not a valid Todo ID"], status=400)
 
 
 class TagViewSet(viewsets.ViewSet):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self, request):
+    def get_queryset(self):
         user = self.request.user
-        return Tag.objects.filter(Q(user=user) | Q(user=None)).order_by('user').all()
+        return Tag.objects.filter(user=user).all()
 
     def list(self, request):
-        serializer = TagSerializer(self.get_queryset(request), many=True)
+        serializer = TagSerializer(self.get_queryset(), many=True)
         return response.Response(serializer.data)
 
     def create(self, request):
         data = request.data
-        t = TagSerializer(data=data)
-        if (t.is_valid()):
-            tag = Tag.objects.create(**t.validated_data, user=request.user)
+        ser = TagSerializer(data=data)
+        if (ser.is_valid()):
+            tag = Tag.objects.create(**ser.validated_data, user=request.user)
             tag.save()
-            return response.Response(t.validated_data)
+            return response.Response(ser.validated_data)
         else:
-            return response.Response({'details': 'bad request'}, status=400)
+            return response.Response(ser._errors, status=400)
 
     def retrieve(self, request, pk=None):
-        tag = get_object_or_404(Tag, user=request.user,  pk=pk)
-        data = TodoSerializer(todo).data
-        return response.Response(data)
-
-    def update(self, request, pk=None):
-        pass
-
-    def partial_update(self, request, pk=None):
-        pass
-
-    def destroy(self, request, pk=None):
-        pass
+        try:
+            tag = get_object_or_404(Tag, user=request.user,  pk=pk)
+            data = TodoSerializer(todo).data
+            return response.Response(data)
+        except ValidationError:
+            return response.Response([f'"{pk}" is not a valid Tag ID'], status=400)
 
 
 class StepViewSet(viewsets.ViewSet):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def list(self, request):
-        pass
-
-    def create(self, request):
-        pass
-
-    def retrieve(self, request, pk=None):
-        pass
-
-    def update(self, request, pk=None):
-        pass
-
     def partial_update(self, request, pk=None):
-        step = get_object_or_404(Step,  pk=pk)
-        if step.todo.user == request.user:
-            step.__dict__.update(request.data)
-            step.save()
-            data = StepSerializer(step).data
-            return response.Response(data)
-        else:
-            return response.Response({'details': 'forbidden'}, status=403)
-
-    def destroy(self, request, pk=None):
-        pass
+        try:
+            step = get_object_or_404(Step,  pk=pk)
+            if step.todo.user == request.user:
+                step.__dict__.update(request.data)
+                step.save()
+                data = StepSerializer(step).data
+                return response.Response(data)
+            else:
+                return response.Response({'details': 'forbidden'}, status=403)
+        except ValidationError:
+            return response.Response([f"'{pk}' is not a valid Step ID"], status=400)
 
 
 @api_view(['POST'])
