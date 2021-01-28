@@ -3,18 +3,21 @@ from todo.models import Todo, Step, Tag
 
 
 class TodoAdmin(admin.ModelAdmin):
-    list_display = ("title", "checked",
+    list_display = ("user", "title", "checked",
                     "tag_label", "date", "steps_count", "id")
 
     def tag_label(self, obj):
-        return obj.tag.label
+        if obj.tag:
+            return obj.tag.label
+        else:
+            return None
 
     def steps_count(self, obj):
         return obj.steps.count()
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ("label", "color", "id")
+    list_display = ("label", "user", "color", "id")
 
 
 class StepAdmin(admin.ModelAdmin):
