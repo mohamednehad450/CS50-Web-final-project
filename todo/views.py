@@ -128,10 +128,14 @@ class StepViewSet(viewsets.ViewSet):
         try:
             step = get_object_or_404(Step,  pk=pk)
             if step.todo.user == request.user:
-                step.__dict__.update(request.data)
-                step.save()
-                data = StepSerializer(step).data
-                return response.Response(data)
+                ser = StepSerializer(
+                    instance=step, data=request.data, partial=True)
+                if ser.is_valid():
+                    step = ser.save()
+                    data = StepSerializer(step).data
+                    return response.Response(data)
+                else:
+                    return response.Response(ser._errors, status=400)
             else:
                 return response.Response({'details': 'forbidden'}, status=403)
         except ValidationError:
