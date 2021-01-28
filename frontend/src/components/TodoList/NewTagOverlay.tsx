@@ -11,12 +11,12 @@ import type { Tag } from '../../API'
 interface NewTagOverlayProps {
     close: () => void
     onSubmit: (tag: Tag) => void
+    submit: (tag: Partial<Tag>) => Promise<Tag>
 }
 
-const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit }) => {
+const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit, submit }) => {
 
-    const [tag, setTag] = useState<Tag>(createEmptyTag())
-
+    const [tag, setTag] = useState<Partial<Tag>>(createEmptyTag())
     return (
         <Overlay>
             <div className='overlay-container'>
@@ -40,7 +40,7 @@ const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit }) => {
                     <Button
                         disabled={!tag.label || !tag.color}
                         type='primary'
-                        onClick={() => { onSubmit(tag); close() }}
+                        onClick={() => submit(tag).then(t => { onSubmit(t); close() })}
                     >
                         Add
                     </Button>

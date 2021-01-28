@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { useState, useContext, createContext, useEffect, } from 'react'
+import { useState, useContext, createContext, useEffect, useCallback, } from 'react'
 import { getItemFromStorage, removeItemFromStorage, setItemToStorage } from '../utils';
 
 // Types
@@ -61,25 +61,27 @@ const useProvideAuth = (): AuthContext => {
     const [user, setUser] = useState<User | undefined>(getItemFromStorage('user'));
     const [lastRefreshed, setLastRefreshed] = useState(0)
 
-    // Refreshing Token
-    useEffect(() => {
-        const updateToken = async () => {
-            if (Date.now() > lastRefreshed + AUTH_REFRESH_INTERVAL) {
-                setLastRefreshed(Date.now())
-                if (user) {
-                    const res = await refreshToken(user.token)
-                    if (res) {
-                        updateUser({ ...user, token: res })
+    const updateToken = useCallback(() => {
+        if (Date.now() > lastRefreshed + AUTH_REFRESH_INTERVAL) {
+            setLastRefreshed(Date.now())
+            if (user) {
+                refreshToken(user.token).then(token => {
+                    if (token) {
+                        updateUser({ ...user, token })
                     }
                     else {
                         updateUser(undefined)
                     }
-                }
+                })
             }
         }
+    }, [lastRefreshed, user])
+
+    // Refreshing Token
+    useEffect(() => {
         const interval = setInterval(updateToken, 3 * 1000)
         return () => clearInterval(interval)
-    }, [user, lastRefreshed])
+    }, [updateToken])
 
     const updateUser = (user: User | undefined) => {
         if (user) {

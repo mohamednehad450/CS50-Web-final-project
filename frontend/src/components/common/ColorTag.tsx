@@ -4,7 +4,7 @@ import { ReactComponent as Circle } from '../../icons/circle.svg'
 import type { Tag } from '../../API'
 
 interface ColorTagProps {
-    tag: Tag
+    tag: Partial<Tag>
     showLabel?: boolean
     className?: string
 }

@@ -35,7 +35,6 @@ const StepsInput: FC<StepsInputProps> = ({ onChange, steps }) => {
                     />
                 ))}
             </div>
-
         </div>
     )
 }

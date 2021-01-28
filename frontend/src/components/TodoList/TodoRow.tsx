@@ -30,7 +30,7 @@ const TodoRow = (props: TodoRowProps) => {
 
     const [editing, setEditing] = useState(false)
 
-    const { updateTodo, updateStep, deleteTodo } = useTodo()
+    const { updateTodo, updateStep, deleteTodo, getTag } = useTodo()
 
 
     return (
@@ -38,7 +38,7 @@ const TodoRow = (props: TodoRowProps) => {
             {editing && (
                 <NewTodoOverlay
                     close={() => setEditing(false)}
-                    onSubmit={updateTodo}
+                    submit={t => updateTodo(todo.id, t)}
                     initialTodo={todo}
                 />
             )}
@@ -48,7 +48,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <Checkbox
                             disabled={expandable}
                             checked={checked}
-                            onChange={(checked) => updateTodo({ id, checked, })}
+                            onChange={(checked) => updateTodo(id, { checked, })}
                         />
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
                     </div>
@@ -58,7 +58,7 @@ const TodoRow = (props: TodoRowProps) => {
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
                             </span>
                         }
-                        <ColorTag tag={tag} />
+                        <ColorTag tag={getTag(tag) || { color: '#fff', label: 'None' }} />
                         {expandable ?
                             <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>
                                 <ExpandIcon />
@@ -70,7 +70,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <ActionSelect
                             actions={[
                                 { label: 'Edit', action: () => setEditing(true) },
-                                { label: 'Delete', action: () => deleteTodo(todo) },
+                                { label: 'Delete', action: () => deleteTodo(todo.id) },
                             ]}
                             id={id}
                         />
@@ -81,7 +81,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <StepRow
                             key={step.id}
                             step={step}
-                            onChange={updateStep}
+                            onChange={(s) => updateStep(step.id, s)}
                         />
                     ))}
                 </div>

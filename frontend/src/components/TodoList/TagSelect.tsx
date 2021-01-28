@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { IconButton, Select } from '../common'
 import NewTagOverlay from './NewTagOverlay'
 import { useTodo } from '.'
@@ -17,16 +17,15 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
 
     const [addTagOverlay, setAddTagOverlay] = useState(false)
 
-    const { getTags, tags, addNewTag } = useTodo()
-    useEffect(() => {
-        !tags.length && getTags()
-    }, [tags, getTags])
+    const { tags, addNewTag } = useTodo()
+
 
     return (
         <>
             {addTagOverlay &&
                 <NewTagOverlay
-                    onSubmit={(t) => { addNewTag(t); onChange(t) }}
+                    onSubmit={(t) => onChange(t)}
+                    submit={addNewTag}
                     close={() => setAddTagOverlay(false)}
                 />
             }
@@ -46,7 +45,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                     (<IconButton
                         className='select-input icon-gray'
                         onClick={onClick}
-                        icon={<Add />}
+                        icon={<Circle fill={"#fff"} />}
                     />)
                 }
                 CustomRow={({ option, onClick, isSelected }) => (

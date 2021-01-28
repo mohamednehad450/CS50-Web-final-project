@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
 import { TodoRow, NewTodoOverlay, useTodo } from '../components/TodoList'
 import { Header } from '../components/common'
@@ -8,10 +8,7 @@ import type { Step, } from '../API'
 
 const TodoList: FC = () => {
 
-    const { todos, getTodos, addNewTodo } = useTodo()
-    useEffect(() => {
-        !todos.length && getTodos()
-    }, [todos, getTodos])
+    const { todos, addNewTodo } = useTodo()
 
     const [expanded, setExpanded] = useState<Step['id']>('');
     const todosLeft = todos.filter(t => !t.checked).length
@@ -21,7 +18,7 @@ const TodoList: FC = () => {
         <div className="container">
             {newOverlay &&
                 <NewTodoOverlay
-                    onSubmit={addNewTodo}
+                    submit={addNewTodo}
                     close={() => setNewOverlay(false)}
                 />
             }

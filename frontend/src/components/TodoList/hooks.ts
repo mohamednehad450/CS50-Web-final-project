@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
     getTodos as getTodosApi,
     updateTodo as updateTodoApi,
@@ -14,16 +14,17 @@ import type { Step, Todo, Tag, AuthContext } from "../../API";
 interface TodoContext {
     todos: Todo[]
     getTodos: () => void
-    updateTodo: (t: Partial<Todo>) => void
-    deleteTodo: (t: Partial<Todo>) => void
-    addNewTodo: (t: Partial<Todo>) => void
-    updateStep: (s: Partial<Step>) => void
+    updateTodo: (id: Todo['id'], t: Partial<Todo>) => Promise<Todo>
+    deleteTodo: (id: Todo['id']) => Promise<void>
+    addNewTodo: (t: Partial<Todo>) => Promise<Todo>
+    updateStep: (id: Step['id'], s: Partial<Step>) => Promise<Step>
     tags: Tag[]
     getTags: () => void
-    addNewTag: (tag: Tag) => void
+    getTag: (id?: Tag['id']) => Tag | undefined
+    addNewTag: (tag: Partial<Tag>) => Promise<Tag>
 }
 
-function todoNotinitialized() {
+function todoNotinitialized(): any {
     console.warn('Todo context not initialized')
 }
 
@@ -36,6 +37,7 @@ const defaultTodoContext: TodoContext = {
     updateStep: todoNotinitialized,
     tags: [],
     getTags: todoNotinitialized,
+    getTag: todoNotinitialized,
     addNewTag: todoNotinitialized,
 }
 
@@ -43,18 +45,27 @@ const todoContext = createContext(defaultTodoContext)
 
 const useTodo = () => useContext(todoContext)
 
-const useProvideTodo = (auth: AuthContext): TodoContext => {
+const useProvideTodo = ({ user }: AuthContext): TodoContext => {
 
     const [todos, setTodos] = useState<Todo[]>([])
     const [tags, setTags] = useState<Tag[]>([])
 
-    const getTodos = () => getTodosApi(auth).then(r => r && setTodos(r))
-    const updateTodo = (t: Partial<Todo>) => updateTodoApi(t, auth).then(getTodos)
-    const deleteTodo = (t: Partial<Todo>) => deleteTodoApi(t, auth).then(getTodos)
-    const addNewTodo = (t: Partial<Todo>) => addNewTodoApi(t, auth).then(getTodos)
-    const updateStep = (s: Partial<Step>) => updateStepApi(s, auth).then(getTodos)
-    const getTags = () => getTagsApi(auth).then(r => r && setTags(r))
-    const addNewTag = (tag: Tag) => addNewTagApi(tag, auth).then(getTags)
+
+    const getTodos = useCallback(() => getTodosApi(user).then(r => r && setTodos(r)), [user])
+    const updateTodo = (id: Todo['id'], t: Partial<Todo>) => updateTodoApi(id, t, user).then(t => { getTodos(); return t })
+    const deleteTodo = (id: Todo['id']) => deleteTodoApi(id, user).then(getTodos)
+    const addNewTodo = (t: Partial<Todo>) => addNewTodoApi(t, user).then(t => { getTodos(); return t })
+    const updateStep = (id: Step['id'], s: Partial<Step>) => updateStepApi(id, s, user).then(s => { getTodos(); return s })
+    const getTags = useCallback(() => getTagsApi(user).then(r => r && setTags(r)), [user])
+    const tagsDict: any = useMemo(() => tags.reduce((acc, t) => ({ ...acc, [t.id]: { ...t } }), {}), [tags]);
+    const getTag = (id?: Tag['id']): Tag | undefined => tagsDict[id || ''] || undefined
+    const addNewTag = (tag: Partial<Tag>) => addNewTagApi(tag, user).then(t => { getTags(); return t })
+
+    useEffect(() => {
+        getTodos()
+        getTags()
+    }, [getTodos, getTags])
+
     return {
         todos,
         getTodos,
@@ -64,6 +75,7 @@ const useProvideTodo = (auth: AuthContext): TodoContext => {
         updateStep,
         tags,
         getTags,
+        getTag,
         addNewTag,
     }
 }

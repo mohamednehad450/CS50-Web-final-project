@@ -7,16 +7,17 @@ import TagSelect from './TagSelect'
 
 import { ReactComponent as CancelIcon } from '../../icons/cancel-fill.svg'
 
-import type { Step, Todo } from '../../API'
+import type { Tag, Todo, Step } from '../../API'
 
 
 interface NewTodoOverlayProps {
     close: () => void
-    onSubmit: (todo: Partial<Todo>) => void
+    submit: (todo: Partial<Todo>) => Promise<Todo>
+    onSubmit?: (todo: Todo) => void
     initialTodo?: Todo
 }
 
-function getMaxDate(steps: Step[]): Date | undefined {
+function getMaxDate(steps: Partial<Step>[]): Date | undefined {
     return steps.reduce<Date | undefined>((acc, { dueDate }) => {
         const date = dueDate ? new Date(dueDate) : undefined
         return (
@@ -29,15 +30,16 @@ function getMaxDate(steps: Step[]): Date | undefined {
     }, undefined)
 }
 
-const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, initialTodo }) => {
+const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, initialTodo }) => {
 
     const [todo, setTodo] = useState<Partial<Todo>>(initialTodo || createEmptyTodo())
+    const [tag, setTag] = useState<Tag>()
     const [maxDate, setMaxDate] = useState<Date | undefined>(getMaxDate(initialTodo?.steps || []))
     return (
         <Overlay>
             <div className='overlay-container-lg'>
                 <div className='input-row header-margin'>
-                    <TagSelect selected={todo.tag} onChange={(tag) => setTodo({ ...todo, tag })} />
+                    <TagSelect selected={tag} onChange={(tag) => { setTodo({ ...todo, tag: tag.id }); setTag(tag) }} />
                     <TextInput
                         onChange={(title) => setTodo({ ...todo, title })}
                         value={todo.title}
@@ -70,9 +72,9 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, initialTodo 
                 <ButtonsRow>
                     <Button type='secondary' onClick={close}>Cancel</Button>
                     <Button
-                        disabled={!todo.tag || !todo.title || !todo.steps?.reduce<boolean>((acc, { title }) => acc && !!title, true)}
+                        disabled={!todo.title || !todo.steps?.reduce<boolean>((acc, { title }) => acc && !!title, true)}
                         type='primary'
-                        onClick={() => { onSubmit(todo); close(); }}
+                        onClick={() => submit(todo).then(t => { onSubmit && onSubmit(t); close() })}
                     >
                         {initialTodo ? 'Save' : 'Add'}
                     </Button>
