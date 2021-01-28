@@ -65,7 +65,7 @@ class TodoViewSet(viewsets.ViewSet):
             data = TodoSerializer(todo).data
             return response.Response(data)
         except ValidationError as err:
-            return response.Response([f"'{pk}' is not a valid Todo ID"], status=400)
+            return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
 
     def partial_update(self, request, pk=None):
         try:
@@ -78,7 +78,7 @@ class TodoViewSet(viewsets.ViewSet):
             else:
                 return response.Response(ser._errors)
         except ValidationError:
-            return response.Response([f"'{pk}' is not a valid Todo ID"], status=400)
+            return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
 
     def destroy(self, request, pk=None):
         try:
@@ -86,7 +86,7 @@ class TodoViewSet(viewsets.ViewSet):
             todo.delete()
             return response.Response(status=200)
         except ValidationError:
-            return response.Response([f"'{pk}' is not a valid Todo ID"], status=400)
+            return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
 
 
 class TagViewSet(viewsets.ViewSet):
@@ -117,7 +117,7 @@ class TagViewSet(viewsets.ViewSet):
             data = TodoSerializer(todo).data
             return response.Response(data)
         except ValidationError:
-            return response.Response([f'"{pk}" is not a valid Tag ID'], status=400)
+            return response.Response({"id": [f'"{pk}" is not a valid Tag ID']}, status=400)
 
 
 class StepViewSet(viewsets.ViewSet):
@@ -135,7 +135,7 @@ class StepViewSet(viewsets.ViewSet):
             else:
                 return response.Response({'details': 'forbidden'}, status=403)
         except ValidationError:
-            return response.Response([f"'{pk}' is not a valid Step ID"], status=400)
+            return response.Response({"id": [f"'{pk}' is not a valid Step ID"]}, status=400)
 
 
 @api_view(['POST'])
