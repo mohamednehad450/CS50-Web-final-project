@@ -31,7 +31,7 @@ function Select<T extends Option>({
 }: SelectProps<T>) {
     const [open, setOpen] = useState(false)
     return (
-        <div className="padding">
+        <div>
             {CustomInput ?
                 <CustomInput selected={selected} onClick={() => setOpen(!open)} /> :
                 (<div className='default-select-input' onClick={() => setOpen(!open)}>

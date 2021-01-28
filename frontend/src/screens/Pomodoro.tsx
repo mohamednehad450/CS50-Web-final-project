@@ -25,15 +25,17 @@ const Pomodoro = () => {
                     <div className="section-header">
                         Target:
                     </div>
-                    <Select
-                        scroll
-                        options={todo.todos.map(t => ({ ...t, label: t.title }))}
-                        onChange={(o) => setSelected(o)}
-                        selected={selected}
-                        Header={({ close }) => (
-                            <SelectItem onClick={() => { setSelected(undefined); close() }} option={{ id: "NONE", label: '- None' }} />
-                        )}
-                    />
+                    <div className="padding">
+                        <Select
+                            scroll
+                            options={todo.todos.map(t => ({ ...t, label: t.title }))}
+                            onChange={(o) => setSelected(o)}
+                            selected={selected}
+                            Header={({ close }) => (
+                                <SelectItem onClick={() => { setSelected(undefined); close() }} option={{ id: "NONE", label: '- None' }} />
+                            )}
+                        />
+                    </div>
                     <div className="section-header">
                         Actions:
                     </div>
