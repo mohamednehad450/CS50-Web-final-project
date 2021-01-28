@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='todo',
             name='tag',
-            field=models.ForeignKey(default=todo.models.get_default_tag,
-                                    on_delete=django.db.models.deletion.SET_DEFAULT, to='todo.Tag'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.SET_DEFAULT, to='todo.Tag'),
         ),
         migrations.AlterField(
             model_name='todo',
