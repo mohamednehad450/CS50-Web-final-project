@@ -1,5 +1,6 @@
 import uuid
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
@@ -79,3 +80,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+        extra_kwargs = {
+            'password': {
+                'validators': [validate_password],
+                'write_only': True
+            }
+        }
+
+    def create(self, validated_data):
+        username = validated_data.get('username', '')
+        password = validated_data.get('password', '')
+        user = User.objects.create(username=username)
+        user.set_password(password)
+        user.save()
+        return user

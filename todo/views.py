@@ -5,11 +5,14 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 from rest_framework import permissions, authentication, viewsets, response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.settings import api_settings
+
 
 from .serializers import TagSerializer, TodoSerializer, StepSerializer, UserSerializer
 from .models import Todo, Step, Tag
@@ -145,13 +148,16 @@ class StepViewSet(viewsets.ViewSet):
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def create_auth(request):
-    user = UserSerializer(data=request.data)
-    if user.is_valid():
-        data = user.validated_data
-        user = User.objects.create(
-            username=data['username'])
-        user.set_password(data['password'])
-        user.save()
-        return response.Response(status=201)
+    ser = UserSerializer(data=request.data)
+    if ser.is_valid():
+        user = ser.save()
+
+        # Manually creating auth token
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+
+        return response.Response({'token': token}, status=201)
     else:
-        return response.Response(serialized._errors, status=400)
+        return response.Response(ser._errors, status=400)
