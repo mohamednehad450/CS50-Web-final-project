@@ -7,7 +7,7 @@ import TagSelect from './TagSelect'
 
 import { ReactComponent as CancelIcon } from '../../icons/cancel-fill.svg'
 
-import type { Tag, Todo, Step, TodoError } from '../../API'
+import type { Todo, Step, TodoError } from '../../API'
 
 
 interface NewTodoOverlayProps {
@@ -33,7 +33,6 @@ function getMaxDate(steps: Partial<Step>[]): Date | undefined {
 const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, initialTodo }) => {
 
     const [todo, setTodo] = useState<Partial<Todo>>(initialTodo || createEmptyTodo())
-    const [tag, setTag] = useState<Tag>()
     const [error, setError] = useState<TodoError>()
 
     const [maxDate, setMaxDate] = useState<Date | undefined>(getMaxDate(initialTodo?.steps || []))
@@ -41,7 +40,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, init
         <Overlay>
             <div className='overlay-container-lg'>
                 <div className='input-row header-margin'>
-                    <TagSelect selected={tag} onChange={(tag) => { setTodo({ ...todo, tag: tag.id }); setTag(tag) }} />
+                    <TagSelect selected={todo.tag} onChange={({ id }) => { setTodo({ ...todo, tag: id }) }} />
                     <TextInput
                         onChange={(title) => { setTodo({ ...todo, title }); setError({ ...error, title: undefined }) }}
                         value={todo.title}

@@ -9,7 +9,7 @@ import { ReactComponent as Add } from '../../icons/add-fill.svg'
 import type { Tag } from '../../API'
 
 interface TagSelectProps {
-    selected?: Tag
+    selected?: Tag['id']
     onChange: (tag: Tag) => void
 }
 
@@ -17,7 +17,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
 
     const [addTagOverlay, setAddTagOverlay] = useState(false)
 
-    const { tags, addNewTag } = useTodo()
+    const { tags, addNewTag, getTag } = useTodo()
 
 
     return (
@@ -33,7 +33,7 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                 border
                 scroll
                 options={tags}
-                selected={selected}
+                selected={getTag(selected)}
                 onChange={onChange}
                 CustomInput={({ selected, onClick }) => selected ? (
                     <IconButton
