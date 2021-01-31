@@ -22,7 +22,7 @@ const Register: FC = () => {
             <form onSubmit={(e) => e.preventDefault()} className="login-form">
                 <div className="col">
                     <TextInput
-                        className="ver-margin"
+                        className="ver-margin stretch"
                         placeholder="Username"
                         onChange={(s) => validateUsername(s) && setUsername(s)}
                         value={username}
@@ -30,7 +30,7 @@ const Register: FC = () => {
                     />
                     <TextInput
                         placeholder="Password"
-                        className="ver-margin"
+                        className="ver-margin stretch"
                         onChange={(password) => setPassword(password)}
                         value={password}
                         type='password'
@@ -38,7 +38,7 @@ const Register: FC = () => {
                     />
                     <TextInput
                         placeholder="Confirm Password"
-                        className="ver-margin"
+                        className="ver-margin stretch"
                         onChange={(confirm) => setConfirm(confirm)}
                         value={confirm}
                         type='password'

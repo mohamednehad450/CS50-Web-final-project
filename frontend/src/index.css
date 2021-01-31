@@ -418,6 +418,12 @@ main {
   transition: border 200ms ease;
 }
 
+.stretch {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .steps-input-container {
   display: flex;
   flex: 1;

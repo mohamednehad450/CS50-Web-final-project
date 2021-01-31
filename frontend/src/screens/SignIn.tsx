@@ -24,14 +24,14 @@ const SignIn: FC = () => {
                         placeholder="Username"
                         onChange={(s) => validateUsername(s) && setUsername(s)}
                         value={username}
-                        className="ver-margin"
+                        className="ver-margin stretch"
                     />
                     <TextInput
                         placeholder="Password"
                         onChange={(password) => setPassword(password)}
                         value={password}
                         type='password'
-                        className="ver-margin"
+                        className="ver-margin stretch"
                     />
                 </div>
                 <div className="col ver-margin">
