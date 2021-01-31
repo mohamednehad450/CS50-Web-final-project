@@ -1,6 +1,6 @@
 import React, { FC, } from 'react'
 import { IconButton } from '../common'
-import { createEmptyStep } from '../../API'
+import { createEmptyStep, StepError } from '../../API'
 import StepInput from './StepInput'
 
 import { ReactComponent as Add } from '../../icons/add-fill.svg'
@@ -11,9 +11,10 @@ import type { Step } from '../../API'
 interface StepsInputProps {
     onChange: (steps: Step[]) => void
     steps: Step[]
+    errors?: StepError[]
 }
 
-const StepsInput: FC<StepsInputProps> = ({ onChange, steps }) => {
+const StepsInput: FC<StepsInputProps> = ({ onChange, steps, errors }) => {
     return (
         <div className="steps-input-container ">
             <IconButton
@@ -25,6 +26,7 @@ const StepsInput: FC<StepsInputProps> = ({ onChange, steps }) => {
             <div className="indent scroll">
                 {steps.map((step, index) => (
                     <StepInput
+                        error={errors && errors[index]}
                         key={step.id}
                         step={step}
                         onChange={(s) => {

@@ -9,6 +9,8 @@ import {
     createEmptyTodo,
     createEmptyStep,
     createEmptyTag,
+    validateTodo,
+    validateStep,
 } from './api'
 
 import ProvideAuth from './ProvideAuth'
@@ -16,7 +18,7 @@ import PrivateRoute from './PrivateRoute'
 import { useAuth } from './auth'
 
 // Types
-import type { Todo, Step, Tag } from './api'
+import type { Todo, Step, Tag, TodoError, StepError } from './api'
 import type { User, AuthContext } from './auth'
 
 
@@ -34,6 +36,8 @@ export {
     PrivateRoute,
     ProvideAuth,
     useAuth,
+    validateTodo,
+    validateStep
 }
 
 export type {
@@ -41,5 +45,7 @@ export type {
     Step,
     Tag,
     User,
-    AuthContext
+    AuthContext,
+    TodoError,
+    StepError,
 }

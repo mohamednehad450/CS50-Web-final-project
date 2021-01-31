@@ -1,13 +1,13 @@
 
 import React, { useState, FC } from 'react'
-import { createEmptyTodo } from '../../API'
+import { createEmptyTodo, validateTodo } from '../../API'
 import { Overlay, Button, ButtonsRow, TextInput, DatePicker, IconButton, } from '../common'
 import StepsInput from './StepsInput'
 import TagSelect from './TagSelect'
 
 import { ReactComponent as CancelIcon } from '../../icons/cancel-fill.svg'
 
-import type { Tag, Todo, Step } from '../../API'
+import type { Tag, Todo, Step, TodoError } from '../../API'
 
 
 interface NewTodoOverlayProps {
@@ -34,6 +34,8 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, init
 
     const [todo, setTodo] = useState<Partial<Todo>>(initialTodo || createEmptyTodo())
     const [tag, setTag] = useState<Tag>()
+    const [error, setError] = useState<TodoError>()
+
     const [maxDate, setMaxDate] = useState<Date | undefined>(getMaxDate(initialTodo?.steps || []))
     return (
         <Overlay>
@@ -41,10 +43,11 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, init
                 <div className='input-row header-margin'>
                     <TagSelect selected={tag} onChange={(tag) => { setTodo({ ...todo, tag: tag.id }); setTag(tag) }} />
                     <TextInput
-                        onChange={(title) => setTodo({ ...todo, title })}
+                        onChange={(title) => { setTodo({ ...todo, title }); setError({ ...error, title: undefined }) }}
                         value={todo.title}
                         placeholder="New Todo"
                         className='textinput-lg'
+                        errors={error?.title}
                     />
                 </div>
                 <div className='input-row'>
@@ -65,16 +68,29 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, init
                 <StepsInput
                     onChange={(steps) => {
                         setTodo({ ...todo, steps, })
+                        setError({ ...error, steps: undefined })
                         setTimeout(() => setMaxDate(getMaxDate(steps)), 0)
                     }}
                     steps={todo.steps || []}
+                    errors={error?.steps?.map(err => err.err)}
                 />
                 <ButtonsRow>
                     <Button type='secondary' onClick={close}>Cancel</Button>
                     <Button
-                        disabled={!todo.title || !todo.steps?.reduce<boolean>((acc, { title }) => acc && !!title, true)}
                         type='primary'
-                        onClick={() => submit(todo).then(t => { onSubmit && onSubmit(t); close() })}
+                        onClick={() => {
+                            const err = validateTodo(todo)
+                            if (err.isValid) {
+                                submit(todo)
+                                    .then(t => {
+                                        onSubmit && onSubmit(t); close()
+                                    })
+                                    .catch(err => setError(err))
+                            }
+                            else {
+                                setError(err.err)
+                            }
+                        }}
                     >
                         {initialTodo ? 'Save' : 'Add'}
                     </Button>

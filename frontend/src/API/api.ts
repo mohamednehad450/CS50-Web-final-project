@@ -25,6 +25,81 @@ export interface Todo {
     id: number | string,
     steps: Step[],
 }
+export interface StepError {
+    id?: string[]
+    title?: string[]
+    dueDate?: string[]
+    checked?: string[]
+}
+export interface TodoError {
+    title?: string[]
+    checked?: string[]
+    tag?: string[]
+    dueDate?: string[]
+    date?: string[]
+    id?: string[]
+    steps?: ErrorObj<StepError>[]
+}
+
+export interface ErrorObj<T> {
+    isValid: boolean
+    err: T
+}
+
+export const validateTodo = (todo: Partial<Todo>): ErrorObj<TodoError> => {
+
+    // FrontEnd validation
+    const err: TodoError = {}
+    let isValid = true
+
+    // title
+    if (todo.title || todo.title === '') {
+        const titleErr: string[] = []
+        todo.title.length === 0 && titleErr.push('This field can\'t be blank')
+        todo.title.length > 150 && titleErr.push('This feild can\'t be greater than 150 charecters')
+        if (titleErr.length) {
+            err.title = titleErr
+            isValid = false
+        }
+    }
+
+    // steps
+    if (todo.steps) {
+        const stepsErr = todo.steps.map(s => validateStep(s))
+        if (!stepsErr.reduce((acc, s) => acc && s.isValid, true)) {
+            err.steps = stepsErr
+            isValid = false
+        }
+    }
+
+    return {
+        isValid,
+        err
+    }
+}
+
+
+export const validateStep = (step: Step): ErrorObj<StepError> => {
+
+    const err: StepError = {}
+    let isValid = true
+
+    // title
+    if (step.title || step.title === '') {
+        const titleErr: string[] = []
+        step.title.length === 0 && titleErr.push('This field can\'t be blank')
+        step.title.length > 150 && titleErr.push('This feild can\'t be greater than 150 charecters')
+        if (titleErr.length) {
+            err.title = titleErr
+            isValid = false
+        }
+    }
+
+    return {
+        isValid,
+        err
+    }
+}
 
 export const createEmptyStep = (): Step => {
     return {
