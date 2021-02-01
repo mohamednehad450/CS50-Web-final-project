@@ -7,16 +7,21 @@ export interface User {
     token: string
     username: string
 }
+export interface UserError {
+    username?: string[]
+    password?: string[]
+    non_field_errors?: string[]
+}
 export type Register = (
     username: string,
     password: string,
     cb?: () => void,
-) => Promise<void>
+) => Promise<void | UserError>
 export type SignIn = (
     username: string,
     password: string,
     cb?: () => void,
-) => Promise<void>
+) => Promise<void | UserError>
 export type SignOut = (cb?: () => void) => Promise<void>
 export interface AuthContext {
     register: Register
@@ -105,7 +110,14 @@ const useProvideAuth = (): AuthContext => {
             cb && cb()
 
         } catch (error) {
-            // TODO: handle error
+            const { response, isAxiosError } = error
+
+            if (isAxiosError) {
+                const { data, status } = response
+                if (status === 400) {
+                    return data
+                }
+            }
         }
     };
     const signin: SignIn = async (username, password, cb) => {
@@ -117,8 +129,14 @@ const useProvideAuth = (): AuthContext => {
             updateUser({ username, token: data.token })
             cb && cb()
         } catch (error) {
-            // TODO: handle error
-            console.log(error.response)
+            const { response, isAxiosError } = error
+
+            if (isAxiosError) {
+                const { data, status } = response
+                if (status === 400) {
+                    return data
+                }
+            }
         }
     };
     const signout: SignOut = async (cb) => {

@@ -2,8 +2,9 @@ import React, { FC, useState } from 'react'
 import { Link, Redirect, } from 'react-router-dom';
 import { routes } from '.';
 import { useAuth } from '../API'
-import { Button, TextInput } from '../components/common';
-import { validateUsername } from '../utils';
+import { Button, ErrorList, TextInput } from '../components/common';
+
+import type { UserError } from '../API'
 
 
 const SignIn: FC = () => {
@@ -12,6 +13,7 @@ const SignIn: FC = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+    const [error, setError] = useState<UserError | undefined>()
 
     if (auth.user) {
         return <Redirect to={routes.APP} />
@@ -22,24 +24,48 @@ const SignIn: FC = () => {
                 <div className="col">
                     <TextInput
                         placeholder="Username"
-                        onChange={(s) => validateUsername(s) && setUsername(s)}
+                        onChange={(s) => {
+                            setUsername(s);
+                            error?.username && setError({ ...error, username: undefined })
+                        }}
+                        errors={error?.username}
                         value={username}
                         className="ver-margin stretch"
                     />
                     <TextInput
                         placeholder="Password"
-                        onChange={(password) => setPassword(password)}
+                        onChange={(password) => {
+                            setPassword(password);
+                            error?.password && setError({ ...error, password: undefined })
+                        }}
+                        errors={error?.password}
                         value={password}
                         type='password'
                         className="ver-margin stretch"
                     />
                 </div>
                 <div className="col ver-margin">
+                    <ErrorList errors={error?.non_field_errors} />
                     <Button
-                        disabled={!username || !password}
                         type="primary"
                         className="btn-row"
                         onClick={() => {
+                            if (username && password) {
+                                auth.signin(
+                                    username,
+                                    password,
+                                ).then(err => err && setError(err))
+                            }
+                            else {
+                                const err: UserError = {}
+                                if (!username) {
+                                    err.username = ['This field can\'t be blank']
+                                }
+                                if (!password) {
+                                    err.password = ['This field can\'t be blank']
+                                }
+                                setError(err)
+                            }
                             auth.signin(
                                 username,
                                 password,

@@ -3,8 +3,12 @@ import { Link, Redirect, } from 'react-router-dom';
 import { routes } from '.';
 import { useAuth } from '../API'
 import { Button, TextInput } from '../components/common';
-import { validateUsername } from '../utils';
 
+import type { UserError as ApiUserError } from '../API'
+
+interface UserError extends ApiUserError {
+    confirm?: string[]
+}
 
 const Register: FC = () => {
     let auth = useAuth();
@@ -13,6 +17,7 @@ const Register: FC = () => {
     const [password, setPassword] = useState('')
     const [confirm, setConfirm] = useState('')
 
+    const [error, setError] = useState<UserError | undefined>()
 
     if (auth.user) {
         return <Redirect to={routes.APP} />
@@ -24,14 +29,22 @@ const Register: FC = () => {
                     <TextInput
                         className="ver-margin stretch"
                         placeholder="Username"
-                        onChange={(s) => validateUsername(s) && setUsername(s)}
+                        onChange={(s) => {
+                            setUsername(s);
+                            error?.username && setError({ ...error, username: undefined })
+                        }}
+                        errors={error?.username}
                         value={username}
                         autoComplete="off"
                     />
                     <TextInput
                         placeholder="Password"
                         className="ver-margin stretch"
-                        onChange={(password) => setPassword(password)}
+                        onChange={(password) => {
+                            setPassword(password);
+                            error?.password && setError({ ...error, password: undefined })
+                        }}
+                        errors={error?.password}
                         value={password}
                         type='password'
                         autoComplete="new-password"
@@ -39,22 +52,40 @@ const Register: FC = () => {
                     <TextInput
                         placeholder="Confirm Password"
                         className="ver-margin stretch"
-                        onChange={(confirm) => setConfirm(confirm)}
+                        onChange={(confirm) => {
+                            setConfirm(confirm);
+                            error?.confirm && setError({ ...error, confirm: undefined })
+                        }}
                         value={confirm}
                         type='password'
+                        errors={error?.confirm}
                         autoComplete="new-password"
                     />
                 </div>
                 <div className="col ver-margin">
                     <Button
-                        disabled={!username || !password || confirm !== password}
                         type="primary"
                         className="btn-row"
                         onClick={() => {
-                            auth.register(
-                                username,
-                                password,
-                            )
+                            if (username && password && password === confirm) {
+                                auth.register(
+                                    username,
+                                    password,
+                                ).then((err) => err && setError(err))
+                            }
+                            else {
+                                const err: UserError = {}
+                                if (password !== confirm) {
+                                    err.confirm = ['Confirmation must match password.']
+                                }
+                                if (!username) {
+                                    err.username = ['This field can\'t be blank']
+                                }
+                                if (!password) {
+                                    err.password = ['This field can\'t be blank']
+                                }
+                                setError(err)
+                            }
                         }}
                     >
                         Register
