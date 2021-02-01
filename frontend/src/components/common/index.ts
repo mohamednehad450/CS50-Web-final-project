@@ -9,11 +9,12 @@ import SelectItem from './SelectItem'
 import DatePicker from './CustomDatePicker'
 import Checkbox from './Checkbox'
 import Header from './Header'
+import ErrorList from './ErrorList'
 
 
 import type { Option, SelectItemProps } from './SelectItem'
 
 
-export { Button, Overlay, ButtonsRow, IconButton, TextInput, ColorTag, DatePicker, Select, SelectItem, Checkbox, Header }
+export { Button, Overlay, ButtonsRow, IconButton, TextInput, ColorTag, DatePicker, Select, SelectItem, Checkbox, Header, ErrorList }
 
 export type { Option, SelectItemProps }

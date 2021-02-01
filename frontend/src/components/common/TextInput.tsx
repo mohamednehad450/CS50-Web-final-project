@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { ErrorList } from '.'
 
 interface TextInputProps {
     placeholder?: string
@@ -33,11 +34,7 @@ const TextInput: FC<TextInputProps> = ({
                 autoComplete={autoComplete}
             >
             </input>
-            {errors.length ? (
-                <ul className="textinput-errors">
-                    {errors.map(s => (<li className="textinput-error">{s}</li>))}
-                </ul>
-            ) : null}
+            <ErrorList errors={errors} />
         </span>
     )
 }
