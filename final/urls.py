@@ -20,12 +20,13 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
-from todo.views import TodoViewSet, TagViewSet, StepViewSet, create_auth
+from todo.views import TodoViewSet, TagViewSet, StepViewSet, PomodoroViewSet, create_auth
 
 router = routers.DefaultRouter()
 router.register(r'todos', TodoViewSet, basename='todo')
 router.register(r'tags', TagViewSet, basename='tag')
 router.register(r'steps', StepViewSet, basename='step')
+router.register(r'pomodoros', PomodoroViewSet, basename='pomodoro')
 
 urlpatterns = [
     path('api/', include(router.urls)),

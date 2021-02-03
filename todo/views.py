@@ -14,8 +14,8 @@ from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.settings import api_settings
 
 
-from .serializers import TagSerializer, TodoSerializer, StepSerializer, UserSerializer
-from .models import Todo, Step, Tag
+from .serializers import TagSerializer, TodoSerializer, StepSerializer, UserSerializer, PomodoroSerializer
+from .models import Todo, Step, Tag, PomodoroInterval
 
 
 # Create your views here.
@@ -143,6 +143,39 @@ class StepViewSet(viewsets.ViewSet):
                 return response.Response({'details': 'forbidden'}, status=403)
         except ValidationError:
             return response.Response({"id": [f"'{pk}' is not a valid Step ID"]}, status=400)
+
+
+class PomodoroViewSet(viewsets.ViewSet):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return PomodoroInterval.objects.filter(user=user).all()
+
+    def list(self, request):
+        serializer = PomodoroSerializer(self.get_queryset(), many=True)
+        return response.Response(serializer.data)
+
+    def create(self, request):
+        data = request.data
+        ser = PomodoroSerializer(data=data)
+        if (ser.is_valid()):
+            interval = PomodoroInterval.objects.create(
+                **ser.validated_data, user=request.user)
+            interval.save()
+            return response.Response(PomodoroSerializer(interval).data)
+        else:
+            return response.Response(ser._errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        try:
+            interval = get_object_or_404(
+                PomodoroInterval, user=request.user,  pk=pk)
+            data = PomodoroSerializer(interval).data
+            return response.Response(data)
+        except ValidationError:
+            return response.Response({"id": [f'"{pk}" is not a valid Tag ID']}, status=400)
 
 
 @api_view(['POST'])

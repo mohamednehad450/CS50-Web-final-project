@@ -32,3 +32,14 @@ class Step(models.Model):
     checked = models.BooleanField(default=False)
     todo = models.ForeignKey(Todo, related_name='steps',
                              on_delete=models.CASCADE)
+
+
+class PomodoroInterval(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='intervals')
+    startDate = models.DateTimeField()
+    endDate = models.DateTimeField()
+    defaultDuration = models.IntegerField()
+    todo = models.ForeignKey(
+        Todo, on_delete=models.CASCADE, related_name="intervals", null=True)

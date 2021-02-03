@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
-from .models import Tag, Todo, Step
+from .models import Tag, Todo, Step, PomodoroInterval
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -94,3 +94,12 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class PomodoroSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PomodoroInterval
+        fields = ['id', 'todo', 'startDate', 'endDate', 'defaultDuration']
+
+    id = serializers.UUIDField(default=uuid.uuid4)
