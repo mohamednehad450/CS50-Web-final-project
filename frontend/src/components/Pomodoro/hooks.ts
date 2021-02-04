@@ -1,10 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useReducer, useState } from "react"
 
 
 enum PomodoroMode {
     WORK = "work",
     BREAK = "break",
     LONGBREAK = "longbreak",
+}
+
+// Reducers Actions
+enum PomodoroActions {
+    tick = "TICK",
+    reset = "RESET",
+    skip = "SKIP",
 }
 
 // units in milieseconds
@@ -19,6 +26,24 @@ interface PomodoroStats {
     goal: number
     date: Date | string
 }
+
+interface Pomodoro {
+    state: PomodoroState
+    stats: PomodoroStats
+}
+
+// Reducers Type
+type PomodoroReducer = (
+    pomodoro: {
+        state: PomodoroState,
+        stats: PomodoroStats
+    },
+    action: {
+        type: PomodoroActions,
+        payload: {
+            settings: PomodoroSettings,
+        }
+    }) => Pomodoro;
 
 // units in seconds
 interface PomodoroSettings {
@@ -76,34 +101,42 @@ const TICK = 1000
 
 const useProvidePomodoro = (): PomodoroContext => {
 
-    const [pomodoro, setPomodoro] = useState({
+    const [pomodoro, dispatch] = useReducer(pomodoroReducer, {
         state: newState(PomodoroMode.WORK, defaultPomodoroSettings),
         stats: defaultPomodoroStats,
     })
 
     const [timer, setTimer] = useState<any>()
 
+    // Cleans up the Timer
     useEffect(() => {
         return () => clearInterval(timer)
     }, [timer])
 
-    const tick = () => {
-        setPomodoro((p) => {
-            if (p.state.timeLeft - TICK < 0) {
-                if (!defaultPomodoroSettings.autoStart) {
-                    clearInterval(timer)
-                    setTimer(undefined)
-                }
-            }
-            return nextPomodoro(defaultPomodoroSettings, p)
+    // Handles autoStart when Pomodoro mode changes
+    useEffect(() => {
+        if (!defaultPomodoroSettings.autoStart) {
+            clearTimeout(timer)
+            setTimer(undefined)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pomodoro.state.mode])
 
+    const tick = () => {
+        dispatch({
+            type: PomodoroActions.tick,
+            payload: {
+                settings: defaultPomodoroSettings,
+            }
         })
     }
+
     const start = () => {
         if (!timer) {
             setTimer(setInterval(tick, TICK))
         }
     }
+
     const stop = () => {
         if (timer) {
             clearInterval(timer)
@@ -114,18 +147,20 @@ const useProvidePomodoro = (): PomodoroContext => {
     const reset = () => {
         clearInterval(timer)
         setTimer(undefined)
-        console.log(pomodoro)
-        setPomodoro(p => ({ stats: p.stats, state: newState(p.state.mode, defaultPomodoroSettings) }))
+        dispatch({
+            type: PomodoroActions.reset,
+            payload: {
+                settings: defaultPomodoroSettings,
+            }
+        })
     }
 
     const skip = () => {
-        if (!defaultPomodoroSettings.autoStart) {
-            clearInterval(timer)
-            setTimer(undefined)
-        }
-        setPomodoro(p => {
-            p.state.timeLeft = -1
-            return nextPomodoro(defaultPomodoroSettings, p)
+        dispatch({
+            type: PomodoroActions.skip,
+            payload: {
+                settings: defaultPomodoroSettings,
+            }
         })
     }
 
@@ -140,49 +175,6 @@ const useProvidePomodoro = (): PomodoroContext => {
     }
 }
 
-const nextPomodoro = (settings: PomodoroSettings, p: { state: PomodoroState, stats: PomodoroStats }): {
-    state: PomodoroState,
-    stats: PomodoroStats,
-} => {
-    if (p.state.timeLeft - TICK < 0) {
-        switch (p.state.mode) {
-            case PomodoroMode.WORK:
-                const stats = {
-                    ...p.stats,
-                    goal: p.stats.goal + 1,
-                    round: p.stats.round + 1,
-                }
-                if (stats.round >= settings.longBreakAfter) {
-                    return {
-                        state: newState(PomodoroMode.LONGBREAK, settings),
-                        stats,
-                    }
-                }
-                return {
-                    state: newState(PomodoroMode.BREAK, settings),
-                    stats,
-                }
-            case PomodoroMode.BREAK:
-                return {
-                    state: newState(PomodoroMode.WORK, settings),
-                    stats: p.stats,
-                }
-            case PomodoroMode.LONGBREAK:
-                return {
-                    state: newState(PomodoroMode.WORK, settings),
-                    stats: { ...p.stats, round: 0 }
-                }
-        }
-    }
-    else {
-        return {
-            stats: p.stats,
-            state: tickState(p.state)
-        }
-    }
-
-}
-
 function newState(mode: PomodoroMode, settings: PomodoroSettings): PomodoroState {
     return {
         mode,
@@ -191,13 +183,70 @@ function newState(mode: PomodoroMode, settings: PomodoroSettings): PomodoroState
     }
 }
 
-function tickState(state: PomodoroState) {
-    return {
-        ...state,
-        timeLeft: state.timeLeft - TICK
+
+const pomodoroReducer: PomodoroReducer = ({ state, stats }, { type, payload: { settings } }) => {
+    function nextPomodoro(state: PomodoroState, stats: PomodoroStats, settings: PomodoroSettings): Pomodoro {
+        // Time is up: Switching to a new mode
+        if (state.timeLeft - TICK < 0) {
+            switch (state.mode) {
+                case PomodoroMode.WORK:
+                    const s = {
+                        ...stats,
+                        round: stats.round + 1,
+                        goal: stats.goal + 1,
+                    }
+                    // Should go on a long or short break?
+                    if (stats.round + 1 >= settings.longBreakAfter) {
+                        return {
+                            state: newState(PomodoroMode.LONGBREAK, settings),
+                            stats: s
+                        }
+                    } else return {
+                        state: newState(PomodoroMode.BREAK, settings),
+                        stats: s
+                    }
+                case PomodoroMode.BREAK:
+                    return {
+                        state: newState(PomodoroMode.WORK, settings),
+                        stats
+                    }
+                case PomodoroMode.LONGBREAK:
+                    return {
+                        state: newState(PomodoroMode.WORK, settings),
+                        stats: { ...stats, round: 0 }
+                    }
+                default:
+                    throw new Error('Invalid PomodoroMode')
+            }
+        }
+        else {
+            return {
+                state: {
+                    ...state,
+                    timeLeft: state.timeLeft - TICK,
+                },
+                stats,
+            }
+        }
+    }
+
+    switch (type) {
+        case PomodoroActions.tick:
+            return nextPomodoro(state, stats, settings)
+        case PomodoroActions.skip:
+            return nextPomodoro({ ...state, timeLeft: 0, }, stats, settings)
+        case PomodoroActions.reset:
+            return {
+                state: newState(state.mode, settings),
+                stats,
+            }
+        default:
+            return {
+                state,
+                stats
+            }
     }
 }
-
 
 export { usePomodoro, useProvidePomodoro, pomodoroContext }
 export type { PomodoroState, PomodoroMode, PomodoroSettings, PomodoroContext }
