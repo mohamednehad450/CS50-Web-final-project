@@ -1,5 +1,5 @@
 from django.contrib import admin
-from todo.models import Todo, Step, Tag
+from todo.models import Todo, Step, Tag, PomodoroInterval
 
 
 class TodoAdmin(admin.ModelAdmin):
@@ -27,7 +27,19 @@ class StepAdmin(admin.ModelAdmin):
         return obj.todo.title
 
 
+class PomodoroIntervalAdmin(admin.ModelAdmin):
+    list_display = ("user", "todo_title", "startDate",
+                    "endDate", "defaultDuration")
+
+    def todo_title(self, obj):
+        if obj.todo:
+            return obj.todo.title
+        else:
+            return None
+
+
 # Register your models here.
 admin.site.register(Todo, TodoAdmin)
 admin.site.register(Step, StepAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(PomodoroInterval, PomodoroIntervalAdmin)
