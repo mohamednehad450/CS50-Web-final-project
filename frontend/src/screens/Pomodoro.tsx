@@ -6,10 +6,9 @@ import { useTodo } from '../components/TodoList'
 
 const Pomodoro = () => {
 
-    const todo = useTodo()
-    const { reset, skip } = usePomodoro()
+    const { todos } = useTodo()
+    const { reset, skip, setTodo } = usePomodoro()
 
-    // TODO: Implement pomodoro linking with Todos
     const [selected, setSelected] = useState<Todo | undefined>()
 
     return (
@@ -28,11 +27,11 @@ const Pomodoro = () => {
                     <div className="padding">
                         <Select
                             scroll
-                            options={todo.todos.map(t => ({ ...t, label: t.title }))}
-                            onChange={(o) => setSelected(o)}
+                            options={todos.map(t => ({ ...t, label: t.title }))}
+                            onChange={(o) => { setSelected(o); setTodo(o.id) }}
                             selected={selected}
                             Header={({ close }) => (
-                                <SelectItem onClick={() => { setSelected(undefined); close() }} option={{ id: "NONE", label: '- None' }} />
+                                <SelectItem onClick={() => { setSelected(undefined); setTodo(); close() }} option={{ id: "NONE", label: '- None' }} />
                             )}
                         />
                     </div>

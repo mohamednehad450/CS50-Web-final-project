@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react"
+import { addPomodoroInterval } from "../../API";
 
+import type { AuthContext, PomodoroInterval, Todo } from "../../API";
 
 enum PomodoroMode {
     WORK = "work",
@@ -83,6 +85,7 @@ interface PomodoroContext {
     stop: () => void
     reset: () => void
     skip: () => void
+    setTodo: (id?: Todo['id']) => void
 }
 
 const pomodoroContext = createContext<PomodoroContext>({
@@ -93,18 +96,21 @@ const pomodoroContext = createContext<PomodoroContext>({
     stop: () => console.error("pomodoro not initialized"),
     reset: () => console.error("pomodoro not initialized"),
     skip: () => console.error("pomodoro not initialized"),
+    setTodo: () => console.error("pomodoro not initialized"),
 })
 
 const usePomodoro = () => useContext(pomodoroContext)
 
 const TICK = 1000
 
-const useProvidePomodoro = (): PomodoroContext => {
+const useProvidePomodoro = ({ user }: AuthContext): PomodoroContext => {
 
     const [pomodoro, dispatch] = useReducer(pomodoroReducer, {
         state: newState(PomodoroMode.WORK, defaultPomodoroSettings),
         stats: defaultPomodoroStats,
     })
+
+    const [pomInterval, setPomInterval] = useState<Partial<PomodoroInterval>>()
 
     const [timer, setTimer] = useState<any>()
 
@@ -122,12 +128,28 @@ const useProvidePomodoro = (): PomodoroContext => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pomodoro.state.mode])
 
+    // Submit PomodoroInterval to Api
+    useEffect(() => {
+        if (pomodoro.state.mode !== PomodoroMode.WORK) {
+            pomInterval && addPomodoroInterval({
+                ...pomInterval,
+                endDate: new Date(),
+            }, user) // TODO: Handle Api Error
+            setPomInterval(undefined)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pomodoro.state.mode])
+
     const tick = () => {
         dispatch({
             type: PomodoroActions.tick,
             payload: {
                 settings: defaultPomodoroSettings,
             }
+        })
+        setPomInterval(p => p || {
+            startDate: new Date(),
+            defaultDuration: defaultPomodoroSettings[PomodoroMode.WORK]
         })
     }
 
@@ -164,6 +186,10 @@ const useProvidePomodoro = (): PomodoroContext => {
         })
     }
 
+    const setTodo = (id?: Todo['id']) => {
+        setPomInterval(p => ({ ...p, todo: id }))
+    }
+
 
     return {
         ...pomodoro,
@@ -171,7 +197,8 @@ const useProvidePomodoro = (): PomodoroContext => {
         start,
         stop,
         reset,
-        skip
+        skip,
+        setTodo,
     }
 }
 

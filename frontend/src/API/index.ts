@@ -11,6 +11,7 @@ import {
     createEmptyTag,
     validateTodo,
     validateStep,
+    addPomodoroInterval,
 } from './api'
 
 import ProvideAuth from './ProvideAuth'
@@ -18,7 +19,7 @@ import PrivateRoute from './PrivateRoute'
 import { useAuth } from './auth'
 
 // Types
-import type { Todo, Step, Tag, TodoError, StepError } from './api'
+import type { Todo, Step, Tag, PomodoroInterval, TodoError, StepError } from './api'
 import type { User, AuthContext, UserError } from './auth'
 
 
@@ -37,13 +38,15 @@ export {
     ProvideAuth,
     useAuth,
     validateTodo,
-    validateStep
+    validateStep,
+    addPomodoroInterval,
 }
 
 export type {
     Todo,
     Step,
     Tag,
+    PomodoroInterval,
     User,
     AuthContext,
     TodoError,

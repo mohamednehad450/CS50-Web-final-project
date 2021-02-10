@@ -25,6 +25,13 @@ export interface Todo {
     id: number | string,
     steps: Step[],
 }
+
+export interface PomodoroInterval {
+    todo?: Todo['id']
+    startDate: Date | string
+    endDate: Date | string
+    defaultDuration: number
+}
 export interface StepError {
     id?: string[]
     title?: string[]
@@ -185,6 +192,16 @@ export const getTages = async (user?: User): Promise<Tag[]> => {
 export const addNewTag = async (tag: Partial<Tag>, user?: User): Promise<Tag> => {
     const { data } =
         await Axios.post<Tag>('/api/tags/', tag, {
+            headers: {
+                "Authorization": `JWT ${user?.token}`
+            }
+        })
+    return data
+}
+
+export const addPomodoroInterval = async (pomInterval: Partial<PomodoroInterval>, user?: User): Promise<PomodoroInterval> => {
+    const { data } =
+        await Axios.post<PomodoroInterval>('/api/pomodoros/', pomInterval, {
             headers: {
                 "Authorization": `JWT ${user?.token}`
             }
