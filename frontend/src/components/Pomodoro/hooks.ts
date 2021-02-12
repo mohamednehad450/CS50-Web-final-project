@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react"
 import { addPomodoroInterval } from "../../API";
+import { defaultPomodoroSettings } from "../Settings";
 
 import type { AuthContext, PomodoroInterval, Todo } from "../../API";
+import type { PomodoroSettings } from "../Settings";
 
 enum PomodoroMode {
     WORK = "work",
@@ -47,22 +49,6 @@ type PomodoroReducer = (
         }
     }) => Pomodoro;
 
-// units in seconds
-interface PomodoroSettings {
-    [PomodoroMode.BREAK]: number
-    [PomodoroMode.WORK]: number
-    [PomodoroMode.LONGBREAK]: number
-    autoStart: boolean
-    longBreakAfter: number
-}
-
-const defaultPomodoroSettings: PomodoroSettings = {
-    [PomodoroMode.BREAK]: 5 * 60,
-    [PomodoroMode.LONGBREAK]: 25 * 60,
-    [PomodoroMode.WORK]: 25 * 60,
-    autoStart: true,
-    longBreakAfter: 4,
-}
 
 const defaultPomodoroState: PomodoroState = {
     mode: PomodoroMode.WORK,
@@ -103,10 +89,10 @@ const usePomodoro = () => useContext(pomodoroContext)
 
 const TICK = 1000
 
-const useProvidePomodoro = ({ user }: AuthContext): PomodoroContext => {
+const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): PomodoroContext => {
 
     const [pomodoro, dispatch] = useReducer(pomodoroReducer, {
-        state: newState(PomodoroMode.WORK, defaultPomodoroSettings),
+        state: newState(PomodoroMode.WORK, settings),
         stats: defaultPomodoroStats,
     })
 
@@ -121,7 +107,7 @@ const useProvidePomodoro = ({ user }: AuthContext): PomodoroContext => {
 
     // Handles autoStart when Pomodoro mode changes
     useEffect(() => {
-        if (!defaultPomodoroSettings.autoStart) {
+        if (!settings.autoStart) {
             clearTimeout(timer)
             setTimer(undefined)
         }
@@ -144,12 +130,12 @@ const useProvidePomodoro = ({ user }: AuthContext): PomodoroContext => {
         dispatch({
             type: PomodoroActions.tick,
             payload: {
-                settings: defaultPomodoroSettings,
+                settings: settings,
             }
         })
         setPomInterval(p => p || {
             startDate: new Date(),
-            defaultDuration: defaultPomodoroSettings[PomodoroMode.WORK]
+            defaultDuration: settings[PomodoroMode.WORK]
         })
     }
 
@@ -172,7 +158,7 @@ const useProvidePomodoro = ({ user }: AuthContext): PomodoroContext => {
         dispatch({
             type: PomodoroActions.reset,
             payload: {
-                settings: defaultPomodoroSettings,
+                settings: settings,
             }
         })
     }
@@ -181,7 +167,7 @@ const useProvidePomodoro = ({ user }: AuthContext): PomodoroContext => {
         dispatch({
             type: PomodoroActions.skip,
             payload: {
-                settings: defaultPomodoroSettings,
+                settings: settings,
             }
         })
     }
@@ -276,4 +262,4 @@ const pomodoroReducer: PomodoroReducer = ({ state, stats }, { type, payload: { s
 }
 
 export { usePomodoro, useProvidePomodoro, pomodoroContext }
-export type { PomodoroState, PomodoroMode, PomodoroSettings, PomodoroContext }
+export type { PomodoroState, PomodoroMode, PomodoroContext }

@@ -24,6 +24,7 @@ import { ReactComponent as GraphIcon } from './icons/graph.svg'
 import { ReactComponent as SettingsIcon } from './icons/settings.svg'
 import { PrivateRoute, ProvideAuth } from './API';
 import { ProvideTodo } from './components/TodoList';
+import { ProvideSettings } from './components/Settings';
 
 
 function App() {
@@ -33,62 +34,64 @@ function App() {
         <Router>
           <Switch>
             <PrivateRoute path={routes.APP}>
-              <Navbar>
-                <NavItem path={routes.POMODORO} Icon={<PomIcon />} />
-                <NavItem path={routes.TODOLIST} Icon={<TodoIcon />} />
-                <NavItem path={routes.HABITTRACKER} Icon={<HabitIcon />} />
-                <NavItem path={routes.GRAPHS} Icon={<GraphIcon />} />
-                <NavItem path={routes.SETTINGS} Icon={<SettingsIcon />} />
-              </Navbar>
-              <main>
-                {/* Main App */}
+              <ProvideSettings>
                 <ProvidePomodoro>
                   <ProvideTodo>
-                    <Switch>
-                      <Route
-                        path={routes.APP}
-                        exact
-                      >
-                        <Redirect to={routes.TODOLIST} />
+                    <Navbar>
+                      <NavItem path={routes.POMODORO} Icon={<PomIcon />} />
+                      <NavItem path={routes.TODOLIST} Icon={<TodoIcon />} />
+                      <NavItem path={routes.HABITTRACKER} Icon={<HabitIcon />} />
+                      <NavItem path={routes.GRAPHS} Icon={<GraphIcon />} />
+                      <NavItem path={routes.SETTINGS} Icon={<SettingsIcon />} />
+                    </Navbar>
+                    <main>
+                      {/* Main App */}
+                      <Switch>
+                        <Route
+                          path={routes.APP}
+                          exact
+                        >
+                          <Redirect to={routes.TODOLIST} />
+                        </Route>
+                        <Route
+                          path={routes.POMODORO}
+                          exact
+                        >
+                          <Pomodoro />
+                        </Route>
+                        <Route
+                          path={routes.TODOLIST}
+                          exact
+                        >
+                          <TodoList />
+                        </Route>
+                        <Route
+                          path={routes.GRAPHS}
+                          exact
+                        >
+                          <Graphs />
+                        </Route>
+                        <Route
+                          path={routes.HABITTRACKER}
+                          exact
+                        >
+                          <HabitTracker />
+                        </Route>
+                        <Route
+                          path={routes.SETTINGS}
+                          exact
+                        >
+                          <Settings />
+                        </Route>
+                        {/* Catch all route */}
+                        <Route path='*' >
+                          404 not found
                       </Route>
-                      <Route
-                        path={routes.POMODORO}
-                        exact
-                      >
-                        <Pomodoro />
-                      </Route>
-                      <Route
-                        path={routes.TODOLIST}
-                        exact
-                      >
-                        <TodoList />
-                      </Route>
-                      <Route
-                        path={routes.GRAPHS}
-                        exact
-                      >
-                        <Graphs />
-                      </Route>
-                      <Route
-                        path={routes.HABITTRACKER}
-                        exact
-                      >
-                        <HabitTracker />
-                      </Route>
-                      <Route
-                        path={routes.SETTINGS}
-                        exact
-                      >
-                        <Settings />
-                      </Route>
-                      {/* Catch all route */}
-                      <Route path='*' >
-                        404 not found
-                      </Route>
-                    </Switch>
+                      </Switch>
+                    </main>
                   </ProvideTodo>
                 </ProvidePomodoro>
-              </main>
+              </ProvideSettings>
             </PrivateRoute>
             {/* Authentication */}
             <Route path={routes.SIGININ}>
