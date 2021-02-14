@@ -126,6 +126,12 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pomodoro.state.mode])
 
+    // Resets when settings changes
+    useEffect(() => {
+        reset()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [settings])
+
     const tick = () => {
         dispatch({
             type: PomodoroActions.tick,
