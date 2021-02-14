@@ -47,6 +47,15 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                 />
             </SettingRow>
             <SettingRow
+                title="Daily Rounds goal"
+            >
+                <NumberInput
+                    label="Rounds"
+                    value={pomodoroSettings.goal}
+                    onChange={v => v >= 1 && v < 100 && onChange({ ...pomodoroSettings, goal: v })}
+                />
+            </SettingRow>
+            <SettingRow
                 title="Auto start next round?"
             >
                 <Checkbox

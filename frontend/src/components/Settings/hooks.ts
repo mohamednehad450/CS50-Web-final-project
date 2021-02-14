@@ -8,6 +8,7 @@ interface PomodoroSettings {
     [PomodoroMode.LONGBREAK]: number
     autoStart: boolean
     longBreakAfter: number
+    goal: number
 }
 
 interface Settings {
@@ -25,6 +26,7 @@ const defaultPomodoroSettings: PomodoroSettings = {
     "work": 25 * 60,
     autoStart: true,
     longBreakAfter: 4,
+    goal: 12
 }
 
 
