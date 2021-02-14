@@ -392,7 +392,7 @@ main {
   color: rgb(255, 54, 87, 1);
 }
 
-.textinput {
+.input {
   border: none;
   padding-left: 0.5rem;
   border-bottom: 2px solid var(--gray-dim);
@@ -402,20 +402,35 @@ main {
   margin: 0.5rem;
 }
 
-.textinput-lg {
+.input-lg {
   font-size: 1.5rem !important;
 }
 
-.textinput:focus {
+.input:focus {
   outline: none;
   border: 0;
   border-bottom: 2px solid var(--btn-prime-bg);
   transition: border 200ms ease;
 }
 
-.textinput-invalid {
+.input-invalid {
   border-bottom: 2px solid rgb(255, 54, 87, 0.6) !important;
   transition: border 200ms ease;
+}
+
+.num-input {
+  width: 3rem;
+}
+
+.num-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.num-input-subtitle {
+  color: var(--gray3);
 }
 
 .stretch {

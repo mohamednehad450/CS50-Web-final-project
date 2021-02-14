@@ -25,7 +25,7 @@ const TextInput: FC<TextInputProps> = ({
     return (
         <span className={`textinput-container ${className}`}>
             <input
-                className={`textinput ${!errors.length ? '' : 'textinput-invalid'}`}
+                className={`input ${!errors.length ? '' : 'input-invalid'}`}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 value={value}

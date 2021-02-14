@@ -45,7 +45,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, init
                         onChange={(title) => { setTodo({ ...todo, title }); setError({ ...error, title: undefined }) }}
                         value={todo.title}
                         placeholder="New Todo"
-                        className='textinput-lg'
+                        className='input-lg'
                         errors={error?.title}
                     />
                 </div>
