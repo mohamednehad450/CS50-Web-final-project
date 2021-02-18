@@ -25,16 +25,17 @@ import { ReactComponent as SettingsIcon } from './icons/settings.svg'
 import { PrivateRoute, ProvideAuth } from './API';
 import { ProvideTodo } from './components/TodoList';
 import { ProvideSettings } from './components/Settings';
+import { ThemeProvider } from './components/theme';
 
 
 function App() {
   return (
-    <div className="light">
-      <ProvideAuth>
-        <Router>
-          <Switch>
-            <PrivateRoute path={routes.APP}>
-              <ProvideSettings>
+    <ProvideAuth>
+      <Router>
+        <Switch>
+          <PrivateRoute path={routes.APP}>
+            <ProvideSettings>
+              <ThemeProvider>
                 <ProvidePomodoro>
                   <ProvideTodo>
                     <Navbar>
@@ -91,30 +92,30 @@ function App() {
                     </main>
                   </ProvideTodo>
                 </ProvidePomodoro>
-              </ProvideSettings>
-            </PrivateRoute>
-            {/* Authentication */}
-            <Route path={routes.SIGININ}>
-              <main>
-                <SignIn />
-              </main>
+              </ThemeProvider>
+            </ProvideSettings>
+          </PrivateRoute>
+          {/* Authentication */}
+          <Route path={routes.SIGININ}>
+            <main>
+              <SignIn />
+            </main>
+          </Route>
+          <Route path={routes.REGISTER}>
+            <main>
+              <Register />
+            </main>
+          </Route>
+          <Route path={routes.ROOT} exact>
+            <Redirect to={routes.APP} />
+          </Route>
+          {/* Catch all route */}
+          <Route path='*' >
+            404 not found
             </Route>
-            <Route path={routes.REGISTER}>
-              <main>
-                <Register />
-              </main>
-            </Route>
-            <Route path={routes.ROOT} exact>
-              <Redirect to={routes.APP} />
-            </Route>
-            {/* Catch all route */}
-            <Route path='*' >
-              404 not found
-            </Route>
-          </Switch>
-        </Router>
-      </ProvideAuth>
-    </div>
+        </Switch>
+      </Router>
+    </ProvideAuth>
   );
 }
 

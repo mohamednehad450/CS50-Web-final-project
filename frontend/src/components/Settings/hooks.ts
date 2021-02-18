@@ -11,8 +11,11 @@ interface PomodoroSettings {
     goal: number
 }
 
+type ThemeSettings = 'light' | 'dark'
+
 interface Settings {
     pomodoroSettings: PomodoroSettings
+    themeSettings: ThemeSettings
 }
 
 interface SettingsContext {
@@ -31,7 +34,8 @@ const defaultPomodoroSettings: PomodoroSettings = {
 
 
 const defaultSettings: Settings = {
-    pomodoroSettings: defaultPomodoroSettings
+    pomodoroSettings: defaultPomodoroSettings,
+    themeSettings: 'light'
 }
 
 const settingsContext = createContext<SettingsContext>({
@@ -56,4 +60,4 @@ const useProvideSettings = (): SettingsContext => {
 }
 
 export { useSettings, settingsContext, useProvideSettings, defaultPomodoroSettings }
-export type { SettingsContext, Settings, PomodoroSettings }
+export type { SettingsContext, Settings, PomodoroSettings, ThemeSettings }
