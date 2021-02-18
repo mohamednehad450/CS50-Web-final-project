@@ -47,11 +47,6 @@ const TodoRow = (props: TodoRowProps) => {
             <div className={`row-container ${expanded ? 'gray-bg' : ''}`}>
                 <div onClick={() => expandable && onClick && onClick(id)} className="row">
                     <div className="row-section">
-                        <Checkbox
-                            disabled={expandable}
-                            checked={checked}
-                            onChange={(checked) => updateTodo(id, { checked, })}
-                        />
                         <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
                     </div>
                     <div className="row-section">
@@ -67,10 +62,14 @@ const TodoRow = (props: TodoRowProps) => {
                             <TimerIcon />
                         </Link>
                         <ColorTag tag={getTag(tag) || { color: '#fff', label: 'None' }} />
-                        {expandable &&
+                        {expandable ?
                             <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>
                                 <ExpandIcon />
-                            </span>
+                            </span> :
+                            <Checkbox
+                                checked={checked}
+                                onChange={(checked) => updateTodo(id, { checked, })}
+                            />
                         }
                         <ActionSelect
                             actions={[

@@ -199,7 +199,7 @@ main {
   justify-content: space-between;
   align-items: center;
   height: 5rem;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 }
 
 .row-section {
@@ -936,6 +936,12 @@ main {
   .icon {
     margin: 0 0.5rem;
   }
+  .checkbox {
+    margin: 0 0.5rem;
+  }
+  .step-row {
+    margin: 0 0.5rem;
+  }
   .pomodoro-section {
     padding: 1rem;
   }
@@ -975,5 +981,8 @@ main {
   .progress {
     width: 25rem;
     height: 25rem;
+  }
+  .step-row .checkbox {
+    margin-right: 4.5rem;
   }
 }

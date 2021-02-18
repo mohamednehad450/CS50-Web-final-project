@@ -16,12 +16,12 @@ const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
             <hr />
             <div className="step-row">
                 <div className="row-section">
-                    <Checkbox
-                        checked={checked}
-                        onChange={(checked) => onChange({ id, checked })}
-                    />
                     <span className={`step-title ${checked ? 'crossed' : ''}`}>{title}</span>
                 </div>
+                <Checkbox
+                    checked={checked}
+                    onChange={(checked) => onChange({ id, checked })}
+                />
             </div>
         </div>
     )
