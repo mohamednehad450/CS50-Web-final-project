@@ -6,7 +6,7 @@ import TodoList from './TodoList'
 import Graphs from './Graphs'
 import SignIn from './SignIn'
 import Register from './Register'
-
+import { useQuery } from './hooks'
 
 
 export {
@@ -18,4 +18,5 @@ export {
     Settings,
     SignIn,
     Register,
+    useQuery
 }

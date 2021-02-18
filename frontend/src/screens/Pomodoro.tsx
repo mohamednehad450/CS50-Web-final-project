@@ -1,15 +1,33 @@
-import React, { useState } from 'react'
-import { Todo } from '../API'
+import React, { useEffect, useState } from 'react'
+import { useQuery } from '.'
 import { Button, ButtonsRow, Header, Select, SelectItem } from '../components/common'
 import { PomodoroClock, PomodoroStats, usePomodoro } from '../components/Pomodoro'
 import { useTodo } from '../components/TodoList'
 
+import type { Option } from '../components/common'
+import type { Todo } from '../API'
+
+interface Selected extends Todo, Option { }
+
 const Pomodoro = () => {
 
+    const query = useQuery()
     const { todos } = useTodo()
-    const { reset, skip, setTodo } = usePomodoro()
+    const { reset, skip, start, setTodo, isRunning } = usePomodoro()
+    const [selected, setSelected] = useState<Selected>()
 
-    const [selected, setSelected] = useState<Todo | undefined>()
+    useEffect(() => {
+        const todoId = query.get('todo')
+        if (todoId) {
+            const todo = todos.find((t) => t.id === todoId)
+            if (todo) {
+                setSelected({ ...todo, label: todo.title })
+                setTodo(todo.id)
+                !isRunning && start()
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className="container">

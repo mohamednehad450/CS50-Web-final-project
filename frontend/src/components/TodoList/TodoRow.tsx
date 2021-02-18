@@ -3,6 +3,8 @@ import { Checkbox, ColorTag, } from '../common'
 import StepRow from './Step'
 import { NewTodoOverlay, useTodo } from '.'
 import ActionSelect from './ActionSelect'
+import { Link } from 'react-router-dom'
+import { routes } from '../../screens'
 
 import { ReactComponent as ExpandIcon } from '../../icons/expand.svg'
 import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
@@ -58,13 +60,16 @@ const TodoRow = (props: TodoRowProps) => {
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
                             </span>
                         }
+                        <Link
+                            className="icon icon-pomodoro"
+                            to={`${routes.POMODORO}?todo=${id}`}
+                        >
+                            <TimerIcon />
+                        </Link>
                         <ColorTag tag={getTag(tag) || { color: '#fff', label: 'None' }} />
-                        {expandable ?
+                        {expandable &&
                             <span className={`icon icon-gray ${expanded ? 'flip' : ''}`}>
                                 <ExpandIcon />
-                            </span> :
-                            <span className={`icon icon-pomodoro`}>
-                                <TimerIcon />
                             </span>
                         }
                         <ActionSelect
