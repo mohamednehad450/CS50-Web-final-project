@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from "react";
+import { getItemFromStorage, setItemToStorage } from "../../utils";
+
 import type { PomodoroMode } from "../Pomodoro";
 
 // units in seconds
@@ -47,10 +49,14 @@ const useSettings = () => useContext(settingsContext)
 
 const useProvideSettings = (): SettingsContext => {
 
-    const [settings, setSettings] = useState(defaultSettings)
+    const [settings, setSettings] = useState<Settings>(getItemFromStorage('settings') || defaultSettings)
 
     const updateSettings = (s: Partial<Settings>) => {
-        setSettings(old => ({ ...old, ...s }))
+        setSettings(old => {
+            const settings = { ...old, ...s }
+            setItemToStorage('settings', settings)
+            return settings
+        })
     }
 
     return {
