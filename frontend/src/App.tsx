@@ -96,23 +96,25 @@ function App() {
             </ProvideSettings>
           </PrivateRoute>
           {/* Authentication */}
-          <Route path={routes.SIGININ}>
-            <main>
-              <SignIn />
-            </main>
-          </Route>
-          <Route path={routes.REGISTER}>
-            <main>
-              <Register />
-            </main>
-          </Route>
-          <Route path={routes.ROOT} exact>
-            <Redirect to={routes.APP} />
-          </Route>
-          {/* Catch all route */}
-          <Route path='*' >
-            404 not found
+          <div className="light">
+            <Route path={routes.SIGININ}>
+              <main>
+                <SignIn />
+              </main>
             </Route>
+            <Route path={routes.REGISTER}>
+              <main>
+                <Register />
+              </main>
+            </Route>
+            <Route path={routes.ROOT} exact>
+              <Redirect to={routes.APP} />
+            </Route>
+            {/* Catch all route */}
+            <Route path='*' >
+              404 not found
+            </Route>
+          </div>
         </Switch>
       </Router>
     </ProvideAuth>
