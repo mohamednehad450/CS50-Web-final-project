@@ -114,7 +114,7 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         }
         // Submiting Pomodoro Interval to Api
         if (pomodoro.state.mode !== PomodoroMode.WORK) {
-            if (pomInterval) {
+            if (pomInterval?.startDate) {
                 addPomodoroInterval({
                     ...pomInterval,
                     endDate: new Date(),
@@ -125,7 +125,8 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
 
         // Initializing Pomodoro Interval
         if (pomodoro.state.mode === PomodoroMode.WORK) {
-            setPomInterval(!!timer ? {
+            setPomInterval(p => !!timer ? {
+                ...p,
                 startDate: new Date(),
                 defaultDuration: settings.work
             } :
@@ -154,11 +155,12 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         if (!timer) {
             setTimer(setInterval(tick, TICK))
         }
-        if (!pomInterval && PomodoroMode.WORK) {
-            setPomInterval({
+        if (!pomInterval?.startDate && PomodoroMode.WORK) {
+            setPomInterval(p => ({
+                ...p,
                 startDate: new Date(),
                 defaultDuration: settings.work
-            })
+            }))
         }
     }
 
