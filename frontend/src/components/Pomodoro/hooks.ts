@@ -105,23 +105,32 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         return () => clearInterval(timer)
     }, [timer])
 
-    // Handles autoStart when Pomodoro mode changes
+    // Mode Change Effect
     useEffect(() => {
+        // Handles autoStart
         if (!settings.autoStart) {
             clearTimeout(timer)
             setTimer(undefined)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pomodoro.state.mode])
-
-    // Submit PomodoroInterval to Api
-    useEffect(() => {
+        // Submiting Pomodoro Interval to Api
         if (pomodoro.state.mode !== PomodoroMode.WORK) {
-            pomInterval && addPomodoroInterval({
-                ...pomInterval,
-                endDate: new Date(),
-            }, user) // TODO: Handle Api Error
-            setPomInterval(undefined)
+            if (pomInterval) {
+                addPomodoroInterval({
+                    ...pomInterval,
+                    endDate: new Date(),
+                }, user) // TODO: Handles api error
+                setPomInterval(undefined)
+            }
+        }
+
+        // Initializing Pomodoro Interval
+        if (pomodoro.state.mode === PomodoroMode.WORK) {
+            setPomInterval(!!timer ? {
+                startDate: new Date(),
+                defaultDuration: settings.work
+            } :
+                undefined
+            )
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pomodoro.state.mode])
@@ -139,15 +148,17 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
                 settings: settings,
             }
         })
-        setPomInterval(p => p || {
-            startDate: new Date(),
-            defaultDuration: settings[PomodoroMode.WORK]
-        })
     }
 
     const start = () => {
         if (!timer) {
             setTimer(setInterval(tick, TICK))
+        }
+        if (!pomInterval && PomodoroMode.WORK) {
+            setPomInterval({
+                startDate: new Date(),
+                defaultDuration: settings.work
+            })
         }
     }
 
