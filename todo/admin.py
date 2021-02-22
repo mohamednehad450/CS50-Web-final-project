@@ -1,5 +1,5 @@
 from django.contrib import admin
-from todo.models import Todo, Step, Tag, PomodoroInterval
+from todo.models import Todo, Step, Tag, PomodoroInterval, Habit, HabitEntry
 
 
 class TodoAdmin(admin.ModelAdmin):
@@ -43,3 +43,5 @@ admin.site.register(Todo, TodoAdmin)
 admin.site.register(Step, StepAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(PomodoroInterval, PomodoroIntervalAdmin)
+admin.site.register(HabitEntry)
+admin.site.register(Habit)
