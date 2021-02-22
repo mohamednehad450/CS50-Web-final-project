@@ -43,3 +43,32 @@ class PomodoroInterval(models.Model):
     defaultDuration = models.IntegerField()
     todo = models.ForeignKey(
         Todo, on_delete=models.CASCADE, related_name="intervals", null=True)
+
+
+class Habit(models.Model):
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'title'], name="unique_title")
+        ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="habits"
+    )
+    created = models.DateTimeField(default=timezone.now, editable=False)
+    title = models.CharField(max_length=150)
+
+
+class HabitEntry(models.Model):
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['habit', 'date'], name="unique_date")
+        ]
+
+    date = models.DateField()
+    habit = models.ForeignKey(
+        Habit, on_delete=models.CASCADE, related_name="entries")
