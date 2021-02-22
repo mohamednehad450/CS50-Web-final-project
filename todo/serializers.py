@@ -4,7 +4,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
-from .models import Tag, Todo, Step, PomodoroInterval
+from rest_framework.validators import UniqueTogetherValidator
+from .models import Tag, Todo, Step, PomodoroInterval, Habit, HabitEntry
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -103,3 +104,36 @@ class PomodoroSerializer(serializers.ModelSerializer):
         fields = ['id', 'todo', 'startDate', 'endDate', 'defaultDuration']
 
     id = serializers.UUIDField(default=uuid.uuid4)
+
+
+class HabitEntrySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = HabitEntry
+        fields = ['date']
+
+    def to_representation(self, instance):
+        return str(instance.date)
+
+
+class HabitSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Habit
+        fields = ['id', 'user', 'created', 'title', 'entries']
+        extra_kwargs = {
+            'user': {
+                'write_only': True
+            },
+        }
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Habit.objects.all(),
+                fields=['title', 'user'],
+                message="Habit already exist.",
+            )
+        ]
+
+    id = serializers.UUIDField(default=uuid.uuid4)
+
+    entries = HabitEntrySerializer(many=True, required=False, read_only=True)
