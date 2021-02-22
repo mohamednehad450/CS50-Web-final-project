@@ -1,3 +1,4 @@
+from .models import Todo, Step, Tag, PomodoroInterval, Habit, HabitEntry
 import os
 
 from django.shortcuts import get_object_or_404
@@ -9,13 +10,12 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 from rest_framework import permissions, authentication, viewsets, response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.settings import api_settings
 
 
-from .serializers import TagSerializer, TodoSerializer, StepSerializer, UserSerializer, PomodoroSerializer
-from .models import Todo, Step, Tag, PomodoroInterval
+from .serializers import TagSerializer, TodoSerializer, StepSerializer, UserSerializer, PomodoroSerializer, HabitSerializer, HabitEntrySerializer
 
 
 # Create your views here.
@@ -176,6 +176,99 @@ class PomodoroViewSet(viewsets.ViewSet):
             return response.Response(data)
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Tag ID']}, status=400)
+
+
+class HabitViewSet(viewsets.ViewSet):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Habit.objects.filter(user=user).all()
+
+    def list(self, request):
+        serializer = HabitSerializer(self.get_queryset(), many=True)
+        return response.Response(serializer.data)
+
+    def create(self, request):
+        data = request.data
+        serializer = HabitSerializer(data={**data, "user": request.user.id})
+        if serializer.is_valid():
+            habit = serializer.save()
+            data = HabitSerializer(habit).data
+            return response.Response(data)
+        else:
+            return response.Response(serializer._errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        try:
+            habit = get_object_or_404(
+                Habit, user=request.user,  pk=pk)
+            data = HabitSerializer(habit).data
+            return response.Response(data)
+        except ValidationError:
+            return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
+
+    @action(methods=['post'], detail=True)
+    def add_entry(self, request, pk=None):
+        try:
+            # getting habit
+            habit = get_object_or_404(
+                Habit, user=request.user, pk=pk
+            )
+            # Validating entry
+            serializer = HabitEntrySerializer(data=request.data)
+            if serializer.is_valid():
+                # saving
+                HabitEntry.objects.get_or_create(
+                    **serializer.validated_data, habit=habit)
+                return response.Response(status=200)
+            else:
+                return response.Response(serializer._errors)
+
+        except ValidationError:
+            return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
+
+    @action(methods=['post'], detail=True)
+    def remove_entry(self, request, pk=None):
+        try:
+            habit = get_object_or_404(
+                Habit, user=request.user, pk=pk
+            )
+            serializer = HabitEntrySerializer(data=request.data)
+            if serializer.is_valid():
+                entry = HabitEntry.objects.get(
+                    **serializer.validated_data, habit=habit)
+                if entry is not None:
+                    entry.delete()
+                return response.Response(status=201)
+            else:
+                return response.Response(serializer._errors)
+        except ValidationError:
+            return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
+
+    def partial_update(self, request, pk=None):
+        try:
+            habit = get_object_or_404(
+                Habit, user=request.user,  pk=pk)
+            serializer = HabitSerializer(
+                data=request.data, instance=habit, partial=True)
+            if serializer.is_valid():
+                habit = serializer.save()
+                data = HabitSerializer(habit).data
+                return response.Response(data)
+            else:
+                return response.Response(serializer._errors)
+        except ValidationError:
+            return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
+
+    def destroy(self, request, pk=None):
+        try:
+            habit = get_object_or_404(Habit, user=request.user,  pk=pk)
+            habit.delete()
+            return response.Response(status=200)
+        except ValidationError:
+            return response.Response({"id": [f"'{pk}' is not a valid Habit ID"]}, status=400)
 
 
 @api_view(['POST'])
