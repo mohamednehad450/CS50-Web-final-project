@@ -1,3 +1,4 @@
+import NewHabitOverlay from './NewHabitOverlay'
 import ProvideHabits from './ProvideHabits'
 
 import {
@@ -5,4 +6,4 @@ import {
 } from './hooks'
 
 
-export { ProvideHabits, useHabits }
+export { NewHabitOverlay, ProvideHabits, useHabits }

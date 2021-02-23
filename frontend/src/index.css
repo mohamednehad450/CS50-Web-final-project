@@ -896,6 +896,14 @@ main {
   padding: 0.5rem 0;
 }
 
+.margin-end {
+  margin-top: auto;
+}
+
+.padding-top-2 {
+  padding-top: 2rem;
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     bottom: 0;
