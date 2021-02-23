@@ -1,26 +1,34 @@
 import {
     getTodos,
-    getTages,
     updateTodo,
     deleteTodo,
     updateStep,
     addNewTodo,
-    addNewTag,
     createEmptyTodo,
     createEmptyStep,
-    createEmptyTag,
     validateTodo,
     validateStep,
-    addPomodoroInterval,
-} from './api'
+} from './todos'
+
+import {
+    getTages,
+    addNewTag,
+    createEmptyTag,
+} from './tags'
+
+import {
+    addPomodoroInterval
+} from './pomodoro'
 
 import ProvideAuth from './ProvideAuth'
 import PrivateRoute from './PrivateRoute'
 import { useAuth } from './auth'
 
 // Types
-import type { Todo, Step, Tag, PomodoroInterval, TodoError, StepError } from './api'
-import type { User, AuthContext, UserError } from './auth'
+import type { Todo, Step, TodoError, StepError, } from './todos'
+import type { Tag, } from './tags'
+import type { PomodoroInterval, } from './pomodoro'
+import type { User, AuthContext, UserError, } from './auth'
 
 
 export {
