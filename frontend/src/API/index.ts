@@ -20,6 +20,15 @@ import {
     addPomodoroInterval
 } from './pomodoro'
 
+import {
+    getHabits,
+    updateHabit,
+    addNewHabit,
+    removeHabit,
+    addEntry,
+    removeEntry,
+} from './habits'
+
 import ProvideAuth from './ProvideAuth'
 import PrivateRoute from './PrivateRoute'
 import { useAuth } from './auth'
@@ -28,6 +37,7 @@ import { useAuth } from './auth'
 import type { Todo, Step, TodoError, StepError, } from './todos'
 import type { Tag, } from './tags'
 import type { PomodoroInterval, } from './pomodoro'
+import type { Habit, } from './habits'
 import type { User, AuthContext, UserError, } from './auth'
 
 
@@ -48,6 +58,12 @@ export {
     validateTodo,
     validateStep,
     addPomodoroInterval,
+    getHabits,
+    updateHabit,
+    addNewHabit,
+    removeHabit,
+    addEntry,
+    removeEntry
 }
 
 export type {
@@ -59,5 +75,6 @@ export type {
     AuthContext,
     TodoError,
     StepError,
-    UserError
+    UserError,
+    Habit
 }
