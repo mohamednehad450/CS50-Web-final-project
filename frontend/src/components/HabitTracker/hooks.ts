@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
-import { AuthContext, Habit } from "../../API"
+import { AuthContext, Habit, HabitError } from "../../API"
 
 import {
     getHabits as getHabitsApi,
@@ -14,9 +14,9 @@ import {
 interface HabitContext {
     habits: Habit[]
     getHabits: () => void
-    updateHabit: (id: Habit['id'], h: Partial<Habit>) => Promise<void>
-    removeHabit: (id: Habit['id']) => Promise<void>
-    addNewHabit: (h: Partial<Habit>) => Promise<void>
+    updateHabit: (id: Habit['id'], h: Partial<Habit>) => Promise<void | HabitError>
+    removeHabit: (id: Habit['id']) => Promise<void | HabitError>
+    addNewHabit: (h: Partial<Habit>) => Promise<void | HabitError>
     addEntry: (id: Habit['id'], date: Date | string) => Promise<void>
     removeEntry: (id: Habit['id'], date: Date | string) => Promise<void>
 }
@@ -40,16 +40,52 @@ const habitsContext = createContext(defaultHabitsContext)
 
 const useHabits = () => useContext(habitsContext)
 
-const useProvideHabits = ({ user }: AuthContext): HabitContext => {
+const useProvideHabits = ({ user, signout }: AuthContext): HabitContext => {
+
+    const isAuthError = (err: any): boolean => {
+        const { response, isAxiosError } = err
+        if (isAxiosError) {
+            const { status } = response
+            if (status === 401 || status === 403) {
+                return true
+            }
+        }
+        return false
+    }
+
+    const handleHabitErr = (err: any): any => {
+        const { response, isAxiosError } = err
+
+        if (isAuthError(err)) {
+            signout()
+        }
+
+        if (isAxiosError) {
+            const { status, data } = response
+
+            if (status === 404) {
+                // eslint-disable-next-line no-throw-literal
+                return { notFound: true, ...data }
+            }
+            else if (status === 400) {
+                return data
+            }
+            else if (status === 500) {
+                alert('Somthing went wrong, Please try again later or refresh the page.')
+            }
+        }
+    }
+
+
 
 
     const [habits, setHabits] = useState<Habit[]>([])
     const getHabits = useCallback(() => getHabitsApi(user).then(habits => habits && setHabits(habits)), [user])
-    const updateHabit = (id: Habit['id'], h: Partial<Habit>) => updateHabitApi(id, h, user).then(getHabits)
-    const removeHabit = (id: Habit['id']) => removeHabitApi(id, user).then(getHabits)
-    const addNewHabit = (h: Partial<Habit>) => addNewHabitApi(h, user).then(getHabits)
-    const addEntry = (id: Habit['id'], date: Date | string) => addEntryApi(id, date, user).then(getHabits)
-    const removeEntry = (id: Habit['id'], date: Date | string) => removeEntryApi(id, date, user).then(getHabits)
+    const updateHabit = (id: Habit['id'], h: Partial<Habit>) => updateHabitApi(id, h, user).then(getHabits).catch(handleHabitErr)
+    const removeHabit = (id: Habit['id']) => removeHabitApi(id, user).then(getHabits).catch(handleHabitErr)
+    const addNewHabit = (h: Partial<Habit>) => addNewHabitApi(h, user).then(getHabits).catch(handleHabitErr)
+    const addEntry = (id: Habit['id'], date: Date | string) => addEntryApi(id, date, user).then(getHabits).catch(handleHabitErr)
+    const removeEntry = (id: Habit['id'], date: Date | string) => removeEntryApi(id, date, user).then(getHabits).catch(handleHabitErr)
 
     useEffect(() => {
         getHabits()

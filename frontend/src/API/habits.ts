@@ -8,6 +8,15 @@ export interface Habit {
     entries: (Date | string)[]
 }
 
+export interface HabitError {
+    id?: string[]
+    title?: string[]
+    created?: string[]
+    entries?: string[]
+    non_field_errors?: string[]
+    notFound?: boolean
+}
+
 export const getHabits = async (user?: User): Promise<Habit[] | undefined> => {
     const { data } =
         await Axios.get<Habit[]>('/api/habits/', {

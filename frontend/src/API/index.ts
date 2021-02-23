@@ -37,7 +37,7 @@ import { useAuth } from './auth'
 import type { Todo, Step, TodoError, StepError, } from './todos'
 import type { Tag, } from './tags'
 import type { PomodoroInterval, } from './pomodoro'
-import type { Habit, } from './habits'
+import type { Habit, HabitError } from './habits'
 import type { User, AuthContext, UserError, } from './auth'
 
 
@@ -76,5 +76,6 @@ export type {
     TodoError,
     StepError,
     UserError,
-    Habit
+    Habit,
+    HabitError
 }
