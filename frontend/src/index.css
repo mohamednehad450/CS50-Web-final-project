@@ -207,6 +207,24 @@ main {
   align-items: center;
 }
 
+.expandable-container {
+  max-height: 0;
+  margin: 0;
+  transition: max-height, width, 300ms ease;
+  overflow: hidden;
+}
+
+.expandable-container::-webkit-scrollbar {
+  display: none;
+}
+
+.expanded {
+  max-height: 50vh;
+  margin: 0;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
 .icon {
   display: flex;
   align-items: center;
@@ -278,27 +296,14 @@ main {
   margin: 0 1rem;
 }
 
-.steps-container {
-  max-height: 0;
-  margin: 0;
-  transition: max-height, width, 300ms ease;
-  overflow: hidden;
-}
-
-.steps-container::-webkit-scrollbar {
-  display: none;
-}
-
-.step-container>hr {
+.step-container {
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
+  padding: 0 2rem;
 }
 
-.expanded {
-  max-height: 50vh;
+.steps-expanded {
   margin-left: 5rem;
-  overflow-y: scroll;
-  scrollbar-width: none;
 }
 
 .step-row {
@@ -928,8 +933,8 @@ main {
   .text-note {
     display: none;
   }
-  .expanded {
-    margin: 0 1rem;
+  .steps-expanded {
+    margin: 0;
   }
   .overlay {
     left: 0;
@@ -991,6 +996,6 @@ main {
     height: 25rem;
   }
   .step-row .checkbox {
-    margin-right: 4.5rem;
+    margin-right: 2.5rem;
   }
 }

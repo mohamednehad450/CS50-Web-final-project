@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Checkbox, ColorTag, } from '../common'
+import { Checkbox, ColorTag, ListRow, } from '../common'
 import StepRow from './Step'
 import { NewTodoOverlay, useTodo } from '.'
 import ActionSelect from './ActionSelect'
@@ -44,12 +44,15 @@ const TodoRow = (props: TodoRowProps) => {
                     initialTodo={todo}
                 />
             )}
-            <div className={`row-container ${expanded ? 'gray-bg' : ''}`}>
-                <div onClick={() => expandable && onClick && onClick(id)} className="row">
-                    <div className="row-section">
-                        <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
-                    </div>
-                    <div className="row-section">
+            <ListRow
+                onClick={() => onClick && onClick(id)}
+                expanded={expanded}
+                expandedClassName='steps-expanded'
+                leftItem={(
+                    <span className={`text-title ${checked ? 'crossed' : ''}`}>{title}</span>
+                )}
+                rightItem={(
+                    <>
                         {expandable &&
                             <span className="text-note">
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
@@ -78,19 +81,18 @@ const TodoRow = (props: TodoRowProps) => {
                             ]}
                             id={id}
                         />
-                    </div>
-                </div>
-                <div className={`steps-container ${expanded ? "expanded" : ''}`}>
-                    {steps?.map((step, index) => (
+                    </>
+                )}
+                expandedItem={steps.length ? (
+                    steps?.map((step) => (
                         <StepRow
                             key={step.id}
                             step={step}
                             onChange={(s) => updateStep(step.id, s)}
                         />
-                    ))}
-                </div>
-                <hr></hr>
-            </div>
+                    ))
+                ) : null}
+            />
         </>
     )
 }

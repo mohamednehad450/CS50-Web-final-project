@@ -13,7 +13,6 @@ const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
     const { title, checked, id } = step
     return (
         <div className="step-container">
-            <hr />
             <div className="step-row">
                 <div className="row-section">
                     <span className={`step-title ${checked ? 'crossed' : ''}`}>{title}</span>
