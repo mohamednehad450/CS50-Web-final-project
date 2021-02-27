@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import { Header } from '../components/common'
-import { NewHabitOverlay } from '../components/HabitTracker'
-import { useHabits } from '../components/HabitTracker'
+import { NewHabitOverlay, useHabits, HabitRow } from '../components/HabitTracker'
 
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
+
+import type { Habit } from '../API'
+
 
 const HabitTracker = () => {
 
     const [overlay, setOverlay] = useState(false)
-    const { habits, addNewHabit } = useHabits()
+    const [expanded, setExpanded] = useState<Habit['id']>('')
+    const { habits, addNewHabit, removeHabit, updateHabit, addEntry, removeEntry } = useHabits()
 
     return (
         <div className="container">
@@ -26,6 +29,18 @@ const HabitTracker = () => {
                     </span>
                 }
             />
+            {habits.map(h => (
+                <HabitRow
+                    habit={h}
+                    key={h.id}
+                    expanded={h.id === expanded}
+                    onClick={(id) => setExpanded(expanded === h.id ? '' : id)}
+                    remove={id => removeHabit(id)}
+                    update={(id, h) => updateHabit(id, h)}
+                    addEntry={addEntry}
+                    removeEntry={removeEntry}
+                />
+            ))}
         </div>
     )
 }
