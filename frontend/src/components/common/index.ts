@@ -12,6 +12,7 @@ import Checkbox from './Checkbox'
 import Header from './Header'
 import ErrorList from './ErrorList'
 import ListRow from './ListRow'
+import ActionSelect from './ActionSelect'
 
 
 import type { Option, SelectItemProps } from './SelectItem'
@@ -32,6 +33,7 @@ export {
     Header,
     ErrorList,
     ListRow,
+    ActionSelect,
 }
 
 export type { Option, SelectItemProps }

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Checkbox, ColorTag, ListRow, } from '../common'
+import { Checkbox, ColorTag, ListRow, ActionSelect } from '../common'
 import StepRow from './Step'
 import { NewTodoOverlay, useTodo } from '.'
-import ActionSelect from './ActionSelect'
 import { Link } from 'react-router-dom'
 import { routes } from '../../screens'
 
