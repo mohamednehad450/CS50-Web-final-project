@@ -22,6 +22,7 @@ body {
   --orange2: #F05E2D;
   --green1: #96E072;
   --green2: #58B828;
+  --speed: 250ms;
 }
 
 .light {
@@ -184,6 +185,11 @@ main {
   width: 100%;
 }
 
+.row-container {
+  transition: all var(--speed) ease-in-out;
+  overflow: hidden;
+}
+
 .row-container>hr {
   border: 0;
   margin-left: 2rem;
@@ -208,21 +214,16 @@ main {
 }
 
 .expandable-container {
-  max-height: 0;
+  max-height: 50vh;
   margin: 0;
-  transition: max-height, width, 300ms ease;
+  transition: all var(--speed) ease-in-out;
+  overflow-y: scroll;
+  scrollbar-width: none;
   overflow: hidden;
 }
 
 .expandable-container::-webkit-scrollbar {
   display: none;
-}
-
-.expanded {
-  max-height: 50vh;
-  margin: 0;
-  overflow-y: scroll;
-  scrollbar-width: none;
 }
 
 .icon {
@@ -323,7 +324,6 @@ main {
 }
 
 .gray-bg {
-  transition: all 200ms ease-in-out;
   background-color: var(--fg-dim);
 }
 
