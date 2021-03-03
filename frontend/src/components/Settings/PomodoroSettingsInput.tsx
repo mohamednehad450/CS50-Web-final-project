@@ -43,7 +43,7 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                 <NumberInput
                     label="Rounds"
                     value={pomodoroSettings.longBreakAfter}
-                    onChange={v => v >= 1 && v < 100 && onChange({ ...pomodoroSettings, longBreakAfter: v })}
+                    onChange={v => v >= 0 && v < 100 && onChange({ ...pomodoroSettings, longBreakAfter: v })}
                 />
             </SettingRow>
             <SettingRow
@@ -52,7 +52,7 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                 <NumberInput
                     label="Rounds"
                     value={pomodoroSettings.goal}
-                    onChange={v => v >= 1 && v < 100 && onChange({ ...pomodoroSettings, goal: v })}
+                    onChange={v => v >= 0 && v < 100 && onChange({ ...pomodoroSettings, goal: v })}
                 />
             </SettingRow>
             <SettingRow
