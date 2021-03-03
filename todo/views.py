@@ -184,7 +184,7 @@ class HabitViewSet(viewsets.ViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return Habit.objects.filter(user=user).all()
+        return Habit.objects.filter(user=user).order_by('-created').all()
 
     def list(self, request):
         serializer = HabitSerializer(self.get_queryset(), many=True)
