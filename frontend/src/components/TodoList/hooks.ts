@@ -8,16 +8,17 @@ import {
     getTages as getTagsApi,
     addNewTag as addNewTagApi,
 } from '../../API'
+import { removeFromArray, replaceFromArray } from "../../utils";
 
 import type { Step, Todo, Tag, AuthContext } from "../../API";
 
 interface TodoContext {
     todos: Todo[]
     getTodos: () => void
-    updateTodo: (id: Todo['id'], t: Partial<Todo>) => Promise<Todo>
+    updateTodo: (id: Todo['id'], t: Partial<Todo>) => Promise<void>
     deleteTodo: (id: Todo['id']) => Promise<void>
-    addNewTodo: (t: Partial<Todo>) => Promise<Todo>
-    updateStep: (id: Step['id'], s: Partial<Step>) => Promise<Step | void>
+    addNewTodo: (t: Partial<Todo>) => Promise<void>
+    updateStep: (id: Todo['id'], s: Partial<Step>) => Promise<void>
     tags: Tag[]
     getTags: () => void
     getTag: (id?: Tag['id']) => Tag | undefined
@@ -94,23 +95,23 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
 
     const updateTodo = (id: Todo['id'], t: Partial<Todo>) =>
         updateTodoApi(id, t, user)
-            .then(t => { getTodos(); return t })
-            .catch(handleTodoErr)
+            .then(t => setTodos(arr => replaceFromArray(arr, t)))
+            .catch((err) => err.isAxiosError ? handleTodoErr(err) : getTodos())
 
     const deleteTodo = (id: Todo['id']) =>
         deleteTodoApi(id, user)
-            .then(getTodos)
+            .then(() => setTodos(arr => removeFromArray(arr, id)))
             .catch(getTodos)
 
     const addNewTodo = (t: Partial<Todo>) =>
         addNewTodoApi(t, user)
-            .then(t => { getTodos(); return t })
+            .then(t => setTodos(arr => [t, ...arr]))
             .catch(handleTodoErr)
 
     const updateStep = (id: Step['id'], s: Partial<Step>) =>
         updateStepApi(id, s, user)
-            .then(s => { getTodos(); return s })
-            .catch(getTodos)
+            .then(todo => setTodos(arr => replaceFromArray(arr, todo)))
+            .catch((err) => err.isAxiosError ? handleTodoErr(err) : getTodos())
 
     const getTags = useCallback(() =>
         getTagsApi(user)

@@ -11,9 +11,8 @@ import type { Todo, Step, TodoError } from '../../API'
 
 
 interface NewTodoOverlayProps {
-    close: () => void
-    submit: (todo: Partial<Todo>) => Promise<Todo>
-    onSubmit?: (todo: Todo) => void
+    done: () => void
+    submit: (todo: Partial<Todo>) => Promise<void>
     initialTodo?: Todo
 }
 
@@ -30,7 +29,7 @@ function getMaxDate(steps: Partial<Step>[]): Date | undefined {
     }, undefined)
 }
 
-const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, initialTodo }) => {
+const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ done, submit, initialTodo }) => {
 
     const [todo, setTodo] = useState<Partial<Todo>>(initialTodo || createEmptyTodo())
     const [error, setError] = useState<TodoError>()
@@ -74,16 +73,14 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ close, onSubmit, submit, init
                     errors={error?.steps?.map(err => err.err)}
                 />
                 <ButtonsRow>
-                    <Button type='secondary' onClick={close}>Cancel</Button>
+                    <Button type='secondary' onClick={done}>Cancel</Button>
                     <Button
                         type='primary'
                         onClick={() => {
                             const err = validateTodo(todo)
                             if (err.isValid) {
                                 submit(todo)
-                                    .then(t => {
-                                        onSubmit && onSubmit(t); close()
-                                    })
+                                    .then(done)
                                     .catch(err => setError(err))
                             }
                             else {

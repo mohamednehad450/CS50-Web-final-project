@@ -3,14 +3,14 @@ import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
 import { TodoRow, NewTodoOverlay, useTodo } from '../components/TodoList'
 import { Header } from '../components/common'
 
-import type { Step, } from '../API'
+import type { Todo, } from '../API'
 
 
 const TodoList: FC = () => {
 
     const { todos, addNewTodo } = useTodo()
 
-    const [expanded, setExpanded] = useState<Step['id']>('');
+    const [expanded, setExpanded] = useState<Todo['id']>('');
     const todosLeft = todos.filter(t => !t.checked).length
     const [newOverlay, setNewOverlay] = useState(false)
 
@@ -19,7 +19,7 @@ const TodoList: FC = () => {
             {newOverlay &&
                 <NewTodoOverlay
                     submit={addNewTodo}
-                    close={() => setNewOverlay(false)}
+                    done={() => setNewOverlay(false)}
                 />
             }
             <Header
@@ -32,7 +32,7 @@ const TodoList: FC = () => {
                 }
                 actions={
                     <span className="header-actions-icon">
-                        <AddIcon onClick={() => setNewOverlay(true)} />
+                        <AddIcon onClick={() => { setNewOverlay(true); setExpanded('') }} />
                     </span>
                 }
             />

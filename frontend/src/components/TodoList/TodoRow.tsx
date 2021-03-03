@@ -23,13 +23,13 @@ const TodoRow = (props: TodoRowProps) => {
     const { todo, onClick, expanded: exp, } = props
     const { title, tag, steps, id, } = todo
 
+    const [editing, setEditing] = useState(false)
+
     const expandable = !!steps.length
-    const expanded = exp && expandable
+    const expanded = exp && expandable && !editing
 
     const stepsLeft: number = steps.length && steps.filter(step => !step.checked).length
     const checked = steps.length ? !stepsLeft : todo.checked
-
-    const [editing, setEditing] = useState(false)
 
     const { updateTodo, updateStep, deleteTodo, getTag } = useTodo()
 
@@ -38,7 +38,7 @@ const TodoRow = (props: TodoRowProps) => {
         <>
             {editing && (
                 <NewTodoOverlay
-                    close={() => setEditing(false)}
+                    done={() => setEditing(false)}
                     submit={t => updateTodo(todo.id, t)}
                     initialTodo={todo}
                 />
@@ -87,7 +87,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <StepRow
                             key={step.id}
                             step={step}
-                            onChange={(s) => updateStep(step.id, s)}
+                            onChange={(s) => updateStep(id, s)}
                         />
                     ))
                 ) : null}

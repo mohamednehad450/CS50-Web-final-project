@@ -143,9 +143,9 @@ export const deleteTodo = async (id: Todo['id'], user?: User): Promise<void> => 
     })
 }
 
-export const updateStep = async (id: Step['id'], step: Partial<Step>, user?: User): Promise<Step> => {
+export const updateStep = async (id: Todo['id'], step: Partial<Step>, user?: User): Promise<Todo> => {
     const { data } =
-        await Axios.patch<Step>(`/api/steps/${id}/`, step, {
+        await Axios.post<Todo>(`/api/todos/${id}/update_step/`, { ...step, stepId: step.id }, {
             headers: {
                 "Authorization": `JWT ${user?.token}`
             }

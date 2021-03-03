@@ -91,6 +91,26 @@ class TodoViewSet(viewsets.ViewSet):
         except ValidationError:
             return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
 
+    @action(methods=['post'], detail=True)
+    def update_step(self, request, pk=None):
+        try:
+            todo = get_object_or_404(Todo, user=request.user,  pk=pk)
+
+            stepPk = request.data.get('stepId', None)
+            step = get_object_or_404(Step,  pk=stepPk, todo=todo)
+
+            ser = StepSerializer(
+                instance=step, data=request.data, partial=True)
+            if ser.is_valid():
+                step = ser.save()
+                todo.save()
+                data = TodoSerializer(todo).data
+                return response.Response(data)
+            else:
+                return response.Response(ser._errors, status=400)
+        except ValidationError:
+            return response.Response({"id": [f"'{pk}' is not a valid ID"]}, status=400)
+
 
 class TagViewSet(viewsets.ViewSet):
 
@@ -121,28 +141,6 @@ class TagViewSet(viewsets.ViewSet):
             return response.Response(data)
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Tag ID']}, status=400)
-
-
-class StepViewSet(viewsets.ViewSet):
-
-    permission_classes = [permissions.IsAuthenticated]
-
-    def partial_update(self, request, pk=None):
-        try:
-            step = get_object_or_404(Step,  pk=pk)
-            if step.todo.user == request.user:
-                ser = StepSerializer(
-                    instance=step, data=request.data, partial=True)
-                if ser.is_valid():
-                    step = ser.save()
-                    data = StepSerializer(step).data
-                    return response.Response(data)
-                else:
-                    return response.Response(ser._errors, status=400)
-            else:
-                return response.Response({'details': 'forbidden'}, status=403)
-        except ValidationError:
-            return response.Response({"id": [f"'{pk}' is not a valid Step ID"]}, status=400)
 
 
 class PomodoroViewSet(viewsets.ViewSet):
