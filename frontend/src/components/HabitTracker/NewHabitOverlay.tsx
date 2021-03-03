@@ -38,7 +38,7 @@ const NewHabitOverlay: FC<NewHabitOverlayProps> = ({ close, submit, initialHabit
                     </Button>
                     <Button
                         type='primary'
-                        onClick={() => submit(habit).then((r => r ? setErr(r) : close()))}
+                        onClick={() => submit(habit).then(close).catch(err => setErr(err))}
                     >
                         {initialHabit ? "Save" : 'Add'}
                     </Button>
