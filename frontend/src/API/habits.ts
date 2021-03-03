@@ -55,16 +55,16 @@ export const removeHabit = async (id: Habit['id'], user?: User): Promise<void> =
     })
 }
 
-export const addEntry = async (id: Habit['id'], entry: Date | string, user?: User): Promise<void> => {
-    await Axios.post<void>(`/api/habits/${id}/add_entry/`, { date: entry }, {
+export const addEntry = async (id: Habit['id'], entry: Date, user?: User): Promise<void> => {
+    await Axios.post<void>(`/api/habits/${id}/add_entry/`, { date: `${entry.getFullYear()}-${entry.getMonth() + 1}-${entry.getDate()}` }, {
         headers: {
             "Authorization": `JWT ${user?.token}`
         }
     })
 }
 
-export const removeEntry = async (id: Habit['id'], entry: Date | string, user?: User): Promise<void> => {
-    await Axios.post<void>(`/api/habits/${id}/remove_entry/`, { date: entry }, {
+export const removeEntry = async (id: Habit['id'], entry: Date, user?: User): Promise<void> => {
+    await Axios.post<void>(`/api/habits/${id}/remove_entry/`, { date: `${entry.getFullYear()}-${entry.getMonth() + 1}-${entry.getDate()}` }, {
         headers: {
             "Authorization": `JWT ${user?.token}`
         }
