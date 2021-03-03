@@ -63,8 +63,18 @@ const refreshToken = async (oldToken: string) => {
 const AUTH_REFRESH_INTERVAL = 3 * 60 * 1000
 const useProvideAuth = (): AuthContext => {
 
-    const [user, setUser] = useState<User | undefined>(getItemFromStorage('user'));
+    const [user, setUser] = useState<User | undefined>();
     const [lastRefreshed, setLastRefreshed] = useState(0)
+
+    useEffect(() => {
+        const user: User = getItemFromStorage('user')
+        user && refreshToken(user.token).then(token => {
+            if (token) {
+                setLastRefreshed(Date.now())
+                updateUser({ ...user, token })
+            }
+        })
+    }, [])
 
     const updateToken = useCallback(() => {
         if (Date.now() > lastRefreshed + AUTH_REFRESH_INTERVAL) {
