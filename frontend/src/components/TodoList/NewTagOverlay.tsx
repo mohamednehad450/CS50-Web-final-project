@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
 import { SliderPicker } from 'react-color'
-import { createEmptyTag } from '../../API'
+import { createEmptyTag, } from '../../API'
 
-import { Overlay, Button, ButtonsRow, TextInput, ColorTag } from '../common'
+import { Overlay, Button, ButtonsRow, TextInput, ColorTag, ErrorList } from '../common'
 
-import type { Tag } from '../../API'
+import type { Tag, TagError } from '../../API'
 
 
 
@@ -17,6 +17,8 @@ interface NewTagOverlayProps {
 const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit, submit }) => {
 
     const [tag, setTag] = useState<Partial<Tag>>(createEmptyTag())
+    const [err, setErr] = useState<TagError>({})
+
     return (
         <Overlay>
             <div className='overlay-container'>
@@ -26,6 +28,7 @@ const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit, submit }) => {
                         placeholder="Tag Name"
                         onChange={(label) => setTag({ ...tag, label })}
                         value={tag.label}
+                        errors={[...err.label || [], ...err.non_field_errors || []]}
                     />
                 </div>
                 <div className='grow'></div>
@@ -34,13 +37,13 @@ const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit, submit }) => {
                     color={tag.color}
                     onChange={(color) => setTag({ ...tag, color: color.hex })}
                 />
+                <ErrorList errors={err.color} />
                 <div className="grow"></div>
                 <ButtonsRow>
                     <Button type='secondary' onClick={close}>Cancel</Button>
                     <Button
-                        disabled={!tag.label || !tag.color}
                         type='primary'
-                        onClick={() => submit(tag).then(t => { onSubmit(t); close() })}
+                        onClick={() => submit(tag).then(t => { onSubmit(t); close() }).catch(err => setErr(err))}
                     >
                         Add
                     </Button>

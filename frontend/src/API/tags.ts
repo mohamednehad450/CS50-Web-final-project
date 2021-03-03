@@ -8,6 +8,14 @@ export interface Tag {
     id: string | number
 }
 
+export interface TagError {
+    color?: string[]
+    label?: string[]
+    id?: string[]
+    non_field_errors?: string[]
+    notFound?: boolean
+}
+
 export const createEmptyTag = (): Partial<Tag> => {
     return {
         label: '',
