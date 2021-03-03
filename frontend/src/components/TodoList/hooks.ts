@@ -121,12 +121,12 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
 
     const addNewTag = (tag: Partial<Tag>) =>
         addNewTagApi(tag, user)
-            .then(t => { getTags(); return t })
+            .then(t => { setTags(arr => [t, ...arr]); return t })
             .catch(handleTodoErr)
 
 
     const tagsDict: any = useMemo(() => tags.reduce((acc, t) => ({ ...acc, [t.id]: { ...t } }), {}), [tags]);
-    const getTag = (id?: Tag['id']): Tag | undefined => tagsDict[id || ''] || undefined
+    const getTag = (id?: Tag['id']): Tag | undefined => tagsDict[id || '']
 
     useEffect(() => {
         getTodos()
