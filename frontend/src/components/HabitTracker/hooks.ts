@@ -81,23 +81,26 @@ const useProvideHabits = ({ user, signout }: AuthContext): HabitContext => {
 
 
     const [habits, setHabits] = useState<Habit[]>([])
+
     const getHabits = useCallback(() => getHabitsApi(user).then(habits => habits && setHabits(habits)), [user])
+
     const updateHabit = (id: Habit['id'], h: Partial<Habit>) => updateHabitApi(id, h, user)
-        .catch(handleHabitErr)
         .then((habit: Habit) => setHabits(arr => replaceFromArray(arr, habit)))
-        .catch(getHabits)
+        .catch(handleHabitErr)
+
     const removeHabit = (id: Habit['id']) => removeHabitApi(id, user)
-        .catch(handleHabitErr)
         .then(() => setHabits(arr => removeFromArray(arr, id)))
+        .catch(handleHabitErr)
+
     const addNewHabit = (h: Partial<Habit>) => addNewHabitApi(h, user)
-        .catch(handleHabitErr)
         .then((habit) => setHabits(arr => [habit, ...arr]))
+        .catch(handleHabitErr)
+
     const addEntry = (id: Habit['id'], date: Date) => addEntryApi(id, date, user)
-        .catch(handleHabitErr)
         .then(() => setHabits(arr => updateItemInArray(arr, id, (h => ({ ...h, entries: [...h.entries, date] })))))
-        .catch(getHabits)
+        .catch((err) => err.isAxiosError ? handleHabitErr(err) : getHabits())
+
     const removeEntry = (id: Habit['id'], date: Date) => removeEntryApi(id, date, user)
-        .catch(handleHabitErr)
         .then(() => {
             setHabits(arr => updateItemInArray(arr, id, (h) => ({
                 ...h,
@@ -106,7 +109,7 @@ const useProvideHabits = ({ user, signout }: AuthContext): HabitContext => {
                 })
             })))
         })
-        .catch(getHabits)
+        .catch((err) => err.isAxiosError ? handleHabitErr(err) : getHabits())
 
     useEffect(() => {
         getHabits()
