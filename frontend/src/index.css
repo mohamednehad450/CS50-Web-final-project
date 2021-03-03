@@ -933,7 +933,15 @@ main {
 }
 
 .entry-checked {
-  background-color: var(--table-cell);
+  background-color: var(--table-cell)!important;
+}
+
+.entry-today {
+  background-color: var(--gray-dim);
+}
+
+.entry-today svg {
+  fill: var(--blue1);
 }
 
 .slide-container {

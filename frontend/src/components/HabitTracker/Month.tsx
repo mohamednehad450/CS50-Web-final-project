@@ -48,8 +48,13 @@ const Month: FC<MonthProps> = ({ date: initDate, entries, onChange, updateDate }
                             const day = cell - fistDayOfWeek + (row * 7) + 1
                             const cellDate = (day < 1 || day > daysInMonth) ? null : new Date(`${y}/${m + 1}/${day}`)
                             const checked = !!cellDate && dSet.has(cellDate.toLocaleDateString())
+                            const isToday = cellDate?.toLocaleDateString() === new Date().toLocaleDateString()
                             return (
-                                <td className={`entry ${checked ? 'entry-checked' : ''}`}>
+                                <td
+                                    className={
+                                        `entry${checked ? ' entry-checked' : ''}${isToday ? ' entry-today' : ''}`
+                                    }
+                                >
                                     {cellDate && (
                                         <Checkbox
                                             checked={checked}
