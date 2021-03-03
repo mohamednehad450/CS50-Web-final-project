@@ -13,8 +13,8 @@ interface HabitRowProps {
     expanded: boolean
     remove: (id: Habit['id']) => void
     update: (id: Habit['id'], h: Partial<Habit>) => Promise<any>
-    addEntry: (id: Habit['id'], d: Date | string) => Promise<any>
-    removeEntry: (id: Habit['id'], d: Date | string) => Promise<any>
+    addEntry: (id: Habit['id'], d: Date) => Promise<any>
+    removeEntry: (id: Habit['id'], d: Date) => Promise<any>
     onClick: (id: Habit['id']) => void
 }
 

@@ -9,6 +9,7 @@ import {
     addEntry as addEntryApi,
     removeEntry as removeEntryApi,
 } from '../../API'
+import { removeFromArray, replaceFromArray, updateItemInArray } from "../../utils"
 
 
 interface HabitContext {
@@ -17,8 +18,8 @@ interface HabitContext {
     updateHabit: (id: Habit['id'], h: Partial<Habit>) => Promise<void | HabitError>
     removeHabit: (id: Habit['id']) => Promise<void | HabitError>
     addNewHabit: (h: Partial<Habit>) => Promise<void | HabitError>
-    addEntry: (id: Habit['id'], date: Date | string) => Promise<void>
-    removeEntry: (id: Habit['id'], date: Date | string) => Promise<void>
+    addEntry: (id: Habit['id'], date: Date) => Promise<void>
+    removeEntry: (id: Habit['id'], date: Date) => Promise<void>
 }
 
 function habitsNotinitialized(): any {
@@ -65,10 +66,10 @@ const useProvideHabits = ({ user, signout }: AuthContext): HabitContext => {
 
             if (status === 404) {
                 // eslint-disable-next-line no-throw-literal
-                return { notFound: true, ...data }
+                throw { notFound: true, ...data }
             }
             else if (status === 400) {
-                return data
+                throw data
             }
             else if (status === 500) {
                 alert('Somthing went wrong, Please try again later or refresh the page.')
@@ -81,11 +82,31 @@ const useProvideHabits = ({ user, signout }: AuthContext): HabitContext => {
 
     const [habits, setHabits] = useState<Habit[]>([])
     const getHabits = useCallback(() => getHabitsApi(user).then(habits => habits && setHabits(habits)), [user])
-    const updateHabit = (id: Habit['id'], h: Partial<Habit>) => updateHabitApi(id, h, user).then(getHabits).catch(handleHabitErr)
-    const removeHabit = (id: Habit['id']) => removeHabitApi(id, user).then(getHabits).catch(handleHabitErr)
-    const addNewHabit = (h: Partial<Habit>) => addNewHabitApi(h, user).then(getHabits).catch(handleHabitErr)
-    const addEntry = (id: Habit['id'], date: Date | string) => addEntryApi(id, date, user).then(getHabits).catch(handleHabitErr)
-    const removeEntry = (id: Habit['id'], date: Date | string) => removeEntryApi(id, date, user).then(getHabits).catch(handleHabitErr)
+    const updateHabit = (id: Habit['id'], h: Partial<Habit>) => updateHabitApi(id, h, user)
+        .catch(handleHabitErr)
+        .then((habit: Habit) => setHabits(arr => replaceFromArray(arr, habit)))
+        .catch(getHabits)
+    const removeHabit = (id: Habit['id']) => removeHabitApi(id, user)
+        .catch(handleHabitErr)
+        .then(() => setHabits(arr => removeFromArray(arr, id)))
+    const addNewHabit = (h: Partial<Habit>) => addNewHabitApi(h, user)
+        .catch(handleHabitErr)
+        .then((habit) => setHabits(arr => [habit, ...arr]))
+    const addEntry = (id: Habit['id'], date: Date) => addEntryApi(id, date, user)
+        .catch(handleHabitErr)
+        .then(() => setHabits(arr => updateItemInArray(arr, id, (h => ({ ...h, entries: [...h.entries, date] })))))
+        .catch(getHabits)
+    const removeEntry = (id: Habit['id'], date: Date) => removeEntryApi(id, date, user)
+        .catch(handleHabitErr)
+        .then(() => {
+            setHabits(arr => updateItemInArray(arr, id, (h) => ({
+                ...h,
+                entries: h.entries.filter((d) => {
+                    return new Date(d).toLocaleDateString() !== new Date(date).toLocaleDateString()
+                })
+            })))
+        })
+        .catch(getHabits)
 
     useEffect(() => {
         getHabits()
