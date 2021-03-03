@@ -63,3 +63,9 @@ export function updateItemInArray<T extends Id>(arr: T[], id: T['id'], updater: 
     }
     throw Error('Item doesn\'t exist in in the Array.')
 }
+
+
+const monthSym = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+export function monthDateFormat(d: Date) {
+    return `${monthSym[d.getMonth()]} (${d.getFullYear()})`
+}

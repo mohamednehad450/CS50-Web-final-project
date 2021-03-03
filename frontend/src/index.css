@@ -46,7 +46,8 @@ body {
   --pomodoro-break: var(--green2);
   --pomodoro-longbreak: var(--gray5);
   --pomodoro-tint: var(--gray1);
-  --pomodoro-head: var(--gray0)
+  --pomodoro-head: var(--gray0);
+  --table-cell: var(--gray2);
 }
 
 .dark {
@@ -70,10 +71,12 @@ body {
   --pomodoro-break: var(--green1);
   --pomodoro-longbreak: var(--gray0);
   --pomodoro-tint: var(--gray5);
-  --pomodoro-head: var(--gray6)
+  --pomodoro-head: var(--gray6);
+  --table-cell: var(--gray4);
 }
 
 .navbar {
+  z-index: 1;
   position: fixed;
   background: var(--bg-nav);
   color: var(--text-nav);
@@ -214,12 +217,11 @@ main {
 }
 
 .expandable-container {
-  max-height: 50vh;
+  max-height: 40rem;
   margin: 0;
   transition: all var(--speed) ease-in-out;
   overflow-y: scroll;
   scrollbar-width: none;
-  overflow: hidden;
 }
 
 .expandable-container::-webkit-scrollbar {
@@ -909,6 +911,78 @@ main {
   padding-top: 2rem;
 }
 
+.table-container {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.entries-container {
+  min-height: 30rem;
+  padding: 0 5rem;
+}
+
+.entry {
+  text-align: center;
+  color: var(--text);
+  height: 4rem;
+}
+
+.entry svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.entry-checked {
+  background-color: var(--table-cell);
+}
+
+.slide-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 30rem;
+  overflow: hidden;
+}
+
+.slide-left-enter {
+  position: absolute;
+  transform: translateX(-110%);
+}
+
+.slide-left-enter-active {
+  transform: translateX(0%);
+  transition: all var(--speed) ease-in-out;
+}
+
+.slide-left-exit {
+  position: absolute;
+}
+
+.slide-left-exit-active {
+  transform: translateX(-110%);
+  transition: all var(--speed) ease-in-out;
+}
+
+.slide-right-enter {
+  transform: translateX(110%);
+}
+
+.slide-right-enter-active {
+  transform: translateX(0%);
+  transition: all var(--speed) ease-in-out;
+}
+
+.slide-right-exit {
+  position: absolute;
+}
+
+.slide-right-exit-active {
+  transform: translateX(110%);
+  transition: all var(--speed) ease-in-out;
+  position: absolute;
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     bottom: 0;
@@ -963,6 +1037,9 @@ main {
   }
   .setting-input {
     padding: 0.5rem 1rem;
+  }
+  .entries-container {
+    padding: 0 1rem;
   }
 }
 
