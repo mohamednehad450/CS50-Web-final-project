@@ -224,7 +224,7 @@ class HabitViewSet(viewsets.ViewSet):
                     **serializer.validated_data, habit=habit)
                 return response.Response(status=200)
             else:
-                return response.Response(serializer._errors)
+                return response.Response(serializer._errors, status=400)
 
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
@@ -243,7 +243,7 @@ class HabitViewSet(viewsets.ViewSet):
                     entry.delete()
                 return response.Response(status=201)
             else:
-                return response.Response(serializer._errors)
+                return response.Response(serializer._errors, status=400)
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
 
@@ -258,7 +258,7 @@ class HabitViewSet(viewsets.ViewSet):
                 data = HabitSerializer(habit).data
                 return response.Response(data)
             else:
-                return response.Response(serializer._errors)
+                return response.Response(serializer._errors, status=400)
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Habit ID']}, status=400)
 
