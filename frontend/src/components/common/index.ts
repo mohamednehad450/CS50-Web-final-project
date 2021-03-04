@@ -13,6 +13,7 @@ import Header from './Header'
 import ErrorList from './ErrorList'
 import ListRow from './ListRow'
 import ActionSelect from './ActionSelect'
+import NumCheckBox from './NumCheckBox'
 
 
 import type { Option, SelectItemProps } from './SelectItem'
@@ -34,6 +35,7 @@ export {
     ErrorList,
     ListRow,
     ActionSelect,
+    NumCheckBox,
 }
 
 export type { Option, SelectItemProps }

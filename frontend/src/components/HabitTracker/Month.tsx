@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
 import { Habit } from "../../API"
-import { Checkbox } from "../common"
+import { NumCheckBox } from "../common"
 
 const divByN = (i: number, n: number) => i % n === 0
 
@@ -56,10 +56,12 @@ const Month: FC<MonthProps> = ({ date: initDate, entries, onChange, updateDate }
                                     }
                                 >
                                     {cellDate && (
-                                        <Checkbox
-                                            checked={checked}
+                                        <NumCheckBox
                                             onChange={(checked) => onChange(cellDate, checked)}
-                                        />)}
+                                            checked={checked}
+                                            number={day}
+                                        />
+                                    )}
                                 </td>
                             )
                         })}

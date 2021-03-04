@@ -928,8 +928,8 @@ main {
 }
 
 .entry svg {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 .entry-checked {
@@ -989,6 +989,15 @@ main {
   transform: translateX(110%);
   transition: all var(--speed) ease-in-out;
   position: absolute;
+}
+
+.num-checkbox {
+  font-size: 0.5rem;
+  font-weight: bold;
+}
+
+.num-checkbox-checked {
+  fill: var(--bg);
 }
 
 @media only screen and (max-width: 799px) {
