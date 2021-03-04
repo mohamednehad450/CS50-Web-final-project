@@ -119,7 +119,7 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
                     ...pomInterval,
                     endDate: new Date(),
                 }, user) // TODO: Handles api error
-                setPomInterval(undefined)
+                setPomInterval(p => ({ todo: p?.todo }))
             }
         }
 
@@ -130,7 +130,7 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
                 startDate: new Date(),
                 defaultDuration: settings.work
             } :
-                undefined
+                { todo: p?.todo }
             )
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,6 +189,9 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
                 settings: settings,
             }
         })
+        if (!settings.submitOnSkip) {
+            setPomInterval(p => ({ todo: p?.todo }))
+        }
     }
 
     const setTodo = (id?: Todo['id']) => {

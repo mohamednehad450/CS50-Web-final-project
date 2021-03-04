@@ -63,6 +63,14 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                     onChange={autoStart => onChange({ ...pomodoroSettings, autoStart })}
                 />
             </SettingRow>
+            <SettingRow
+                title="Submit Pomodoro Inteval on skip?"
+            >
+                <Checkbox
+                    checked={pomodoroSettings.submitOnSkip}
+                    onChange={submitOnSkip => onChange({ ...pomodoroSettings, submitOnSkip })}
+                />
+            </SettingRow>
         </div>
     )
 }

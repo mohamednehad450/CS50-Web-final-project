@@ -11,6 +11,7 @@ interface PomodoroSettings {
     autoStart: boolean
     longBreakAfter: number
     goal: number
+    submitOnSkip: boolean
 }
 
 type ThemeSettings = 'light' | 'dark'
@@ -31,7 +32,9 @@ const defaultPomodoroSettings: PomodoroSettings = {
     "work": 25 * 60,
     autoStart: true,
     longBreakAfter: 4,
-    goal: 12
+    goal: 12,
+    submitOnSkip: false
+
 }
 
 
