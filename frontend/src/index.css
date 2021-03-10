@@ -30,17 +30,15 @@ body {
   --fg: var(--gray0);
   --fg-dim: var(--gray-dim);
   --titles: var(--blue1);
-  --subtitle: var(--gray3);
-  --icons: var(--gray3);
-  --bg-nav: var(--gray5);
+  --subtitle: var(--gray4);
+  --icons: var(--gray4);
+  --bg-nav: var(--gray6);
   --text-nav: var(--gray0);
-  --shadow-nav1: var(--gray4);
-  --shadow-nav2: var(--gray3);
-  --active-navitem: var(--blue1);
-  --text: var(--gray5);
+  --shadow-nav1: var(--gray5);
+  --shadow-nav2: var(--gray4);
+  --text: var(--gray7);
   --hr: var(--gray1);
-  --btn-prime-bg: var(--blue1);
-  --btn-second-bg: var(--gray4);
+  --btn-bg: var(--gray4);
   --btn-text: var(--gray0);
   --pomodoro-work: var(--orange2);
   --pomodoro-break: var(--green2);
@@ -48,31 +46,33 @@ body {
   --pomodoro-tint: var(--gray1);
   --pomodoro-head: var(--gray0);
   --table-cell: var(--gray2);
+  --input-active-border: var(--blue1);
+  --input-invalid-border: rgb(255, 54, 87, 0.6);
 }
 
 .dark {
-  --bg: var(--gray5);
-  --fg: var(--gray6);
+  --bg: var(--gray4);
+  --fg: var(--gray5);
   --fg-dim: var(--gray-dim);
-  --titles: var(--blue1);
+  --titles: var(--gray0);
   --subtitle: var(--gray1);
   --icons: var(--gray1);
-  --bg-nav: var(--gray7);
+  --bg-nav: var(--gray6);
   --text-nav: var(--gray0);
   --shadow-nav1: var(--gray5);
-  --shadow-nav2: var(--gray3);
-  --active-navitem: var(--blue1);
+  --shadow-nav2: var(--gray4);
   --text: var(--gray0);
   --hr: var(--gray4);
-  --btn-prime-bg: var(--blue1);
-  --btn-second-bg: var(--gray3);
-  --btn-text: var(--gray0);
+  --btn-bg: var(--gray1);
+  --btn-text: var(--gray6);
   --pomodoro-work: var(--orange1);
   --pomodoro-break: var(--green1);
   --pomodoro-longbreak: var(--gray0);
   --pomodoro-tint: var(--gray5);
   --pomodoro-head: var(--gray6);
   --table-cell: var(--gray4);
+  --input-active-border: var(--blue1);
+  --input-invalid-border: rgb(255, 54, 87, 0.6);
 }
 
 .navbar {
@@ -120,7 +120,6 @@ body {
 }
 
 .nav-link:hover svg {
-  fill: var(--active-navitem);
   filter: opacity(1);
 }
 
@@ -260,7 +259,7 @@ main {
 }
 
 .icon-prime svg {
-  fill: var(--btn-prime-bg);
+  fill: var(--icons);
 }
 
 .checkbox {
@@ -303,10 +302,11 @@ main {
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0 2rem;
+  margin-left: 2rem;
 }
 
 .steps-expanded {
-  margin-left: 5rem;
+  margin-left: 4rem;
 }
 
 .step-row {
@@ -416,12 +416,12 @@ main {
 .input:focus {
   outline: none;
   border: 0;
-  border-bottom: 2px solid var(--btn-prime-bg);
+  border-bottom: 2px solid var(--input-active-border);
   transition: border 200ms ease;
 }
 
 .input-invalid {
-  border-bottom: 2px solid rgb(255, 54, 87, 0.6) !important;
+  border-bottom: 2px solid var(--input-invalid-border) !important;
   transition: border 200ms ease;
 }
 
@@ -522,13 +522,14 @@ main {
 }
 
 .btn-prime {
-  background-color: var(--btn-prime-bg);
+  background-color: var(--btn-bg);
   color: var(--btn-text);
 }
 
 .btn-second {
-  background-color: var(--btn-second-bg);
-  color: var(--btn-text);
+  border: 3px solid var(--btn-bg);
+  background-color: transparent;
+  color: var(--text);
 }
 
 .btn-disabled {
@@ -797,7 +798,9 @@ main {
 }
 
 .default-select-input {
-  background-color: var(--btn-prime-bg);
+  background-color: transparent;
+  border: 3px solid var(--btn-bg);
+  color: var(--text);
   width: 12rem;
   height: 2rem;
   padding: 0 1rem;
@@ -811,7 +814,6 @@ main {
 }
 
 .default-select-input-title {
-  color: var(--btn-text);
   text-overflow: ellipsis;
   width: 10rem;
   overflow: hidden;
@@ -825,30 +827,31 @@ main {
 .default-select-input-icon svg {
   width: 1rem;
   height: 1rem;
-  fill: var(--btn-text);
+  fill: var(--text);
 }
 
 .default-select-row {
-  background-color: var(--btn-second-bg);
-  color: var(--btn-text);
+  border: 3px solid var(--btn-bg);
+  border-top: none;
+  color: var(--text);
   width: 11rem;
   height: 2rem;
   padding: 0 1rem;
   padding-left: 2rem;
   display: flex;
   align-items: center;
-  border-top: 1px solid var(--btn-text);
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .default-select-row-selected {
-  background-color: var(--btn-prime-bg);
+  background-color: var(--btn-bg) !important;
+  color: var(--btn-text) !important;
 }
 
 .default-select-row:hover {
   cursor: pointer;
-  background-color: rgba(90, 146, 255, 0.7)!important;
+  background-color: var(--gray-dim);
 }
 
 .pomodoro-container {
@@ -865,15 +868,14 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .pomodoro-stats {
-  margin: 2rem 0;
   height: 4rem;
-  width: 12rem;
-  align-self: flex-start;
-  background-color: var(--btn-prime-bg);
-  color: var(--btn-text);
+  width: 14rem;
+  border: 3px solid var(--btn-bg);
+  color: var(--text);
   padding: 0.5rem 0;
   display: flex;
 }
@@ -893,7 +895,7 @@ main {
 }
 
 .pomodoro-count:last-child {
-  border-left: 1px solid var(--btn-text);
+  border-left: 1px solid var(--text);
 }
 
 .section-header {

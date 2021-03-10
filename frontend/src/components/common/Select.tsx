@@ -16,6 +16,7 @@ interface SelectProps<T extends Option> {
     CustomInput?: FC<{ selected?: T, onClick: () => void }>
     CustomRow?: FC<SelectItemProps<T>>
     Header?: FC<{ close: () => void }>
+    emptyTitle?: string
 }
 
 function Select<T extends Option>({
@@ -27,7 +28,8 @@ function Select<T extends Option>({
     onChange,
     scroll = false,
     right = false,
-    border = false
+    border = false,
+    emptyTitle = '',
 }: SelectProps<T>) {
     const [open, setOpen] = useState(false)
     return (
@@ -35,7 +37,7 @@ function Select<T extends Option>({
             {CustomInput ?
                 <CustomInput selected={selected} onClick={() => setOpen(!open)} /> :
                 (<div className='default-select-input' onClick={() => setOpen(!open)}>
-                    <span className='default-select-input-title'>{selected ? selected.label : ' - Select'}</span>
+                    <span className='default-select-input-title'>{selected ? selected.label : emptyTitle || ' - Select'}</span>
                     <span className={`default-select-input-icon ${open ? 'flip' : ''}`}><ExpandIcon /></span>
                 </div>)
             }

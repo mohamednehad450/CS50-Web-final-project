@@ -39,32 +39,29 @@ const Pomodoro = () => {
                     <PomodoroClock />
                 </div>
                 <div className="pomodoro-section">
-                    <div className="section-header">
-                        Target:
-                    </div>
-                    <div className="padding">
-                        <Select
-                            scroll
-                            options={todos.map(t => ({ ...t, label: t.title }))}
-                            onChange={(o) => { setSelected(o); setTodo(o.id) }}
-                            selected={selected}
-                            Header={({ close }) => (
-                                <SelectItem onClick={() => { setSelected(undefined); setTodo(); close() }} option={{ id: "NONE", label: '- None' }} />
-                            )}
-                        />
-                    </div>
-                    <div className="section-header">
-                        Actions:
-                    </div>
-                    <ButtonsRow>
-                        <Button type="primary" onClick={skip}>
-                            Skip
+                    <Select
+                        emptyTitle=" - Select Todo"
+                        scroll
+                        options={todos.map(t => ({ ...t, label: t.title }))}
+                        onChange={(o) => { setSelected(o); setTodo(o.id) }}
+                        selected={selected}
+                        Header={({ close }) => (
+                            <SelectItem onClick={() => { setSelected(undefined); setTodo(); close() }} option={{ id: "NONE", label: '- None' }} />
+                        )}
+                    />
+                    <span className="padding-top-2">
+                        <ButtonsRow>
+                            <Button onClick={skip}>
+                                Skip
                         </Button>
-                        <Button onClick={reset}>
-                            Reset
+                            <Button onClick={reset}>
+                                Reset
                         </Button>
-                    </ButtonsRow>
-                    <PomodoroStats />
+                        </ButtonsRow>
+                    </span>
+                    <span className="padding-top-2">
+                        <PomodoroStats />
+                    </span>
                 </div>
             </div>
         </div>
