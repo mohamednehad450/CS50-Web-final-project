@@ -18,8 +18,8 @@ const StepRow: FC<StepRowProps> = ({ step, onChange }) => {
                     <span className={`step-title ${checked ? 'crossed' : ''}`}>{title}</span>
                 </div>
                 <Checkbox
-                    checked={checked}
-                    onChange={(checked) => onChange({ id, checked })}
+                    checked={!!checked}
+                    onChange={(b) => onChange({ id, checked: b ? new Date() : null })}
                 />
             </div>
         </div>

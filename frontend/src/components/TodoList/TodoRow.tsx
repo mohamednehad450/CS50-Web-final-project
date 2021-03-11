@@ -69,8 +69,8 @@ const TodoRow = (props: TodoRowProps) => {
                                 <ExpandIcon />
                             </span> :
                             <Checkbox
-                                checked={checked}
-                                onChange={(checked) => updateTodo(id, { checked, })}
+                                checked={!!checked}
+                                onChange={(b) => updateTodo(id, { checked: b ? new Date() : null, })}
                             />
                         }
                         <ActionSelect

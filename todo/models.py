@@ -19,7 +19,7 @@ class Todo(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='todos')
     title = models.CharField(max_length=150)
-    checked = models.BooleanField(default=False)
+    checked = models.DateTimeField(null=True, blank=True)
     tag = models.ForeignKey(Tag, null=True, on_delete=models.SET_NULL)
     dueDate = models.DateTimeField(blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
@@ -29,7 +29,7 @@ class Step(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=150)
     dueDate = models.DateTimeField(blank=True, null=True)
-    checked = models.BooleanField(default=False)
+    checked = models.DateTimeField(null=True, blank=True)
     todo = models.ForeignKey(Todo, related_name='steps',
                              on_delete=models.CASCADE)
 

@@ -8,12 +8,12 @@ export interface Step {
     id: number | string,
     title: string,
     dueDate?: Date | string,
-    checked: boolean,
+    checked: Date | string | null,
 }
 
 export interface Todo {
     title: string,
-    checked: boolean,
+    checked: Date | string | null,
     tag?: Tag['id'],
     dueDate?: string | Date,
     date: Date,
@@ -101,7 +101,7 @@ export const validateStep = (step: Step): ErrorObj<StepError> => {
 export const createEmptyStep = (): Step => {
     return {
         title: '',
-        checked: false,
+        checked: null,
         id: v4()
     }
 }
@@ -110,7 +110,7 @@ export const createEmptyTodo = (): Partial<Todo> => {
     return {
         title: '',
         steps: [],
-        checked: false
+        checked: null,
     }
 }
 
