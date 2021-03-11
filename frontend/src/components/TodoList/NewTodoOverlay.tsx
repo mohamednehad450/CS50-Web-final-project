@@ -34,7 +34,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ done, submit, initialTodo }) 
     const [todo, setTodo] = useState<Partial<Todo>>(initialTodo || createEmptyTodo())
     const [error, setError] = useState<TodoError>()
 
-    const [maxDate, setMaxDate] = useState<Date | undefined>(getMaxDate(initialTodo?.steps || []))
+    const [maxDate, setMaxDate] = useState<Date | undefined>(getMaxDate(initialTodo?.steps.length ? initialTodo.steps : []))
     return (
         <Overlay>
             <div className='overlay-container-lg'>
