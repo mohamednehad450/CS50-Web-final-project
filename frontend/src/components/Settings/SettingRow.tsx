@@ -8,7 +8,7 @@ interface SettingRowProps {
 const SettingRow: FC<SettingRowProps> = ({ title, children }) => {
 
     return (
-        <div className="setting-row">
+        <div className="setting-row padding">
             <span className="setting-title">
                 {title}
             </span>

@@ -453,7 +453,6 @@ main {
 .setting-row {
   display: flex;
   flex-direction: row;
-  padding: 1rem;
   align-items: flex-end;
   flex-wrap: wrap;
 }
@@ -1000,6 +999,10 @@ main {
 
 .num-checkbox-checked {
   fill: var(--bg);
+}
+
+.align-center {
+  align-items: center !important;
 }
 
 @media only screen and (max-width: 799px) {

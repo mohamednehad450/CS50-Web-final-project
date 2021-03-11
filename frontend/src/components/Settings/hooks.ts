@@ -16,9 +16,18 @@ interface PomodoroSettings {
 
 type ThemeSettings = 'light' | 'dark'
 
+interface TodoSettings {
+    hideCheckedTodos: boolean
+    sortTodosBy: 'added' | 'title' | 'dueDate' | 'stepsLeft' | 'checked'
+    todosAscending: boolean
+    sortStepsBy: 'title' | 'dueDate' | 'checked'
+    stepsAscending: boolean
+}
+
 interface Settings {
     pomodoroSettings: PomodoroSettings
     themeSettings: ThemeSettings
+    todoSettings: TodoSettings
 }
 
 interface SettingsContext {
@@ -34,13 +43,21 @@ const defaultPomodoroSettings: PomodoroSettings = {
     longBreakAfter: 4,
     goal: 12,
     submitOnSkip: false
+}
 
+const defaultTodoSettings: TodoSettings = {
+    sortTodosBy: 'added',
+    todosAscending: true,
+    hideCheckedTodos: false,
+    sortStepsBy: 'title',
+    stepsAscending: true,
 }
 
 
 const defaultSettings: Settings = {
     pomodoroSettings: defaultPomodoroSettings,
-    themeSettings: 'light'
+    themeSettings: 'light',
+    todoSettings: defaultTodoSettings
 }
 
 const settingsContext = createContext<SettingsContext>({
@@ -69,4 +86,4 @@ const useProvideSettings = (): SettingsContext => {
 }
 
 export { useSettings, settingsContext, useProvideSettings, defaultPomodoroSettings }
-export type { SettingsContext, Settings, PomodoroSettings, ThemeSettings }
+export type { SettingsContext, Settings, PomodoroSettings, ThemeSettings, TodoSettings }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from '../components/common'
-import { PomodoroSettingsInput, ThemeSettingsInput, useSettings } from '../components/Settings'
+import { PomodoroSettingsInput, ThemeSettingsInput, TodosSettingsInput, useSettings } from '../components/Settings'
 
 const Settings = () => {
 
@@ -12,6 +12,10 @@ const Settings = () => {
             <PomodoroSettingsInput
                 pomodoroSettings={settings.pomodoroSettings}
                 onChange={(pomodoroSettings) => updateSettings({ pomodoroSettings })}
+            />
+            <TodosSettingsInput
+                todoSettings={settings.todoSettings}
+                onChange={(todoSettings) => updateSettings({ todoSettings })}
             />
             <ThemeSettingsInput
                 themeSettings={settings.themeSettings}
