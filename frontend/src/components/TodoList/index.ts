@@ -7,6 +7,10 @@ import {
     todoContext,
 } from './hooks'
 
+import {
+    filterTodos,
+} from './utils'
+
 import type { TodoContext } from './hooks'
 
 export {
@@ -15,7 +19,8 @@ export {
     useTodo,
     useProvideTodo,
     todoContext,
-    ProvideTodo
+    ProvideTodo,
+    filterTodos,
 }
 
 export type {

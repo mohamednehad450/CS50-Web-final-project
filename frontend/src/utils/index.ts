@@ -69,3 +69,9 @@ const monthSym = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', "Jul", "Aug", "Sep",
 export function monthDateFormat(d: Date) {
     return `${monthSym[d.getMonth()]} (${d.getFullYear()})`
 }
+
+export function compDate(d1: Date | string, d2: Date | string) {
+    const t1 = new Date(d1).getTime()
+    const t2 = new Date(d2).getTime()
+    return t1 > t2 ? 1 : t1 === t2 ? 0 : -1
+}
