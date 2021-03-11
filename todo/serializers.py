@@ -45,8 +45,8 @@ class TodoSerializer(serializers.ModelSerializer):
         tag = validated_data.get('tag', instance.tag)
         instance.tag = tag
 
-        steps = validated_data.get('steps', [])
-        if len(steps) > 0:
+        steps = validated_data.get('steps', None)
+        if steps is not None:
             Step.objects.filter(todo=instance).delete()
             new_steps = []
             for step in steps:
@@ -64,7 +64,6 @@ class TodoSerializer(serializers.ModelSerializer):
         else:
             steps = []
 
-        print(validated_data)
         todo = Todo.objects.create(
             **validated_data, user=self.context.get('user', None))
 
