@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import { useState, useContext, createContext, useEffect, useCallback, } from 'react'
 import { getItemFromStorage, removeItemFromStorage, setItemToStorage } from '../utils';
+import Cookies from 'js-cookie'
 
 // Types
 export interface User {
@@ -115,7 +116,12 @@ const useProvideAuth = (): AuthContext => {
             const { data } = await Axios.post<{ token: string }>('/api/auth/create_auth', {
                 username,
                 password,
-            })
+            },
+                {
+                    headers: {
+                        "X-CSRFToken": Cookies.get('csrftoken')
+                    }
+                })
             updateUser({ username, token: data.token })
             cb && cb()
 
