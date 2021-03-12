@@ -9,7 +9,7 @@ const ErrorList: FC<ErrorListProps> = ({ errors }) => {
     return (
         errors?.length ? (
             <ul className="textinput-errors">
-                {errors.map(s => (<li className="textinput-error">{s}</li>))}
+                {errors.map(s => (<li key={s} className="textinput-error">{s}</li>))}
             </ul>
         ) : null
     )
