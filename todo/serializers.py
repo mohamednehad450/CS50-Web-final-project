@@ -28,7 +28,19 @@ class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = ['id', 'title', 'checked',
-                  'tag', 'dueDate', 'steps', 'date']
+                  'tag', 'dueDate', 'steps', 'date', 'user']
+        extra_kwargs = {
+            'user': {
+                'write_only': True
+            },
+        }
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Todo.objects.all(),
+                fields=['title', 'user'],
+                message="Todo already exist.",
+            )
+        ]
 
     steps = StepSerializer(many=True, required=False)
     date = serializers.DateTimeField(default=timezone.now, read_only=True)
@@ -64,8 +76,7 @@ class TodoSerializer(serializers.ModelSerializer):
         else:
             steps = []
 
-        todo = Todo.objects.create(
-            **validated_data, user=self.context.get('user', None))
+        todo = Todo.objects.create(**validated_data)
 
         new_steps = []
         for step in steps:

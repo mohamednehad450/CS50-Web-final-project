@@ -50,10 +50,7 @@ class TodoViewSet(viewsets.ViewSet):
 
     def create(self, request):
         ser = TodoSerializer(
-            data=request.data,
-            context={
-                'user': request.user
-            }
+            data={**request.data, 'user': request.user.id}
         )
         if (ser.is_valid()):
             todo = ser.save()

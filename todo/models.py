@@ -15,6 +15,12 @@ class Tag(models.Model):
 
 
 class Todo(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'title'], name="unique_todo_title")
+        ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='todos')
@@ -50,7 +56,7 @@ class Habit(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'title'], name="unique_title")
+                fields=['user', 'title'], name="unique_habit_title")
         ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
