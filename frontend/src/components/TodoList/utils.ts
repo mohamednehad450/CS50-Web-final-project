@@ -72,9 +72,9 @@ function filterTodos(todos: Todo[], settings: TodoSettings): Todo[] {
     if (settings.hideCheckedTodos) {
         results = results.filter(t => !isDone(t))
     }
-    results = todos.sort(todoCompFns[settings.sortTodosBy])
+    results = results.sort(todoCompFns[settings.sortTodosBy])
 
-    results = todos.map(t => ({ ...t, steps: sortSteps(t.steps, settings) }))
+    results = results.map(t => ({ ...t, steps: sortSteps(t.steps, settings) }))
 
     return settings.todosAscending ? results : results.reverse()
 
