@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Link, Redirect, } from 'react-router-dom';
+import { Link, Redirect, useLocation, } from 'react-router-dom';
 import { routes } from '.';
 import { useAuth } from '../API'
 import { Button, ErrorList, TextInput } from '../components/common';
@@ -15,8 +15,9 @@ const SignIn: FC = () => {
 
     const [error, setError] = useState<UserError | undefined>()
 
+    const location: any = useLocation()
     if (auth.user) {
-        return <Redirect to={routes.APP} />
+        return <Redirect to={location?.state?.from || routes.APP} />
     }
     return (
         <div className="container-sm">
