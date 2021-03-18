@@ -37,8 +37,6 @@ const stepCompFns: { [key: string]: (t1: Step, t2: Step) => number } = {
             !s1.dueDate && !s2.dueDate ? s1.title.localeCompare(s2.title) :
                 s1.dueDate ? 1 : -1
     },
-
-
 }
 
 function isDone(todo: Todo): boolean {
@@ -78,6 +76,52 @@ function filterTodos(todos: Todo[], settings: TodoSettings): Todo[] {
 
     return settings.todosAscending ? results : results.reverse()
 
+}
+interface FormatedTodo extends Todo {
+    expandable: boolean
+    stepsLeft: number | undefined
+
+}
+
+export const formatTodo = (todo: Todo): FormatedTodo => {
+    const {
+        steps,
+        dueDate: todoDueDate,
+        checked: todoCheckedDate
+    } = todo;
+
+    const stepsLeft = steps.length ?
+        steps.filter(step => !step.checked).length :
+        undefined;
+
+    const dueDate = steps.length ?
+        steps.reduce<Todo['dueDate']>((acc, { dueDate }) =>
+            acc ?
+                dueDate ?
+                    acc > dueDate ? acc : dueDate
+                    : acc
+                : dueDate
+            , undefined) :
+        todoDueDate;
+    const checked = steps.length ?
+        steps.reduce<Todo['checked']>((acc, { checked }) =>
+            acc ?
+                checked ?
+                    acc > checked ? acc : checked
+                    : acc
+                : checked
+            , null)
+        : todoCheckedDate;
+
+
+    return {
+        ...todo,
+        stepsLeft,
+        expandable: !!steps.length,
+        dueDate: dueDate || todoDueDate,
+        checked,
+
+    }
 }
 
 export { filterTodos, sortSteps, isDone }

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Checkbox, ColorTag, ListRow, ActionSelect } from '../common'
 import StepRow from './Step'
-import { NewTodoOverlay, useTodo } from '.'
+import { NewTodoOverlay, useTodo, formatTodo, DateBadge } from '.'
 import { Link } from 'react-router-dom'
 import { routes } from '../../screens'
 
@@ -21,15 +21,11 @@ interface TodoRowProps {
 
 const TodoRow = (props: TodoRowProps) => {
     const { todo, onClick, expanded: exp, } = props
-    const { title, tag, steps, id, } = todo
+    const { title, tag, steps, id, dueDate, stepsLeft, expandable, checked } = formatTodo(todo)
 
     const [editing, setEditing] = useState(false)
 
-    const expandable = !!steps.length
     const expanded = exp && expandable && !editing
-
-    const stepsLeft: number = steps.length && steps.filter(step => !step.checked).length
-    const checked = steps.length ? !stepsLeft : todo.checked
 
     const { updateTodo, updateStep, deleteTodo, getTag } = useTodo()
 
@@ -52,11 +48,16 @@ const TodoRow = (props: TodoRowProps) => {
                 )}
                 rightItem={(
                     <>
-                        {expandable &&
+                        {steps.length &&
                             <span className="text-note">
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
                             </span>
                         }
+                        <DateBadge
+                            date={dueDate}
+                            hideDate
+                            crossed={!!checked}
+                        />
                         <Link
                             className="icon icon-pomodoro"
                             to={`${routes.POMODORO}?todo=${id}`}

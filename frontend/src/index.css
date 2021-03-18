@@ -284,7 +284,7 @@ main {
 
 .text-title {
   font-size: 1.5rem;
-  margin: 0 1rem;
+  margin-left: 1rem;
   max-width: 40vw;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -295,7 +295,7 @@ main {
 .text-note {
   color: var(--subtitle);
   font-size: 1rem;
-  margin: 0 1rem;
+  margin-right: 1rem;
 }
 
 .step-container {
@@ -1005,6 +1005,20 @@ main {
   align-items: center !important;
 }
 
+.date-badge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.date-badge-icon {
+  margin-right: 0.5rem;
+}
+
+.date-badge-date {
+  color: var(--subtitle);
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     bottom: 0;
@@ -1062,6 +1076,9 @@ main {
   }
   .entries-container {
     padding: 0 1rem;
+  }
+  .hide-date {
+    display: none;
   }
 }
 
