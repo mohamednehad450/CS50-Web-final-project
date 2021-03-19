@@ -17,7 +17,9 @@ import {
 } from './tags'
 
 import {
-    addPomodoroInterval
+    addInterval,
+    getInterval,
+    getIntervals,
 } from './pomodoro'
 
 import {
@@ -57,7 +59,9 @@ export {
     useAuth,
     validateTodo,
     validateStep,
-    addPomodoroInterval,
+    addInterval,
+    getInterval,
+    getIntervals,
     getHabits,
     updateHabit,
     addNewHabit,

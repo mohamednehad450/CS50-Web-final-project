@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react"
-import { addPomodoroInterval } from "../../API";
+import { addInterval } from "../../API";
 import { defaultPomodoroSettings } from "../Settings";
 
 import type { AuthContext, PomodoroInterval, Todo } from "../../API";
@@ -115,7 +115,7 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         // Submiting Pomodoro Interval to Api
         if (pomodoro.state.mode !== PomodoroMode.WORK) {
             if (pomInterval?.startDate) {
-                addPomodoroInterval({
+                addInterval({
                     ...pomInterval,
                     endDate: new Date(),
                 }, user) // TODO: Handles api error
