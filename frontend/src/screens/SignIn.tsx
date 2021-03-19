@@ -67,10 +67,6 @@ const SignIn: FC = () => {
                                 }
                                 setError(err)
                             }
-                            auth.signin(
-                                username,
-                                password,
-                            )
                         }}
                     >
                         Sign In
