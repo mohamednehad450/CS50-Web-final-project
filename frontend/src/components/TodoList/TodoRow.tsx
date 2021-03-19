@@ -48,11 +48,11 @@ const TodoRow = (props: TodoRowProps) => {
                 )}
                 rightItem={(
                     <>
-                        {steps.length &&
+                        {steps.length ?
                             <span className="text-note">
                                 {stepsLeft ? `${stepsLeft} step${stepsLeft > 1 ? 's' : ''} left` : 'done'}
                             </span>
-                        }
+                            : null}
                         <DateBadge
                             date={dueDate}
                             hideDate
