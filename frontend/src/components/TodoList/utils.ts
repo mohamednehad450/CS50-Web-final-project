@@ -94,6 +94,7 @@ export const formatTodo = (todo: Todo): FormatedTodo => {
         steps.filter(step => !step.checked).length :
         undefined;
 
+    // Get the maximum dueDate
     const dueDate = steps.length ?
         steps.reduce<Todo['dueDate']>((acc, { dueDate }) =>
             acc ?
@@ -103,14 +104,16 @@ export const formatTodo = (todo: Todo): FormatedTodo => {
                 : dueDate
             , undefined) :
         todoDueDate;
+
+    // Get the maximum check date IF all is checked
     const checked = steps.length ?
         steps.reduce<Todo['checked']>((acc, { checked }) =>
             acc ?
                 checked ?
                     acc > checked ? acc : checked
-                    : acc
-                : checked
-            , null)
+                    : null
+                : null
+            , steps[0].checked)
         : todoCheckedDate;
 
 
