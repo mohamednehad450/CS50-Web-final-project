@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react"
-import { addInterval } from "../../API";
 import { defaultPomodoroSettings } from "../Settings";
 
 import type { AuthContext, PomodoroInterval, Todo } from "../../API";
 import type { PomodoroSettings } from "../Settings";
+import { useIntervals } from "./intervalContext";
 
 enum PomodoroMode {
     WORK = "work",
@@ -96,6 +96,8 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         stats: defaultPomodoroStats,
     })
 
+    const { addInterval } = useIntervals()
+
     const [pomInterval, setPomInterval] = useState<Partial<PomodoroInterval>>()
 
     const [timer, setTimer] = useState<any>()
@@ -118,7 +120,7 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
                 addInterval({
                     ...pomInterval,
                     endDate: new Date(),
-                }, user) // TODO: Handles api error
+                }) // TODO: Handles api error
                 setPomInterval(p => ({ todo: p?.todo }))
             }
         }
