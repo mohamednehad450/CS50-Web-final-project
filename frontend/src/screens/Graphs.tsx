@@ -1,10 +1,15 @@
 import React from 'react'
+import { Header } from '../components/common'
+import { Summary } from '../components/Graphs'
 
 const Graphs = () => {
     return (
-        <h1>
-            Graphs
-        </h1>
+        <div className="container">
+            <Header
+                title="Graphs"
+            />
+            <Summary />
+        </div>
     )
 }
 

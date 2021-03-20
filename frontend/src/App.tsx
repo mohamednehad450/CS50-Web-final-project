@@ -27,6 +27,7 @@ import { ProvideTodo } from './components/TodoList';
 import { ProvideSettings } from './components/Settings';
 import { ThemeProvider } from './components/theme';
 import { ProvideHabits } from './components/HabitTracker';
+import { ProvideStats } from './components/Graphs';
 
 const ProvideState: FC = ({ children }) => (
   <ProvideSettings>
@@ -34,7 +35,9 @@ const ProvideState: FC = ({ children }) => (
       <ProvidePomodoro>
         <ProvideTodo>
           <ProvideHabits>
-            {children}
+            <ProvideStats>
+              {children}
+            </ProvideStats>
           </ProvideHabits>
         </ProvideTodo>
       </ProvidePomodoro>

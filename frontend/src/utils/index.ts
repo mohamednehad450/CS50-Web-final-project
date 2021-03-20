@@ -75,3 +75,10 @@ export function compDate(d1: Date | string, d2: Date | string) {
     const t2 = new Date(d2).getTime()
     return t1 > t2 ? 1 : t1 === t2 ? 0 : -1
 }
+
+export const isToday = (d: Date | string | null) => {
+    if (!d) return false
+    const now = new Date()
+    const date = new Date(d)
+    return now.toLocaleDateString() === date.toLocaleDateString()
+}
