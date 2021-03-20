@@ -32,7 +32,8 @@ body {
   --titles: var(--blue1);
   --subtitle: var(--gray4);
   --icons: var(--gray4);
-  --bg-nav: var(--gray6);
+  --bg-nav-v: linear-gradient(to top, var(--gray6), var(--gray5));
+  --bg-nav-h: linear-gradient(to left, var(--gray6), var(--gray5));
   --text-nav: var(--gray0);
   --shadow-nav1: var(--gray5);
   --shadow-nav2: var(--gray4);
@@ -59,7 +60,8 @@ body {
   --titles: var(--gray0);
   --subtitle: var(--gray1);
   --icons: var(--gray1);
-  --bg-nav: var(--gray6);
+  --bg-nav-v: linear-gradient(to top, var(--gray6), var(--gray5));
+  --bg-nav-h: linear-gradient(to left, var(--gray6), var(--gray5));
   --text-nav: var(--gray0);
   --shadow-nav1: var(--gray5);
   --shadow-nav2: var(--gray4);
@@ -79,10 +81,20 @@ body {
   --numcard-text: var(--text);
 }
 
+.solar {
+  --gray0: #fbffd4;
+  --gray1: #f7f8d0;
+  --gray2: #b6f880;
+  --gray3: #5ec72d;
+  --gray4: #3ea565;
+  --gray5: #005368;
+  --gray6: #003d4c;
+  --gray7: #00222a;
+}
+
 .navbar {
   z-index: 1;
   position: fixed;
-  background: var(--bg-nav);
   color: var(--text-nav);
 }
 
@@ -1066,6 +1078,7 @@ main {
 
 @media only screen and (max-width: 799px) {
   .navbar {
+    background: var(--bg-nav-h);
     bottom: 0;
     width: 100vw;
     height: 5rem;
@@ -1129,6 +1142,7 @@ main {
 
 @media only screen and (min-width: 800px) {
   .navbar {
+    background: var(--bg-nav-v);
     top: 0;
     width: 5rem;
     height: 100vh;

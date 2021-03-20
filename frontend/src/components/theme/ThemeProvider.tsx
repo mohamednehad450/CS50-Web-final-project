@@ -3,9 +3,9 @@ import { useSettings } from "../Settings"
 
 const ThemeProvider: FC = ({ children }) => {
 
-    const { settings } = useSettings()
+    const { settings: { themeSettings: { theme, solar } } } = useSettings()
     return (
-        <div className={settings.themeSettings}>
+        <div className={`${theme}${solar ? ' solar' : ''}`}>
             {children}
         </div>
     )

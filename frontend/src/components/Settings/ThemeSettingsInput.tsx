@@ -21,8 +21,16 @@ const ThemeSettingsInput: FC<ThemeSettingsInputProps> = ({ themeSettings, onChan
                 title="Dark Mode?"
             >
                 <Checkbox
-                    checked={themeSettings === 'dark'}
-                    onChange={dark => onChange(dark ? 'dark' : 'light')}
+                    checked={themeSettings.theme === 'dark'}
+                    onChange={dark => onChange({ ...themeSettings, theme: dark ? 'dark' : 'light' })}
+                />
+            </SettingRow>
+            <SettingRow
+                title="Solar?"
+            >
+                <Checkbox
+                    checked={themeSettings.solar}
+                    onChange={solar => onChange({ ...themeSettings, solar, })}
                 />
             </SettingRow>
         </div>

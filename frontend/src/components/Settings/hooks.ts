@@ -14,7 +14,10 @@ interface PomodoroSettings {
     submitOnSkip: boolean
 }
 
-type ThemeSettings = 'light' | 'dark'
+interface ThemeSettings {
+    theme: 'light' | 'dark'
+    solar: boolean
+}
 
 interface TodoSettings {
     hideCheckedTodos: boolean
@@ -56,7 +59,10 @@ const defaultTodoSettings: TodoSettings = {
 
 const defaultSettings: Settings = {
     pomodoroSettings: defaultPomodoroSettings,
-    themeSettings: 'light',
+    themeSettings: {
+        theme: 'light',
+        solar: false,
+    },
     todoSettings: defaultTodoSettings
 }
 
