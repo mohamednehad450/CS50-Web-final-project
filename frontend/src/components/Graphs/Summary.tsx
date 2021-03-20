@@ -7,29 +7,30 @@ interface SummaryProps { }
 
 const Summary: FC<SummaryProps> = () => {
 
-    const { summary } = useStats()
     const {
-        todoAdded,
-        todoFinished,
-        stepsFinished,
-        pomodoroSession
-    } = summary
+        summary: {
+            todoAdded,
+            todoFinished,
+            stepsFinished,
+            pomodoroSession,
+            checkedHabits,
+        }
+    } = useStats()
 
 
 
     return (
         <>
-            <div className="section-header margin">
+            <div className="section-header margin padding-top">
                 Today's Summary
             </div>
             <div className="summary-container">
-                <span className="numcard-section" >
-                    <NumCard title="Todos Added" count={todoAdded} />
-                    <NumCard title="Todos Completed" count={todoFinished} />
-                </span>
-                <span className="numcard-section" >
-                    <NumCard title="Steps Completed" count={stepsFinished} />
+                <NumCard title="Todos Added" count={todoAdded} />
+                <NumCard title="Todos Completed" count={todoFinished} />
+                <NumCard title="Steps Completed" count={stepsFinished} />
+                <span className="numcard-section">
                     <NumCard title="Pomodoro Sessions" count={pomodoroSession} />
+                    <NumCard title="Checked Habits" count={checkedHabits} />
                 </span>
             </div>
 

@@ -5,6 +5,7 @@ import { useIntervals } from "../Pomodoro";
 
 
 import { Step } from "../../API";
+import { useHabits } from "../HabitTracker";
 
 export interface StatsContext {
     summary: {
@@ -12,6 +13,7 @@ export interface StatsContext {
         todoFinished: number
         stepsFinished: number
         pomodoroSession: number
+        checkedHabits: number
     }
 }
 
@@ -23,6 +25,7 @@ const defaultStatsContext = {
         todoFinished: 0,
         stepsFinished: 0,
         pomodoroSession: 0,
+        checkedHabits: 0,
     }
 
 }
@@ -35,6 +38,7 @@ export const useProvideStats = (): StatsContext => {
 
     const { intervals } = useIntervals()
     const { todos } = useTodo()
+    const { habits } = useHabits()
 
     const todoSummary = useMemo(() => {
         const todoAdded = todos
@@ -62,11 +66,19 @@ export const useProvideStats = (): StatsContext => {
         return pomodoroSession
     }, [intervals])
 
+    const checkedHabits = useMemo(() => {
+        const checkedHabits = habits
+            .filter(h => h.entries
+                .reduce<boolean>((acc, d) => acc || isToday(d), false))
+            .length
+        return checkedHabits
+    }, [habits])
 
     return {
         summary: {
             ...todoSummary,
             pomodoroSession,
+            checkedHabits,
         }
     }
 }

@@ -596,11 +596,11 @@ main {
 }
 
 .padding-top {
-  padding-top: 1rem;
+  padding-top: 1rem !important;
 }
 
 .padding {
-  padding: 1rem;
+  padding: 1rem !important;
 }
 
 .center {
