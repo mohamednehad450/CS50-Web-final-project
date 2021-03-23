@@ -20,11 +20,11 @@ const Summary: FC<SummaryProps> = () => {
 
 
     return (
-        <>
+        <div className="border-bottom">
             <div className="section-header margin padding-top">
                 Today's Summary
             </div>
-            <div className="summary-container">
+            <div className="summary-body">
                 <NumCard title="Todos Added" count={todoAdded} />
                 <NumCard title="Todos Completed" count={todoFinished} />
                 <NumCard title="Steps Completed" count={stepsFinished} />
@@ -33,8 +33,7 @@ const Summary: FC<SummaryProps> = () => {
                     <NumCard title="Checked Habits" count={checkedHabits} />
                 </span>
             </div>
-
-        </>
+        </div>
     )
 }
 

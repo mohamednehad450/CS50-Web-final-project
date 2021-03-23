@@ -1039,12 +1039,15 @@ main {
   margin: 0 1.5em;
 }
 
-.summary-container {
+.border-bottom {
+  border-bottom: 1px solid var(--hr);
+}
+
+.summary-body {
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  border-bottom: 1px solid var(--hr);
   padding-bottom: 1rem;
   margin: 0.5rem;
 }
@@ -1086,10 +1089,6 @@ main {
 
 .todomark {
   stroke: var(--fg);
-}
-
-.todo-stats-container {
-  border-bottom: 1px solid var(--hr);
 }
 
 .todo-stats-body {
@@ -1165,6 +1164,10 @@ main {
   }
   .todo-stats-body {
     padding: 00.5rem;
+  }
+  .numcard {
+    width: 9rem;
+    margin: 0.5rem;
   }
 }
 

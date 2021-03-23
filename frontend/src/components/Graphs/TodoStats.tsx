@@ -12,7 +12,7 @@ const TodoStats: FC<TodoStatsProps> = () => {
     const { todoStats, } = useStats()
 
     return (
-        <div className="todo-stats-container">
+        <div className="border-bottom">
             <div className="section-header margin padding-top">
                 Todos Stats
             </div>
