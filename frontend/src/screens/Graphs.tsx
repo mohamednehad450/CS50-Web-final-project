@@ -1,6 +1,5 @@
-import React from 'react'
 import { Header } from '../components/common'
-import { Summary } from '../components/Graphs'
+import { Summary, TodoStats } from '../components/Graphs'
 
 const Graphs = () => {
     return (
@@ -9,6 +8,7 @@ const Graphs = () => {
                 title="Graphs"
             />
             <Summary />
+            <TodoStats />
         </div>
     )
 }

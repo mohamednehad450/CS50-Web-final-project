@@ -1076,6 +1076,31 @@ main {
   margin-top: auto;
 }
 
+.tick-text {
+  fill: var(--subtitle);
+}
+
+.tick-line {
+  stroke: var(--bg);
+}
+
+.todomark {
+  stroke: var(--fg);
+}
+
+.todo-stats-container {
+  border-bottom: 1px solid var(--hr);
+}
+
+.todo-stats-body {
+  max-width: 50rem;
+  padding: 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     background: var(--bg-nav-h);
@@ -1137,6 +1162,9 @@ main {
   }
   .hide-date {
     display: none;
+  }
+  .todo-stats-body {
+    padding: 00.5rem;
   }
 }
 
