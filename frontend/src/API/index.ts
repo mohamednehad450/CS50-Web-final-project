@@ -36,7 +36,7 @@ import PrivateRoute from './PrivateRoute'
 import { useAuth } from './auth'
 
 // Types
-import type { Todo, Step, TodoError, StepError, } from './todos'
+import type { Todo, TodoWithTag, Step, TodoError, StepError, } from './todos'
 import type { Tag, TagError } from './tags'
 import type { PomodoroInterval, } from './pomodoro'
 import type { Habit, HabitError } from './habits'
@@ -72,6 +72,7 @@ export {
 
 export type {
     Todo,
+    TodoWithTag,
     Step,
     Tag,
     TagError,

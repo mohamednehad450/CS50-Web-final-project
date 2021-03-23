@@ -21,6 +21,16 @@ export interface Todo {
     steps: Step[],
 }
 
+export interface TodoWithTag {
+    title: string,
+    checked: Date | string | null,
+    tag?: Tag,
+    dueDate?: string | Date,
+    date: Date,
+    id: number | string,
+    steps: Step[],
+}
+
 
 export interface StepError {
     id?: string[]

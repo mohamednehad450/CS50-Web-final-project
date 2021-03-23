@@ -1,11 +1,12 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
+import { isSameMonth, isToday } from '../../utils'
 import { formatTodo, useTodo } from "../TodoList";
-import { isToday } from '../../utils'
 import { useIntervals } from "../Pomodoro";
-
-
-import { Step } from "../../API";
 import { useHabits } from "../HabitTracker";
+
+
+import type { Step, TodoWithTag, } from "../../API";
+
 
 export interface StatsContext {
     summary: {
@@ -14,7 +15,13 @@ export interface StatsContext {
         stepsFinished: number
         pomodoroSession: number
         checkedHabits: number
-    }
+    },
+    todoStats: {
+        month: Date,
+        added: TodoWithTag[]
+        finished: TodoWithTag[]
+        setMonth: (d: Date) => void
+    },
 }
 
 
@@ -26,6 +33,12 @@ const defaultStatsContext = {
         stepsFinished: 0,
         pomodoroSession: 0,
         checkedHabits: 0,
+    },
+    todoStats: {
+        month: new Date(),
+        setMonth: () => console.error('Stats context not initialized'),
+        added: [],
+        finished: [],
     }
 
 }
@@ -37,8 +50,10 @@ export const useStats = () => useContext(statsContext)
 export const useProvideStats = (): StatsContext => {
 
     const { intervals } = useIntervals()
-    const { todos } = useTodo()
+    const { todos, getTag } = useTodo()
     const { habits } = useHabits()
+
+    const [todosMonth, setTodosMonth] = useState(new Date())
 
     const todoSummary = useMemo(() => {
         const todoAdded = todos
@@ -74,11 +89,45 @@ export const useProvideStats = (): StatsContext => {
         return checkedHabits
     }, [habits])
 
+    const todosStats = useMemo(() => {
+        const added = todos
+            .filter(t => isSameMonth(t.date, todosMonth))
+            .map(t => ({ ...t, tag: getTag(t.tag) }))
+            .sort((a, b) => {
+                const aColor = a.tag?.color || '#FFF'
+                const bColor = b.tag?.color || '#FFF'
+                return aColor.localeCompare(bColor)
+            })
+            .reverse()
+        const finished = todos
+            .filter(t => {
+                const { checked } = formatTodo(t)
+                return isSameMonth(checked, todosMonth)
+            })
+            .map(t => ({ ...t, tag: getTag(t.tag) }))
+            .sort((a, b) => {
+                const aColor = a.tag?.color || '#FFF'
+                const bColor = b.tag?.color || '#FFF'
+                return aColor.localeCompare(bColor)
+            })
+            .reverse()
+
+        return {
+            added,
+            finished,
+        }
+    }, [todosMonth, todos, getTag])
+
     return {
         summary: {
             ...todoSummary,
             pomodoroSession,
             checkedHabits,
-        }
+        },
+        todoStats: {
+            month: todosMonth,
+            setMonth: setTodosMonth,
+            ...todosStats,
+        },
     }
 }
