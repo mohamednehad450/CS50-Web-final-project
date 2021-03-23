@@ -5,7 +5,7 @@ import { useIntervals } from "../Pomodoro";
 import { useHabits } from "../HabitTracker";
 
 
-import type { Step, TodoWithTag, } from "../../API";
+import type { Step, Tag, TodoWithTag, } from "../../API";
 
 
 export interface StatsContext {
@@ -20,6 +20,7 @@ export interface StatsContext {
         month: Date,
         added: TodoWithTag[]
         finished: TodoWithTag[]
+        tags: Tag[]
         setMonth: (d: Date) => void
     },
 }
@@ -39,6 +40,7 @@ const defaultStatsContext = {
         setMonth: () => console.error('Stats context not initialized'),
         added: [],
         finished: [],
+        tags: []
     }
 
 }
@@ -92,12 +94,19 @@ export const useProvideStats = (): StatsContext => {
     const todosStats = useMemo(() => {
         let added: TodoWithTag[] = []
         let finished: TodoWithTag[] = []
+        const tags = new Set<Tag>()
+
+        tags.add({ label: 'None', color: '#FFF', id: 'NONE' })
 
         for (let t of todos) {
+            const tag = getTag(t.tag)
             isSameMonth(t.date, todosMonth) &&
-                added.push({ ...t, tag: getTag(t.tag) })
+                added.push({ ...t, tag, }) &&
+                tag && tags.add(tag);
+
             isSameMonth(formatTodo(t).checked, todosMonth) &&
-                finished.push({ ...t, tag: getTag(t.tag) })
+                finished.push({ ...t, tag }) &&
+                tag && tags.add(tag);
         }
         added = added
             .sort((a, b) => {
@@ -117,6 +126,7 @@ export const useProvideStats = (): StatsContext => {
         return {
             added,
             finished,
+            tags: [...tags.values()]
         }
     }, [todosMonth, todos, getTag])
 
