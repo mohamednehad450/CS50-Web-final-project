@@ -82,3 +82,11 @@ export const isToday = (d: Date | string | null) => {
     const date = new Date(d)
     return now.toLocaleDateString() === date.toLocaleDateString()
 }
+
+export const isSameMonth = (d1: Date | string | null, d2: Date | string | null) => {
+    if (!d1 || !d2) return false
+    const date1 = new Date(d1)
+    const date2 = new Date(d2)
+    return date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth()
+}
