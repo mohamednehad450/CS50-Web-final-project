@@ -90,21 +90,16 @@ export const useProvideStats = (): StatsContext => {
     }, [habits])
 
     const todosStats = useMemo(() => {
-        const added = todos
-            .filter(t => isSameMonth(t.date, todosMonth))
-            .map(t => ({ ...t, tag: getTag(t.tag) }))
-            .sort((a, b) => {
-                const aColor = a.tag?.color || '#FFF'
-                const bColor = b.tag?.color || '#FFF'
-                return aColor.localeCompare(bColor)
-            })
-            .reverse()
-        const finished = todos
-            .filter(t => {
-                const { checked } = formatTodo(t)
-                return isSameMonth(checked, todosMonth)
-            })
-            .map(t => ({ ...t, tag: getTag(t.tag) }))
+        let added: TodoWithTag[] = []
+        let finished: TodoWithTag[] = []
+
+        for (let t of todos) {
+            isSameMonth(t.date, todosMonth) &&
+                added.push({ ...t, tag: getTag(t.tag) })
+            isSameMonth(formatTodo(t).checked, todosMonth) &&
+                finished.push({ ...t, tag: getTag(t.tag) })
+        }
+        added = added
             .sort((a, b) => {
                 const aColor = a.tag?.color || '#FFF'
                 const bColor = b.tag?.color || '#FFF'
@@ -112,6 +107,13 @@ export const useProvideStats = (): StatsContext => {
             })
             .reverse()
 
+        finished = finished
+            .sort((a, b) => {
+                const aColor = a.tag?.color || '#FFF'
+                const bColor = b.tag?.color || '#FFF'
+                return aColor.localeCompare(bColor)
+            })
+            .reverse()
         return {
             added,
             finished,
