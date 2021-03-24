@@ -141,7 +141,6 @@ body {
 
 main {
   min-height: 100vh;
-  overflow: hidden;
   background-color: var(--bg);
   display: flex;
   justify-content: center;
@@ -150,7 +149,6 @@ main {
 .container {
   min-width: 500px;
   width: 80rem;
-  padding: 1rem 0;
   background-color: var(--fg);
 }
 
@@ -162,6 +160,10 @@ main {
   align-items: center;
   background-color: var(--fg);
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 0;
 }
 
 .header-titles {
