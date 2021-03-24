@@ -1117,7 +1117,6 @@ main {
   .container {
     width: 100%;
     min-width: 0;
-    overflow-y: scroll;
     padding-bottom: 5rem;
   }
   .container-sm {
