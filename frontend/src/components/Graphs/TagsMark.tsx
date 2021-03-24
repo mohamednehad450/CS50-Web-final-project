@@ -17,6 +17,7 @@ const TagsMark: FC<TagsMarkProps> = ({ x, y, tags }) => {
         <g transform={`translate(${x},${y})`}>
             {tags.map((tag, i) => (
                 <TagMark
+                    key={tag.id}
                     tag={tag}
                     x={0}
                     y={(r * 2 + padding) * i}

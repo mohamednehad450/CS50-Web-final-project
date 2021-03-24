@@ -15,6 +15,7 @@ const TodosTagMark: FC<TodosTagMarkProps> = ({ width, height, x, y, todos }) => 
         <>
             {todos.map((t, i) => (
                 <rect
+                    key={t.id}
                     className="todomark"
                     width={width}
                     height={(height / todos.length)}

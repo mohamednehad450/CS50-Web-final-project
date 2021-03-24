@@ -16,9 +16,8 @@ const BandAxisBottom: FC<BandAxisBottomProps> = ({
 }) => (
     <>
         {xScale.domain().map((tickValue) => (
-            <g className="tick">
+            <g className="tick" key={tickValue}>
                 <text
-                    key={tickValue}
                     style={{
                         textAnchor: 'middle',
                     }}
