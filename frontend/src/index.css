@@ -163,7 +163,7 @@ main {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
-  z-index: 0;
+  z-index: 1;
 }
 
 .header-titles {
@@ -364,7 +364,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
 }
 
 .overlay-container-lg {
@@ -375,7 +375,7 @@ main {
   margin: 2rem;
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  z-index: 2;
 }
 
 .overlay-container {
@@ -386,7 +386,7 @@ main {
   margin: 2rem;
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  z-index: 2;
 }
 
 .buttons {
