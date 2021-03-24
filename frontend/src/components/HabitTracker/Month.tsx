@@ -38,12 +38,12 @@ const Month: FC<MonthProps> = ({ date: initDate, entries, onChange, updateDate }
         <table className="table-container">
             <thead>
                 <tr className="entries-row">
-                    {daySym.map(s => <td className="entry">{s}</td>)}
+                    {daySym.map(s => <td key={s} className="entry">{s}</td>)}
                 </tr>
             </thead>
             <tbody>
                 {[...Array(rows)].map((_, row) => (
-                    <tr className="entries-row">
+                    <tr className="entries-row" key={String(row)}>
                         {[...Array(7)].map((_, cell) => {
                             const day = cell - fistDayOfWeek + (row * 7) + 1
                             const cellDate = (day < 1 || day > daysInMonth) ? null : new Date(`${y}/${m + 1}/${day}`)
@@ -51,6 +51,7 @@ const Month: FC<MonthProps> = ({ date: initDate, entries, onChange, updateDate }
                             const isToday = cellDate?.toLocaleDateString() === new Date().toLocaleDateString()
                             return (
                                 <td
+                                    key={String(cell)}
                                     className={
                                         `entry${checked ? ' entry-checked' : ''}${isToday ? ' entry-today' : ''}`
                                     }
