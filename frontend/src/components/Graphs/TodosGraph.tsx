@@ -41,7 +41,7 @@ const TodosGraph: FC<TodosGraphProps> = ({ stats }) => {
                 <BandAxisLeft
                     yScale={yScale}
                     innerWidth={innerWidth}
-                    innerHeight={innerHeight}
+                    reverse
                 />
                 {[added, finished].map((todos, i) => (
                     <TodosTagMark
