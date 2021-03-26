@@ -16,7 +16,7 @@ const TodoStats: FC<TodoStatsProps> = () => {
             <div className="section-header margin padding-top">
                 Todos Stats
             </div>
-            <div className="todo-stats-body">
+            <div className="stats-body">
                 <div className="row">
                     <Button
                         onClick={() => {

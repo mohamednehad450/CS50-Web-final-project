@@ -1093,7 +1093,7 @@ main {
   stroke: var(--fg);
 }
 
-.todo-stats-body {
+.stats-body {
   max-width: 50rem;
   padding: 2rem;
   margin: 0 auto;
@@ -1163,7 +1163,7 @@ main {
   .hide-date {
     display: none;
   }
-  .todo-stats-body {
+  .stats-body {
     padding: 00.5rem;
   }
   .numcard {
