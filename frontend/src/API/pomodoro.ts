@@ -1,12 +1,19 @@
 import Axios from 'axios'
 
-import type { User } from '.'
-import { Todo } from './todos'
+import type { User, Todo, TodoWithTag } from '.'
 
 
 export interface PomodoroInterval {
     id: string
     todo?: Todo['id']
+    startDate: Date | string
+    endDate: Date | string
+    defaultDuration: number
+}
+
+export interface IntervalWithTodo {
+    id: string
+    todo?: TodoWithTag
     startDate: Date | string
     endDate: Date | string
     defaultDuration: number
