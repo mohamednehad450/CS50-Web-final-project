@@ -5,7 +5,7 @@ import { useIntervals } from "../Pomodoro";
 import { useHabits } from "../HabitTracker";
 
 
-import type { Step, Tag, TodoWithTag, } from "../../API";
+import type { IntervalWithTodo, Step, Tag, Todo, TodoWithTag, } from "../../API";
 
 
 export interface StatsContext {
@@ -23,11 +23,18 @@ export interface StatsContext {
         tags: Tag[]
         setMonth: (d: Date) => void
     },
+    pomodoroStats: {
+        month: Date,
+        setMonth: (d: Date) => void
+        intervals: IntervalWithTodo[]
+        todos: Map<TodoWithTag['id'], TodoWithTag>
+        tags: Map<Tag['id'], Tag>
+    }
 }
 
 
 
-const defaultStatsContext = {
+const defaultStatsContext: StatsContext = {
     summary: {
         todoAdded: 0,
         todoFinished: 0,
@@ -41,8 +48,14 @@ const defaultStatsContext = {
         added: [],
         finished: [],
         tags: []
+    },
+    pomodoroStats: {
+        month: new Date(),
+        setMonth: () => console.error('Stats context not initialized'),
+        intervals: [],
+        todos: new Map(),
+        tags: new Map(),
     }
-
 }
 
 export const statsContext = createContext<StatsContext>(defaultStatsContext)
@@ -56,6 +69,7 @@ export const useProvideStats = (): StatsContext => {
     const { habits } = useHabits()
 
     const [todosMonth, setTodosMonth] = useState(new Date())
+    const [intervalsMonth, setIntervalsMonth] = useState(new Date())
 
     const todoSummary = useMemo(() => {
         const todoAdded = todos
@@ -130,6 +144,33 @@ export const useProvideStats = (): StatsContext => {
         }
     }, [todosMonth, todos, getTag])
 
+    const pomodoroStats = useMemo(() => {
+
+        const monthInterval = intervals.filter(i => isSameMonth(i.endDate, intervalsMonth))
+
+        const todosIds = new Set(monthInterval.map(i => i.todo || ''))
+
+        const todosMap = new Map<Todo['id'], TodoWithTag>()
+
+        const tags = new Map<Tag['id'], Tag>()
+
+
+        for (let id of todosIds) {
+            const todo = todos.find(t => t.id === id)
+            const tag = todo && getTag(todo.tag)
+            tag && tags.set(tag.id, tag)
+            todo && todosMap.set(id, { ...todo, tag: getTag(todo.tag) })
+        }
+        const intervalsWithTodos: IntervalWithTodo[] = monthInterval.map(i => ({ ...i, todo: todosMap.get(i.todo || '') }))
+
+
+        return {
+            intervals: intervalsWithTodos,
+            todos: todosMap,
+            tags,
+        }
+    }, [intervals, todos, getTag, intervalsMonth])
+
     return {
         summary: {
             ...todoSummary,
@@ -141,5 +182,10 @@ export const useProvideStats = (): StatsContext => {
             setMonth: setTodosMonth,
             ...todosStats,
         },
+        pomodoroStats: {
+            month: intervalsMonth,
+            setMonth: setIntervalsMonth,
+            ...pomodoroStats
+        }
     }
 }
