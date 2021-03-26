@@ -1102,6 +1102,21 @@ main {
   justify-content: center;
 }
 
+.stats-body .setting-input, .stats-body .checkbox {
+  padding: 0 !important;
+  margin: 0;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  max-width: 50rem;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
 @media only screen and (max-width: 799px) {
   .navbar {
     background: var(--bg-nav-h);

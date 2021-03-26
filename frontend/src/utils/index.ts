@@ -40,6 +40,12 @@ export const formatTime = (time: number): string => {
     return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`
 }
 
+export const formatMinToHour = (n: number): string => {
+    const min = Math.floor(n % 60)
+    const h = Math.floor(n / 60)
+    return `${h < 10 ? '0' + h : h}:${min < 10 ? '0' + min : min}`
+}
+
 interface Id {
     id: string | number
 }
