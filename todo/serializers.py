@@ -19,7 +19,19 @@ class StepSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'label', 'color']
+        fields = ['id', 'user', 'label', 'color']
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Tag.objects.all(),
+                fields=['label', 'user'],
+                message="Tag already exist.",
+            )
+        ]
+        extra_kwargs = {
+            'user': {
+                'write_only': True
+            },
+        }
 
     id = serializers.UUIDField(default=uuid.uuid4)
 

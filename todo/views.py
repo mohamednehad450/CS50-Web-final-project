@@ -123,11 +123,13 @@ class TagViewSet(viewsets.ViewSet):
 
     def create(self, request):
         data = request.data
-        ser = TagSerializer(data=data)
+        ser = TagSerializer(
+            data={**request.data, 'user': request.user.id}
+        )
         if (ser.is_valid()):
-            tag = Tag.objects.create(**ser.validated_data, user=request.user)
-            tag.save()
-            return response.Response(ser.validated_data)
+            tag = ser.save()
+            data = TagSerializer(tag).data
+            return response.Response(data)
         else:
             return response.Response(ser._errors, status=400)
 
