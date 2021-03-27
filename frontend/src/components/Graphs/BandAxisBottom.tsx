@@ -6,6 +6,7 @@ interface BandAxisBottomProps {
     innerHeight: number
     innerWidth: number
     tickFormat?: (tickValue: string) => string
+    rotateLabel?: number
 }
 
 const BandAxisBottom: FC<BandAxisBottomProps> = ({
@@ -13,19 +14,28 @@ const BandAxisBottom: FC<BandAxisBottomProps> = ({
     innerHeight,
     innerWidth,
     tickFormat,
+    rotateLabel = 0,
 }) => (
     <>
         {xScale.domain().map((tickValue) => (
-            <g className="tick" key={tickValue}>
+            <g
+                className="tick"
+                key={tickValue}
+                transform={`
+                translate(
+                    ${(xScale(tickValue) || 0) + xScale.bandwidth() / 2},
+                    ${innerHeight}
+                ) 
+                rotate(${rotateLabel})
+                `}
+            >
                 <text
                     style={{
-                        textAnchor: 'middle',
+                        textAnchor: rotateLabel > 0 ? 'start' : rotateLabel < 0 ? 'end' : 'middle',
                     }}
                     className="tick-text"
                     fill="gray"
                     dy="1.32em"
-                    x={(xScale(tickValue) || 0) + xScale.bandwidth() / 2}
-                    y={innerHeight}
                 >
                     {tickFormat ? tickFormat(tickValue) : tickValue}
                 </text>
