@@ -9,7 +9,6 @@ import TagMark from './TagMark'
 import TagsMark from './TagsMark'
 import PomodoroStats from './PomodoroStats'
 import PomodoroGraph from './PomodoroGraph'
-import IntervalsMark from './IntervalsMark'
 import HabitStats from './HabitStats'
 import HabitsGraph from './HabitsGraph'
 import {
@@ -34,7 +33,6 @@ export {
     TagsMark,
     PomodoroStats,
     PomodoroGraph,
-    IntervalsMark,
     HabitStats,
     HabitsGraph,
 }

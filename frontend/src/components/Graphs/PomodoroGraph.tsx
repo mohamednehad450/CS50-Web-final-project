@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { scaleBand, scaleLinear, } from "d3-scale";
 import { formatMinToHour } from "../../utils";
-import { IntervalsMark, TagsMark, LinearAxisLeft } from ".";
+import { LinearAxisLeft, BandAxisBottom } from ".";
 
 
 import type { StatsContext } from ".";
 import type { IntervalWithTodo } from "../../API";
+import BarChartMarks from "./BarChartMarks";
 
 interface PomodoroGraphProps {
     stats: StatsContext['pomodoroStats']
@@ -23,9 +24,9 @@ interface IntervalDataItem {
 }
 
 
-const WIDTH = 550;
+const WIDTH = 500;
 const HEIGHT = 400;
-const MARGIN = { top: 20, right: 170, bottom: 10, left: 70 };
+const MARGIN = { top: 20, right: 50, bottom: 100, left: 80 };
 const innerHeight = HEIGHT - MARGIN.top - MARGIN.bottom;
 const innerWidth = WIDTH - MARGIN.left - MARGIN.right;
 
@@ -90,38 +91,27 @@ const PomodoroGraph: FC<PomodoroGraphProps> = ({ stats, settings }) => {
         <>
             <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
                 <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
-                    {/* Used intead of BandAxisBottom since there's no need for labels */}
-                    <g className="tick" >
-                        <line y2={innerHeight} className="tick-line" />
-                        <line y2={innerHeight} y1={0} x1={innerWidth} x2={innerWidth} className="tick-line" />
-                    </g>
+                    <BandAxisBottom
+                        xScale={xScale}
+                        innerHeight={innerHeight}
+                        innerWidth={innerWidth}
+                        tickFormat={(id) => data.find(d => d.id === id)?.title || ''}
+                        rotateLabel={-25}
+                    />
                     <LinearAxisLeft
                         innerWidth={innerWidth}
                         yScale={yScale}
                         tickFormat={formatMinToHour}
                         reverse
                     />
-                    {data.map(d => (
-                        <IntervalsMark
-                            key={d.id}
-                            formatTooltip={formatMinToHour}
-                            x={xScale(d.id) || 0}
-                            y={innerHeight}
-                            height={yScale(d.intervals
-                                .reduce((acc, i) => acc + getIntervalLength(i, settings.time), 0) || 0)}
-                            width={xScale.bandwidth()}
-                            intervals={d.intervals}
-                            getIntervalLength={(i) => getIntervalLength(i, settings.time)}
-                        />
-                    ))}
-                    <TagsMark
-                        tags={data.map(d => ({
-                            id: d.id,
-                            label: d.title,
-                            color: d.intervals[0].todo?.tag?.color || '#FFF'
-                        }))}
-                        x={innerWidth + 36}
-                        y={12}
+                    <BarChartMarks
+                        xScale={xScale}
+                        yScale={yScale}
+                        xValue={d => d.id}
+                        yValue={d => d.intervals
+                            .reduce((acc, i) => acc + getIntervalLength(i, settings.time), 0) || 0}
+                        tooltipFormat={formatMinToHour}
+                        data={data}
                     />
                 </g>
             </svg>
