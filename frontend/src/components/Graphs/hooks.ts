@@ -5,7 +5,7 @@ import { useIntervals } from "../Pomodoro";
 import { useHabits } from "../HabitTracker";
 
 
-import type { IntervalWithTodo, Step, Tag, Todo, TodoWithTag, } from "../../API";
+import type { Habit, IntervalWithTodo, Step, Tag, Todo, TodoWithTag, } from "../../API";
 
 
 export interface StatsContext {
@@ -29,6 +29,11 @@ export interface StatsContext {
         intervals: IntervalWithTodo[]
         todos: Map<TodoWithTag['id'], TodoWithTag>
         tags: Map<Tag['id'], Tag>
+    },
+    habitsStats: {
+        month: Date,
+        setMonth: (d: Date) => void
+        habits: Habit[]
     }
 }
 
@@ -55,6 +60,11 @@ const defaultStatsContext: StatsContext = {
         intervals: [],
         todos: new Map(),
         tags: new Map(),
+    },
+    habitsStats: {
+        month: new Date(),
+        setMonth: () => console.error('Stats context not initialized'),
+        habits: []
     }
 }
 
@@ -70,6 +80,7 @@ export const useProvideStats = (): StatsContext => {
 
     const [todosMonth, setTodosMonth] = useState(new Date())
     const [intervalsMonth, setIntervalsMonth] = useState(new Date())
+    const [habitsMonth, setHabitsMonth] = useState(new Date())
 
     const todoSummary = useMemo(() => {
         const todoAdded = todos
@@ -171,6 +182,18 @@ export const useProvideStats = (): StatsContext => {
         }
     }, [intervals, todos, getTag, intervalsMonth])
 
+
+    const habitStats = useMemo(() => {
+
+        const filterHabits = habits
+            .map(h => ({ ...h, entries: h.entries.filter(d => isSameMonth(habitsMonth, d)) }))
+            .filter(h => h.entries.length)
+
+        return {
+            habits: filterHabits
+        }
+    }, [habitsMonth, habits])
+
     return {
         summary: {
             ...todoSummary,
@@ -186,6 +209,11 @@ export const useProvideStats = (): StatsContext => {
             month: intervalsMonth,
             setMonth: setIntervalsMonth,
             ...pomodoroStats
+        },
+        habitsStats: {
+            month: habitsMonth,
+            setMonth: setHabitsMonth,
+            ...habitStats
         }
     }
 }
