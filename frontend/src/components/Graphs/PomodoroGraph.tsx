@@ -103,6 +103,7 @@ const PomodoroGraph: FC<PomodoroGraphProps> = ({ stats, settings }) => {
                     />
                     {data.map(d => (
                         <IntervalsMark
+                            key={d.id}
                             formatTooltip={formatMinToHour}
                             x={xScale(d.id) || 0}
                             y={innerHeight}

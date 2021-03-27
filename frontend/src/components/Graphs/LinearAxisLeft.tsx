@@ -23,6 +23,7 @@ const LinearAxisLeft: FC<LinearAxisLeftProps> = ({
     <>
         {yScale.ticks().map(tickValue => (
             <g className="tick"
+                key={tickValue}
                 transform={`translate(0,${reverse ?
                     (yScale.range()[1] - yScale(tickValue) || 0) :
                     (yScale(tickValue) || 0)
