@@ -141,6 +141,14 @@ class TagViewSet(viewsets.ViewSet):
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Tag ID']}, status=400)
 
+    def destroy(self, request, pk=None):
+        try:
+            tag = get_object_or_404(Tag, user=request.user,  pk=pk)
+            tag.delete()
+            return response.Response(status=200)
+        except ValidationError:
+            return response.Response({"id": [f"'{pk}' is not a valid Tag ID"]}, status=400)
+
 
 class PomodoroViewSet(viewsets.ViewSet):
 
