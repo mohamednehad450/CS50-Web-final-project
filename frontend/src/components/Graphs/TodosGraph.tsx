@@ -1,6 +1,6 @@
 import { FC } from "react"
-import { scaleBand } from 'd3';
-import { BandAxisBottom, TagsMark, BandAxisLeft, TodosTagMark } from ".";
+import { scaleBand, scaleLinear } from 'd3';
+import { BandAxisBottom, TagsMark, LinearAxisLeft, TodosTagMark } from ".";
 
 import type { StatsContext } from "./hooks"
 
@@ -26,8 +26,8 @@ const TodosGraph: FC<TodosGraphProps> = ({ stats }) => {
         .paddingOuter(0.3);
 
     const maxY = Math.max(added.length, finished.length, 8)
-    const yScale = scaleBand()
-        .domain([...Array(maxY)].map((_, i) => String(i + 1)))
+    const yScale = scaleLinear()
+        .domain([0, maxY])
         .range([0, innerHeight]);
 
     return (
@@ -38,7 +38,7 @@ const TodosGraph: FC<TodosGraphProps> = ({ stats }) => {
                     innerHeight={innerHeight}
                     innerWidth={innerWidth}
                 />
-                <BandAxisLeft
+                <LinearAxisLeft
                     yScale={yScale}
                     innerWidth={innerWidth}
                     reverse
@@ -47,9 +47,9 @@ const TodosGraph: FC<TodosGraphProps> = ({ stats }) => {
                     <TodosTagMark
                         key={xs[i]}
                         x={(xScale(xs[i]) || 0)}
-                        y={-(yScale(String(todos.length)) || 0) + yScale.range()[1] - yScale.bandwidth()}
+                        y={-(yScale(todos.length) || 0) + yScale.range()[1]}
                         width={xScale.bandwidth()}
-                        height={(yScale(String(todos.length)) || 0) + yScale.bandwidth()}
+                        height={(yScale(todos.length) || 0)}
                         todos={todos}
                     />
                 ))}
