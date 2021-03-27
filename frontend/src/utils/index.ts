@@ -96,3 +96,11 @@ export const isSameMonth = (d1: Date | string | null, d2: Date | string | null) 
     return date1.getFullYear() === date2.getFullYear() &&
         date1.getMonth() === date2.getMonth()
 }
+
+export const divByN = (i: number, n: number) => i % n === 0
+
+export const getDaysInMonth = (m: number, y: number) => {
+    const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if (m === 1 && divByN(y, 4) && divByN(y, 100) && divByN(y, 400)) return 29
+    else return months[m % months.length]
+}

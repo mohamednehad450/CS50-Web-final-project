@@ -1,14 +1,9 @@
 import { FC, useEffect, useState } from "react"
 import { Habit } from "../../API"
+import { getDaysInMonth } from "../../utils"
 import { NumCheckBox } from "../common"
 
-const divByN = (i: number, n: number) => i % n === 0
 
-const getDaysInMonth = (m: number, y: number) => {
-    const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    if (m === 1 && divByN(y, 4) && divByN(y, 100) && divByN(y, 400)) return 29
-    else return months[m % months.length]
-}
 
 const daySym = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', "Sa"]
 
