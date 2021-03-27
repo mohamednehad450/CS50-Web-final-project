@@ -3,6 +3,7 @@ import TodoStats from './TodoStats'
 import ProvideStats from './ProvideStats'
 import BandAxisBottom from './BandAxisBottom'
 import LinearAxisLeft from './LinearAxisLeft'
+import BarChartMarks from './BarChartMarks'
 import TodosTagMark from './TodosTagMark'
 import TagMark from './TagMark'
 import TagsMark from './TagsMark'
@@ -10,6 +11,7 @@ import PomodoroStats from './PomodoroStats'
 import PomodoroGraph from './PomodoroGraph'
 import IntervalsMark from './IntervalsMark'
 import HabitStats from './HabitStats'
+import HabitsGraph from './HabitsGraph'
 import {
     useStats
 } from './hooks'
@@ -26,6 +28,7 @@ export {
     TodoStats,
     BandAxisBottom,
     LinearAxisLeft,
+    BarChartMarks,
     TodosTagMark,
     TagMark,
     TagsMark,
@@ -33,6 +36,7 @@ export {
     PomodoroGraph,
     IntervalsMark,
     HabitStats,
+    HabitsGraph,
 }
 
 export type {

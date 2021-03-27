@@ -51,6 +51,7 @@ body {
   --input-invalid-border: rgb(255, 54, 87, 0.6);
   --numcard-bg: var(--blue1);
   --numcard-text: var(--fg);
+  --default-bar-color: var(--blue1);
 }
 
 .dark {
@@ -79,6 +80,7 @@ body {
   --input-invalid-border: rgb(255, 54, 87, 0.6);
   --numcard-bg: var(--gray4);
   --numcard-text: var(--text);
+  --default-bar-color: var(--gray2);
 }
 
 .solar {
