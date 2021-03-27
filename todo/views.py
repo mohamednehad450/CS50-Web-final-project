@@ -136,7 +136,7 @@ class TagViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             tag = get_object_or_404(Tag, user=request.user,  pk=pk)
-            data = TodoSerializer(todo).data
+            data = TagSerializer(tag).data
             return response.Response(data)
         except ValidationError:
             return response.Response({"id": [f'"{pk}" is not a valid Tag ID']}, status=400)
