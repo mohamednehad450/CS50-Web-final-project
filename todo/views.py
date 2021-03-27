@@ -149,6 +149,19 @@ class TagViewSet(viewsets.ViewSet):
         except ValidationError:
             return response.Response({"id": [f"'{pk}' is not a valid Tag ID"]}, status=400)
 
+    def partial_update(self, request, pk=None):
+        try:
+            tag = get_object_or_404(Tag, user=request.user,  pk=pk)
+            ser = TagSerializer(tag, data=request.data, partial=True)
+            if ser.is_valid():
+                tag = ser.save()
+                data = TagSerializer(tag).data
+                return response.Response(data)
+            else:
+                return response.Response(ser._errors)
+        except ValidationError:
+            return response.Response({"id": [f"'{pk}' is not a valid Tag ID"]}, status=400)
+
 
 class PomodoroViewSet(viewsets.ViewSet):
 
