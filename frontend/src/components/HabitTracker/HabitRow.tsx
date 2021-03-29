@@ -56,7 +56,6 @@ const HaibtRow: FC<HabitRowProps> = ({
                                 { label: 'Edit', action: () => setEdit(true) },
                                 { label: 'Delete', action: () => remove(habit.id) },
                             ]}
-                            id={habit.id}
                         />
                     </>
                 )}

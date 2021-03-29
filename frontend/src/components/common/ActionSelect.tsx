@@ -9,7 +9,6 @@ interface Action {
 }
 
 interface ActionSelectProps {
-    id: string | number
     actions: Action[]
 }
 

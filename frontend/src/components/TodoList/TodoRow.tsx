@@ -79,7 +79,6 @@ const TodoRow = (props: TodoRowProps) => {
                                 { label: 'Edit', action: () => setEditing(true) },
                                 { label: 'Delete', action: () => deleteTodo(todo.id) },
                             ]}
-                            id={id}
                         />
                     </>
                 )}
