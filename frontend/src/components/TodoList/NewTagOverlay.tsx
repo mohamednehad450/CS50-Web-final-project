@@ -9,14 +9,14 @@ import type { Tag, TagError } from '../../API'
 
 
 interface NewTagOverlayProps {
-    close: () => void
-    onSubmit: (tag: Tag) => void
-    submit: (tag: Partial<Tag>) => Promise<Tag>
+    done: () => void
+    submit: (tag: Partial<Tag>) => Promise<void>
+    initialTag?: Partial<Tag>
 }
 
-const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit, submit }) => {
+const NewTagOverlay: FC<NewTagOverlayProps> = ({ submit, initialTag, done }) => {
 
-    const [tag, setTag] = useState<Partial<Tag>>(createEmptyTag())
+    const [tag, setTag] = useState<Partial<Tag>>(initialTag || createEmptyTag())
     const [err, setErr] = useState<TagError>({})
 
     return (
@@ -40,12 +40,12 @@ const NewTagOverlay: FC<NewTagOverlayProps> = ({ close, onSubmit, submit }) => {
                 <ErrorList errors={err.color} />
                 <div className="grow"></div>
                 <ButtonsRow>
-                    <Button type='secondary' onClick={close}>Cancel</Button>
+                    <Button type='secondary' onClick={done}>Cancel</Button>
                     <Button
                         type='primary'
-                        onClick={() => submit(tag).then(t => { onSubmit(t); close() }).catch(err => setErr(err))}
+                        onClick={() => submit(tag).then(done).catch(err => setErr(err))}
                     >
-                        Add
+                        {initialTag ? "Save" : "Add"}
                     </Button>
                 </ButtonsRow>
             </div>

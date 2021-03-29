@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import { IconButton, Select } from '../common'
 import NewTagOverlay from './NewTagOverlay'
 import { useTodo } from '.'
+import TagSelectRow from './TagSelectRow'
 
 import { ReactComponent as Circle } from '../../icons/circle.svg'
 import { ReactComponent as Add } from '../../icons/add-fill.svg'
@@ -10,7 +11,7 @@ import type { Tag } from '../../API'
 
 interface TagSelectProps {
     selected?: Tag['id']
-    onChange: (tag: Tag) => void
+    onChange: (tag?: Tag) => void
 }
 
 const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
@@ -24,9 +25,8 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
         <>
             {addTagOverlay &&
                 <NewTagOverlay
-                    onSubmit={(t) => onChange(t)}
                     submit={addNewTag}
-                    close={() => setAddTagOverlay(false)}
+                    done={() => setAddTagOverlay(false)}
                 />
             }
             <Select
@@ -35,35 +35,35 @@ const TagSelect: FC<TagSelectProps> = ({ selected, onChange }) => {
                 options={tags}
                 selected={getTag(selected)}
                 onChange={onChange}
-                CustomInput={({ selected, onClick }) => selected ? (
+                CustomInput={({ selected, onClick }) => (
                     <IconButton
                         className='select-input'
                         onClick={onClick}
-                        icon={<Circle fill={selected.color} />}
+                        icon={<Circle fill={selected?.color || '#fff'} />}
                     />
-                ) :
-                    (<IconButton
-                        className='select-input icon-gray'
-                        onClick={onClick}
-                        icon={<Circle fill={"#fff"} />}
-                    />)
-                }
+                )}
                 CustomRow={({ option, onClick, isSelected }) => (
-                    <IconButton
-                        key={option.id}
-                        className={`select-item ${isSelected ? 'select-item-selected' : ''}`}
+                    <TagSelectRow
+                        tag={option}
                         onClick={onClick}
-                        icon={<Circle fill={option.color} />}
-                        label={option.label}
+                        isSelected={!!isSelected}
                     />
                 )}
                 Header={({ close }) => (
-                    <IconButton
-                        className="select-item icon-gray"
-                        icon={<Add />}
-                        onClick={() => { setAddTagOverlay(true); close() }}
-                        label="New Tag"
-                    />
+                    <>
+                        <IconButton
+                            className="select-item icon-gray"
+                            icon={<Add />}
+                            onClick={() => { setAddTagOverlay(true); close() }}
+                            label="New Tag"
+                        />
+                        <IconButton
+                            className="select-item"
+                            icon={<Circle fill={"#fff"} />}
+                            onClick={() => { onChange(); close() }}
+                            label="None"
+                        />
+                    </>
                 )}
             />
         </>

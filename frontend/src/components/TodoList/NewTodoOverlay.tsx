@@ -39,7 +39,10 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ done, submit, initialTodo }) 
         <Overlay>
             <div className='overlay-container-lg'>
                 <div className='input-row header-margin'>
-                    <TagSelect selected={todo.tag} onChange={({ id }) => { setTodo({ ...todo, tag: id }) }} />
+                    <TagSelect
+                        selected={todo.tag}
+                        onChange={(t) => setTodo({ ...todo, tag: t?.id })}
+                    />
                     <TextInput
                         onChange={(title) => { setTodo({ ...todo, title }); setError({ ...error, title: undefined }) }}
                         value={todo.title}
