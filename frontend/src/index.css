@@ -1185,7 +1185,14 @@ main {
   }
   .numcard {
     width: 9rem;
+    height: 7rem;
     margin: 0.5rem;
+  }
+  .numcard-title {
+    font-size: 1rem;
+  }
+  .numcard-count {
+    font-size: 3rem;
   }
 }
 
