@@ -34,6 +34,25 @@ export const getTages = async (user?: User): Promise<Tag[]> => {
         })
     return data
 };
+
+export const updateTag = async (id: Tag['id'], tag: Partial<Tag>, user?: User): Promise<Tag> => {
+    const { data } =
+        await Axios.patch<Tag>(`/api/tags/${id}/`, tag, {
+            headers: {
+                "Authorization": `JWT ${user?.token}`
+            }
+        })
+    return data
+}
+
+export const deleteTag = async (id: Tag['id'], user?: User): Promise<void> => {
+    await Axios.delete<void>(`/api/tags/${id}/`, {
+        headers: {
+            "Authorization": `JWT ${user?.token}`
+        }
+    })
+}
+
 export const addNewTag = async (tag: Partial<Tag>, user?: User): Promise<Tag> => {
     const { data } =
         await Axios.post<Tag>('/api/tags/', tag, {

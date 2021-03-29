@@ -12,6 +12,8 @@ import {
 
 import {
     getTages,
+    updateTag,
+    deleteTag,
     addNewTag,
     createEmptyTag,
 } from './tags'
@@ -48,6 +50,8 @@ export {
     getTages,
     updateTodo,
     deleteTodo,
+    deleteTag,
+    updateTag,
     updateStep,
     addNewTodo,
     addNewTag,

@@ -7,6 +7,8 @@ import {
     updateStep as updateStepApi,
     getTages as getTagsApi,
     addNewTag as addNewTagApi,
+    updateTag as updateTagApi,
+    deleteTag as deleteTagApi,
 } from '../../API'
 import { removeFromArray, replaceFromArray } from "../../utils";
 
@@ -22,7 +24,9 @@ interface TodoContext {
     tags: Tag[]
     getTags: () => void
     getTag: (id?: Tag['id']) => Tag | undefined
-    addNewTag: (tag: Partial<Tag>) => Promise<Tag>
+    addNewTag: (tag: Partial<Tag>) => Promise<void>
+    deleteTag: (id: Tag['id']) => Promise<void>
+    updateTag: (id: Tag['id'], tag: Partial<Tag>) => Promise<void>
 }
 
 function todoNotinitialized(): any {
@@ -40,6 +44,8 @@ const defaultTodoContext: TodoContext = {
     getTags: todoNotinitialized,
     getTag: todoNotinitialized,
     addNewTag: todoNotinitialized,
+    deleteTag: todoNotinitialized,
+    updateTag: todoNotinitialized,
 }
 
 const todoContext = createContext(defaultTodoContext)
@@ -124,9 +130,24 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
             .then(t => { setTags(arr => [t, ...arr]); return t })
             .catch(handleTodoErr)
 
+    const updateTag = (id: Tag['id'], tag: Partial<Tag>) =>
+        updateTagApi(id, tag, user)
+            .then(t => setTags(replaceFromArray(tags, t)))
+            .catch(handleTodoErr);
 
-    const tagsDict: any = useMemo(() => tags.reduce((acc, t) => ({ ...acc, [t.id]: { ...t } }), {}), [tags]);
-    const getTag = (id?: Tag['id']): Tag | undefined => tagsDict[id || '']
+
+    const deleteTag = (id: Tag['id']) =>
+        deleteTagApi(id, user)
+            .then(() => setTags(removeFromArray(tags, id)))
+            .catch(handleTodoErr);
+
+
+    const tagsMap: any = useMemo(() => {
+        const map = new Map()
+        tags.forEach(t => map.set(t.id, t))
+        return map
+    }, [tags]);
+    const getTag = (id?: Tag['id']): Tag | undefined => tagsMap.get(id)
 
     useEffect(() => {
         getTodos()
@@ -144,6 +165,8 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
         getTags,
         getTag,
         addNewTag,
+        updateTag,
+        deleteTag,
     }
 }
 
