@@ -19,7 +19,7 @@ const NumCheckBox: FC<NumCheckBoxProps> = ({
 
     return (
         <span
-            className={`checkbox ${disabled ? 'checkbox-disabled' : ''} ${className}`}
+            className={`num-checkbox-container ${disabled ? 'checkbox-disabled' : ''} ${className}`}
             onClick={() => !disabled && onChange(!checked)}
         >
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
