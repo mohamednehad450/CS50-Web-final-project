@@ -48,7 +48,7 @@ const NewTodoOverlay: FC<NewTodoOverlayProps> = ({ done, submit, initialTodo }) 
                         value={todo.title}
                         placeholder="New Todo"
                         className='input-lg'
-                        errors={error?.title}
+                        errors={(error?.non_field_errors || []).concat(error?.title || [])}
                     />
                 </div>
                 <div className='input-row'>

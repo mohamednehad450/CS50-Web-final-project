@@ -45,6 +45,7 @@ export interface TodoError {
     dueDate?: string[]
     date?: string[]
     id?: string[]
+    non_field_errors?: string[]
     steps?: ErrorObj<StepError>[]
 }
 
