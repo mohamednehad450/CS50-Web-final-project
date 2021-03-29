@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { Select } from '../common'
+import { Select, IconButton } from '.'
 
 import { ReactComponent as MoreIcon } from '../../icons/more.svg'
 
@@ -22,9 +22,11 @@ const ActionSelect: FC<ActionSelectProps> = ({
                 border
                 options={actions.map(a => ({ ...a, id: a.label }))}
                 CustomInput={({ onClick }) => (
-                    <span onClick={(e) => { e.stopPropagation(); onClick() }} className="icon icon-gray">
-                        <MoreIcon />
-                    </span>
+                    <IconButton
+                        icon={<MoreIcon />}
+                        onClick={(e) => { e.stopPropagation(); onClick() }}
+                        className="icon-gray"
+                    />
                 )}
                 CustomRow={({ onClick, option }) => (<div onClick={(e) => { e.stopPropagation(); onClick() }} className="select-item select-item-sm align-row">{option.label}</div>)}
                 onChange={(o) => o.action()}

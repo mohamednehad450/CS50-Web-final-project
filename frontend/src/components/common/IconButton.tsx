@@ -1,10 +1,10 @@
-import React, { ReactNode, FC } from 'react'
+import React, { ReactNode, FC, MouseEventHandler } from 'react'
 
 interface IconButtonProps {
     icon: ReactNode
     label?: string
     className?: string
-    onClick?: () => void
+    onClick?: MouseEventHandler
     disabled?: boolean
 }
 
