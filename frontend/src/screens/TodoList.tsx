@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
 import { TodoRow, NewTodoOverlay, useTodo, filterTodos } from '../components/TodoList'
-import { Header } from '../components/common'
+import { Header, IconButton } from '../components/common'
 import { useSettings } from '../components/Settings'
 
 import type { Todo, } from '../API'
@@ -37,9 +37,11 @@ const TodoList: FC = () => {
                     'no current todos'
                 }
                 actions={
-                    <span className="header-actions-icon">
-                        <AddIcon onClick={() => { setNewOverlay(true); setExpanded('') }} />
-                    </span>
+                    <IconButton
+                        onClick={() => setNewOverlay(true)}
+                        icon={<AddIcon />}
+                        className="header-actions-icon"
+                    />
                 }
             />
             <div className="list-container">

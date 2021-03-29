@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Header } from '../components/common'
+import { Header, IconButton } from '../components/common'
 import { NewHabitOverlay, useHabits, HabitRow } from '../components/HabitTracker'
 
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
@@ -24,9 +24,11 @@ const HabitTracker = () => {
             <Header
                 title="Habit Tracker"
                 actions={
-                    <span className="header-actions-icon">
-                        <AddIcon onClick={() => setOverlay(true)} />
-                    </span>
+                    <IconButton
+                        onClick={() => setOverlay(true)}
+                        icon={<AddIcon />}
+                        className="header-actions-icon"
+                    />
                 }
             />
             {habits.map(h => (

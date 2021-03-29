@@ -196,8 +196,8 @@ main {
 }
 
 .header-actions-icon svg {
-  height: 3rem;
-  width: 3rem;
+  height: 3rem !important;
+  width: 3rem !important;
   fill: var(--icons);
 }
 
