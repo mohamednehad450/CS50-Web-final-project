@@ -61,7 +61,7 @@ const refreshToken = async (oldToken: string) => {
     }
 }
 
-const AUTH_REFRESH_INTERVAL = 3 * 60 * 1000
+const AUTH_REFRESH_INTERVAL = 24 * 60 * 60 * 1000
 const useProvideAuth = (): AuthContext => {
 
     const [user, setUser] = useState<User | undefined>();
