@@ -73,7 +73,7 @@ body {
   --pomodoro-work: var(--orange1);
   --pomodoro-break: var(--green1);
   --pomodoro-longbreak: var(--gray0);
-  --pomodoro-tint: var(--gray5);
+  --pomodoro-tint: var(--gray6);
   --pomodoro-head: var(--gray6);
   --table-cell: var(--gray4);
   --input-active-border: var(--blue1);
