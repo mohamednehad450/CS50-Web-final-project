@@ -12,6 +12,9 @@ interface PomodoroSettings {
     longBreakAfter: number
     goal: number
     submitOnSkip: boolean
+    enableNotifications: boolean
+    enableSound: boolean
+
 }
 
 interface ThemeSettings {
@@ -45,7 +48,9 @@ const defaultPomodoroSettings: PomodoroSettings = {
     autoStart: true,
     longBreakAfter: 4,
     goal: 12,
-    submitOnSkip: false
+    submitOnSkip: false,
+    enableNotifications: false,
+    enableSound: true,
 }
 
 const defaultTodoSettings: TodoSettings = {

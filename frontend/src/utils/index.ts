@@ -125,3 +125,5 @@ export const requestNotificationPermission = () => {
         });
     }
 }
+
+export const isNotificationAllowed = () => Notification.permission === 'granted'

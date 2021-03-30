@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { requestNotificationPermission } from "../../utils";
-import { Button, Checkbox, NumberInput } from "../common";
+import { isNotificationAllowed, requestNotificationPermission } from "../../utils";
+import { Checkbox, NumberInput } from "../common";
 import { PomodoroSettings } from "./hooks";
 import SettingRow from "./SettingRow";
 
@@ -73,11 +73,21 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                 />
             </SettingRow>
             <SettingRow title="Allow Notification?">
-                <Button
-                    onClick={requestNotificationPermission}
-                >
-                    Allow
-                </Button>
+                <Checkbox
+                    checked={isNotificationAllowed() && pomodoroSettings.enableNotifications}
+                    onChange={enableNotifications => isNotificationAllowed() ?
+                        onChange({ ...pomodoroSettings, enableNotifications }) :
+                        requestNotificationPermission()
+                    }
+                />
+
+            </SettingRow>
+            <SettingRow title="Enable Sound Notification?">
+                <Checkbox
+                    checked={pomodoroSettings.enableSound}
+                    onChange={enableSound => onChange({ ...pomodoroSettings, enableSound })
+                    }
+                />
             </SettingRow>
         </div>
     )

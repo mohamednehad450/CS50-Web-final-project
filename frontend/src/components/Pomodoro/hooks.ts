@@ -144,26 +144,29 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
 
     // Hanlde notifiy effect
     useEffect(() => {
-        switch (pomodoro.state.notifyState) {
-            case PomodoroMode.WORK:
-                setTimeout(() => {
-                    workSound.play()
-                    pushNotifications('Work session is over, It\'s time for a break.')
-                }, 0)
-                break;
-            case PomodoroMode.LONGBREAK:
-                setTimeout(() => {
-                    breakSound.play()
-                    pushNotifications('Long break is over, It\'s time to get back to work.')
-                }, 0)
-                break;
-            case PomodoroMode.BREAK:
-                setTimeout(() => {
-                    breakSound.play()
-                    pushNotifications('Short Break is over, It\'s time to get back to work.')
-                }, 0)
-                break;
-        }
+        setTimeout(() => {
+            switch (pomodoro.state.notifyState) {
+                case PomodoroMode.WORK:
+                    settings.enableSound &&
+                        workSound.play()
+                    settings.enableNotifications &&
+                        pushNotifications('Work session is over, It\'s time for a break.')
+                    break;
+                case PomodoroMode.LONGBREAK:
+                    settings.enableSound &&
+                        breakSound.play()
+                    settings.enableNotifications &&
+                        pushNotifications('Long break is over, It\'s time to get back to work.')
+                    break;
+                case PomodoroMode.BREAK:
+                    settings.enableSound &&
+                        breakSound.play()
+                    settings.enableNotifications &&
+                        pushNotifications('Short Break is over, It\'s time to get back to work.')
+                    break;
+            }
+        }, 0)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pomodoro.state.notifyState])
 
 
