@@ -436,6 +436,10 @@ main {
   justify-content: flex-end;
 }
 
+.buttons .btn {
+  margin: 1rem;
+}
+
 .hide {
   display: none;
 }
@@ -565,7 +569,6 @@ main {
   width: 6rem;
   height: 2rem;
   font-size: 1rem;
-  margin: 1rem;
   border: none;
   -webkit-appearance: none;
   -moz-appearance: none;
