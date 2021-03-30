@@ -118,11 +118,10 @@ export const pushNotifications = (messege: string) => {
     }
 }
 
-export const requestNotificationPermission = () => {
+export const requestNotificationPermission = async () => {
     if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then((permission) => {
-            return permission === "granted"
-        });
+        const permission = await Notification.requestPermission()
+        return permission === "granted"
     }
 }
 

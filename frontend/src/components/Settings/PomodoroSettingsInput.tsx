@@ -78,6 +78,7 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                     onChange={enableNotifications => isNotificationAllowed() ?
                         onChange({ ...pomodoroSettings, enableNotifications }) :
                         requestNotificationPermission()
+                            .then(succsess => onChange({ ...pomodoroSettings, enableNotifications: !!succsess }))
                     }
                 />
 
@@ -85,8 +86,7 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
             <SettingRow title="Enable Sound Notification?">
                 <Checkbox
                     checked={pomodoroSettings.enableSound}
-                    onChange={enableSound => onChange({ ...pomodoroSettings, enableSound })
-                    }
+                    onChange={enableSound => onChange({ ...pomodoroSettings, enableSound })}
                 />
             </SettingRow>
         </div>
