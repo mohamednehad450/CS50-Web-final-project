@@ -1,9 +1,12 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react"
 import { defaultPomodoroSettings } from "../Settings";
+import { useIntervals } from "./intervalContext";
+import { breakSound, workSound } from '../../audio'
+import { pushNotifications } from "../../utils";
 
 import type { AuthContext, PomodoroInterval, Todo } from "../../API";
 import type { PomodoroSettings } from "../Settings";
-import { useIntervals } from "./intervalContext";
+
 
 enum PomodoroMode {
     WORK = "work",
@@ -23,6 +26,7 @@ interface PomodoroState {
     mode: PomodoroMode
     defaultTime: number
     timeLeft: number
+    notifyState?: PomodoroMode
 }
 
 interface PomodoroStats {
@@ -138,6 +142,31 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pomodoro.state.mode])
 
+    // Hanlde notifiy effect
+    useEffect(() => {
+        switch (pomodoro.state.notifyState) {
+            case PomodoroMode.WORK:
+                setTimeout(() => {
+                    workSound.play()
+                    pushNotifications('Work session is over, It\'s time for a break.')
+                }, 0)
+                break;
+            case PomodoroMode.LONGBREAK:
+                setTimeout(() => {
+                    breakSound.play()
+                    pushNotifications('Long break is over, It\'s time to get back to work.')
+                }, 0)
+                break;
+            case PomodoroMode.BREAK:
+                setTimeout(() => {
+                    breakSound.play()
+                    pushNotifications('Short Break is over, It\'s time to get back to work.')
+                }, 0)
+                break;
+        }
+    }, [pomodoro.state.notifyState])
+
+
     // Resets when settings changes
     useEffect(() => {
         reset()
@@ -212,8 +241,9 @@ const useProvidePomodoro = ({ user }: AuthContext, settings: PomodoroSettings): 
     }
 }
 
-function newState(mode: PomodoroMode, settings: PomodoroSettings): PomodoroState {
+function newState(mode: PomodoroMode, settings: PomodoroSettings, notifyState?: PomodoroMode): PomodoroState {
     return {
+        notifyState,
         mode,
         timeLeft: settings[mode] * 1000,
         defaultTime: settings[mode] * 1000,
@@ -235,21 +265,21 @@ const pomodoroReducer: PomodoroReducer = ({ state, stats }, { type, payload: { s
                     // Should go on a long or short break?
                     if (stats.round + 1 >= settings.longBreakAfter) {
                         return {
-                            state: newState(PomodoroMode.LONGBREAK, settings),
+                            state: newState(PomodoroMode.LONGBREAK, settings, state.notifyState),
                             stats: s
                         }
                     } else return {
-                        state: newState(PomodoroMode.BREAK, settings),
+                        state: newState(PomodoroMode.BREAK, settings, state.notifyState),
                         stats: s
                     }
                 case PomodoroMode.BREAK:
                     return {
-                        state: newState(PomodoroMode.WORK, settings),
+                        state: newState(PomodoroMode.WORK, settings, state.notifyState),
                         stats
                     }
                 case PomodoroMode.LONGBREAK:
                     return {
-                        state: newState(PomodoroMode.WORK, settings),
+                        state: newState(PomodoroMode.WORK, settings, state.notifyState),
                         stats: { ...stats, round: 0 }
                     }
                 default:
@@ -269,9 +299,22 @@ const pomodoroReducer: PomodoroReducer = ({ state, stats }, { type, payload: { s
 
     switch (type) {
         case PomodoroActions.tick:
-            return nextPomodoro(state, stats, settings)
+            return nextPomodoro({
+                ...state,
+                notifyState: state.timeLeft - TICK < 0 ? state.mode : undefined
+            },
+                stats,
+                settings
+            )
         case PomodoroActions.skip:
-            return nextPomodoro({ ...state, timeLeft: 0, }, stats, settings)
+            return nextPomodoro({
+                ...state,
+                timeLeft: 0,
+                notifyState: undefined
+            },
+                stats,
+                settings
+            )
         case PomodoroActions.reset:
             return {
                 state: newState(state.mode, settings),

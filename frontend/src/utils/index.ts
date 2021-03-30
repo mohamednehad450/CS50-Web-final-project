@@ -104,3 +104,24 @@ export const getDaysInMonth = (m: number, y: number) => {
     if (m === 1 && divByN(y, 4) && divByN(y, 100) && divByN(y, 400)) return 29
     else return months[m % months.length]
 }
+
+export const pushNotifications = (messege: string) => {
+
+    // Check if the browser supports notifications
+    if (!("Notification" in window)) {
+        return;
+    }
+
+    // Check whether notification permissions have already been granted
+    if (Notification.permission === "granted") {
+        new Notification(messege);
+    }
+}
+
+export const requestNotificationPermission = () => {
+    if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then((permission) => {
+            return permission === "granted"
+        });
+    }
+}

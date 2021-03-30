@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { Checkbox, NumberInput } from "../common";
+import { requestNotificationPermission } from "../../utils";
+import { Button, Checkbox, NumberInput } from "../common";
 import { PomodoroSettings } from "./hooks";
 import SettingRow from "./SettingRow";
 
@@ -70,6 +71,13 @@ const PomodoroSettingsInput: FC<PomodoroSettingsInputProps> = ({ pomodoroSetting
                     checked={pomodoroSettings.submitOnSkip}
                     onChange={submitOnSkip => onChange({ ...pomodoroSettings, submitOnSkip })}
                 />
+            </SettingRow>
+            <SettingRow title="Allow Notification?">
+                <Button
+                    onClick={requestNotificationPermission}
+                >
+                    Allow
+                </Button>
             </SettingRow>
         </div>
     )
