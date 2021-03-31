@@ -62,11 +62,11 @@ class TodoSerializer(serializers.ModelSerializer):
         # Premitives
         title = validated_data.get('title', instance.title)
         instance.title = title
-        checked = validated_data.get('checked', instance.checked)
+        checked = validated_data.get('checked', None)
         instance.checked = checked
-        dueDate = validated_data.get('dueDate', instance.dueDate)
+        dueDate = validated_data.get('dueDate', None)
         instance.dueDate = dueDate
-        tag = validated_data.get('tag', instance.tag)
+        tag = validated_data.get('tag', None)
         instance.tag = tag
 
         steps = validated_data.get('steps', None)

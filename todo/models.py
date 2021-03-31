@@ -33,7 +33,8 @@ class Todo(models.Model):
         User, on_delete=models.CASCADE, related_name='todos')
     title = models.CharField(max_length=150)
     checked = models.DateTimeField(null=True, blank=True)
-    tag = models.ForeignKey(Tag, null=True, on_delete=models.SET_NULL)
+    tag = models.ForeignKey(Tag, null=True, blank=True,
+                            on_delete=models.SET_NULL)
     dueDate = models.DateTimeField(blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
 
