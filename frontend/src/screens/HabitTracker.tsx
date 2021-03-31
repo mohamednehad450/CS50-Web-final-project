@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header, IconButton } from '../components/common'
 import { NewHabitOverlay, useHabits, HabitRow } from '../components/HabitTracker'
 
@@ -8,6 +8,10 @@ import type { Habit } from '../API'
 
 
 const HabitTracker = () => {
+
+    useEffect(() => {
+        document.title = 'Habit Tracker'
+    }, [])
 
     const [overlay, setOverlay] = useState(false)
     const [expanded, setExpanded] = useState<Habit['id']>('')

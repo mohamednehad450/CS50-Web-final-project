@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Link, Redirect, useLocation, } from 'react-router-dom';
 import { routes } from '.';
 import { useAuth } from '../API'
@@ -8,6 +8,11 @@ import type { UserError } from '../API'
 
 
 const SignIn: FC = () => {
+
+    useEffect(() => {
+        document.title = 'Sign in'
+    }, [])
+
     let auth = useAuth();
 
     const [username, setUsername] = useState('')

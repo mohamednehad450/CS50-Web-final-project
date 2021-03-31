@@ -8,6 +8,10 @@ import type { Todo, } from '../API'
 
 const TodoList: FC = () => {
 
+    useEffect(() => {
+        document.title = 'Todo List'
+    }, [])
+
     const { todos: initTodos, addNewTodo } = useTodo()
     const { settings: { todoSettings } } = useSettings()
     const [todos, setTodos] = useState(filterTodos(initTodos, todoSettings))

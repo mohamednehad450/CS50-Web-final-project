@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Header } from '../components/common'
 import { PomodoroSettingsInput, ThemeSettingsInput, TodosSettingsInput, useSettings } from '../components/Settings'
 
 const Settings = () => {
+
+    useEffect(() => {
+        document.title = 'Settings'
+    }, [])
 
     const { settings, updateSettings } = useSettings()
 

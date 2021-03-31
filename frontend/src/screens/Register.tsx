@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Link, Redirect, } from 'react-router-dom';
 import { routes } from '.';
 import { useAuth } from '../API'
@@ -11,6 +11,12 @@ interface UserError extends ApiUserError {
 }
 
 const Register: FC = () => {
+
+    useEffect(() => {
+        document.title = 'Register'
+    }, [])
+
+
     let auth = useAuth();
 
     const [username, setUsername] = useState('')
@@ -101,4 +107,4 @@ const Register: FC = () => {
     );
 }
 
-export default Register 
+export default Register

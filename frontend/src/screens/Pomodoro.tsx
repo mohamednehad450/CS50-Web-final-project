@@ -11,6 +11,10 @@ interface Selected extends Todo, Option { }
 
 const Pomodoro = () => {
 
+    useEffect(() => {
+        document.title = 'Pomodoro Timer'
+    }, [])
+
     const query = useQuery()
     const { todos } = useTodo()
     const { reset, skip, start, setTodo, isRunning } = usePomodoro()
