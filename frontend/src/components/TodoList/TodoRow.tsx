@@ -27,7 +27,7 @@ const TodoRow = (props: TodoRowProps) => {
 
     const expanded = exp && expandable && !editing
 
-    const { updateTodo, updateStep, deleteTodo, getTag } = useTodo()
+    const { updateTodo, updateStep, deleteTodo, getTag, checkTodo } = useTodo()
 
 
     return (
@@ -71,7 +71,7 @@ const TodoRow = (props: TodoRowProps) => {
                             </span> :
                             <Checkbox
                                 checked={!!checked}
-                                onChange={(b) => updateTodo(id, { checked: b ? new Date() : null, })}
+                                onChange={() => checkTodo(id, todo)}
                             />
                         }
                         <ActionSelect

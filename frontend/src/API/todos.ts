@@ -172,3 +172,13 @@ export const addNewTodo = async (todo: Partial<Todo>, user?: User): Promise<Todo
         })
     return data
 }
+
+export const checkTodo = async (id: Todo['id'], user?: User): Promise<{ checked: Todo['checked'] }> => {
+    const { data } =
+        await Axios.post<{ checked: Todo['checked'] }>(`/api/todos/${id}/check_todo/`, {}, {
+            headers: {
+                "Authorization": `JWT ${user?.token}`
+            }
+        })
+    return data
+}

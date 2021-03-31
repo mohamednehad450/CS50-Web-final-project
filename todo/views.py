@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from rest_framework import permissions, authentication, viewsets, response
 from rest_framework.decorators import api_view, permission_classes, action
@@ -85,6 +86,19 @@ class TodoViewSet(viewsets.ViewSet):
             todo = get_object_or_404(Todo, user=request.user,  pk=pk)
             todo.delete()
             return response.Response(status=200)
+        except ValidationError:
+            return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
+
+    @action(methods=['post'], detail=True)
+    def check_todo(self, request, pk=None):
+        try:
+            todo = get_object_or_404(Todo, user=request.user,  pk=pk)
+            if (todo.checked is not None):
+                todo.checked = None
+            else:
+                todo.checked = timezone.now()
+            todo.save()
+            return response.Response({'checked': todo.checked}, status=200)
         except ValidationError:
             return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
 

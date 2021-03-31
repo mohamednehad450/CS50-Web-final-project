@@ -4,6 +4,7 @@ import {
     updateTodo as updateTodoApi,
     deleteTodo as deleteTodoApi,
     addNewTodo as addNewTodoApi,
+    checkTodo as checkTodoApi,
     updateStep as updateStepApi,
     getTages as getTagsApi,
     addNewTag as addNewTagApi,
@@ -19,6 +20,7 @@ interface TodoContext {
     getTodos: () => void
     updateTodo: (id: Todo['id'], t: Partial<Todo>) => Promise<void>
     deleteTodo: (id: Todo['id']) => Promise<void>
+    checkTodo: (id: Todo['id'], todo: Todo) => Promise<{ checked: Todo['checked'] }>
     addNewTodo: (t: Partial<Todo>) => Promise<void>
     updateStep: (id: Todo['id'], s: Partial<Step>) => Promise<void>
     tags: Tag[]
@@ -39,6 +41,7 @@ const defaultTodoContext: TodoContext = {
     updateTodo: todoNotinitialized,
     deleteTodo: todoNotinitialized,
     addNewTodo: todoNotinitialized,
+    checkTodo: todoNotinitialized,
     updateStep: todoNotinitialized,
     tags: [],
     getTags: todoNotinitialized,
@@ -119,6 +122,11 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
             .then(todo => setTodos(arr => replaceFromArray(arr, todo)))
             .catch((err) => err.isAxiosError ? handleTodoErr(err) : getTodos())
 
+    const checkTodo = (id: Todo['id'], todo: Todo) =>
+        checkTodoApi(id, user)
+            .then(({ checked }) => setTodos(arr => replaceFromArray(arr, { ...todo, checked })))
+            .catch((err) => err.isAxiosError ? handleTodoErr(err) : getTodos())
+
     const getTags = useCallback(() =>
         getTagsApi(user)
             .then(r => r && setTags(r))
@@ -160,6 +168,7 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
         updateTodo,
         deleteTodo,
         addNewTodo,
+        checkTodo,
         updateStep,
         tags,
         getTags,
