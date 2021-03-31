@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Header } from '../components/common'
-import { PomodoroSettingsInput, ThemeSettingsInput, TodosSettingsInput, useSettings } from '../components/Settings'
+import { AccountSettings, PomodoroSettingsInput, ThemeSettingsInput, TodosSettingsInput, useSettings } from '../components/Settings'
 
 const Settings = () => {
 
@@ -25,6 +25,7 @@ const Settings = () => {
                 themeSettings={settings.themeSettings}
                 onChange={(themeSettings) => updateSettings({ themeSettings })}
             />
+            <AccountSettings />
         </div>
     )
 }
