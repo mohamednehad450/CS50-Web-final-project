@@ -221,6 +221,8 @@ Each screen in the app has a separate file in `./screens` and as shown above, a 
 
 Each screen folder in `frontend/src/components/` has a context to manage the state, a context provider and custom component for that screen.
 
+Also contains `routes` which defines the routes names.
+
 #### API `frontend/src/API/`
 
 * Auth `./auth`: contains all the todos api methods.
