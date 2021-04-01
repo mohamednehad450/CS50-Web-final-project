@@ -46,7 +46,7 @@
 
     ```pip3 install djangorestframework-jwt```
 
-#### Frontend (React)
+### Frontend (React)
 
 1. Install Node.js LTS [here](https://nodejs.org/) or using nvm [here](https://github.com/nvm-sh/nvm)
 
