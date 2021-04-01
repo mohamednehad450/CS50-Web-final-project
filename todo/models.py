@@ -56,7 +56,7 @@ class PomodoroInterval(models.Model):
     endDate = models.DateTimeField()
     defaultDuration = models.IntegerField()
     todo = models.ForeignKey(
-        Todo, on_delete=models.CASCADE, related_name="intervals", null=True)
+        Todo, on_delete=models.CASCADE, related_name="intervals", null=True, blank=True)
 
 
 class Habit(models.Model):
