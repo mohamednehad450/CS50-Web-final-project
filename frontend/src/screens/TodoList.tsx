@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ReactComponent as AddIcon } from '../icons/add-outline.svg'
-import { TodoRow, NewTodoOverlay, useTodo, filterTodos } from '../components/TodoList'
+import { TodoRow, NewTodoOverlay, useTodo, filterTodos, formatTodo } from '../components/TodoList'
 import { Header, IconButton } from '../components/common'
 import { useSettings } from '../components/Settings'
 
@@ -14,10 +14,10 @@ const TodoList: FC = () => {
 
     const { todos: initTodos, addNewTodo } = useTodo()
     const { settings: { todoSettings } } = useSettings()
-    const [todos, setTodos] = useState(filterTodos(initTodos, todoSettings))
+    const [todos, setTodos] = useState(filterTodos(initTodos, todoSettings).map(formatTodo))
 
     useEffect(() => {
-        setTodos(filterTodos(initTodos, todoSettings))
+        setTodos(filterTodos(initTodos, todoSettings).map(formatTodo))
     }, [initTodos, setTodos, todoSettings])
 
     const [expanded, setExpanded] = useState<Todo['id']>('');

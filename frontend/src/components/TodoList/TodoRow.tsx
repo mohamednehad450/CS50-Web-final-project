@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Checkbox, ColorTag, ListRow, ActionSelect } from '../common'
 import StepRow from './Step'
-import { NewTodoOverlay, useTodo, formatTodo, DateBadge } from '.'
+import { NewTodoOverlay, useTodo, DateBadge } from '.'
 import { Link } from 'react-router-dom'
 import { routes } from '../../screens'
 
@@ -10,9 +10,10 @@ import { ReactComponent as TimerIcon } from '../../icons/pomodoro.svg'
 
 // Types
 import { Todo, } from '../../API'
+import { FormatedTodo } from './utils'
 
 interface TodoRowProps {
-    todo: Todo,
+    todo: FormatedTodo,
     expanded: boolean,
     onClick?: (id: Todo['id']) => void,
 }
@@ -21,7 +22,7 @@ interface TodoRowProps {
 
 const TodoRow = (props: TodoRowProps) => {
     const { todo, onClick, expanded: exp, } = props
-    const { title, tag, steps, id, dueDate, stepsLeft, expandable, checked } = formatTodo(todo)
+    const { title, tag, steps, id, dueDate, stepsLeft, expandable, checked } = todo
 
     const [editing, setEditing] = useState(false)
 

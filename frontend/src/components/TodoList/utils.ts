@@ -77,7 +77,7 @@ function filterTodos(todos: Todo[], settings: TodoSettings): Todo[] {
     return settings.todosAscending ? results : results.reverse()
 
 }
-interface FormatedTodo extends Todo {
+export interface FormatedTodo extends Todo {
     expandable: boolean
     stepsLeft: number | undefined
 
