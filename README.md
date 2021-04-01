@@ -125,7 +125,7 @@ All non-matched urls redirects to the frontend
 * `/api/todos/{id}/` `GET`: Gets an existing todo.
 * `/api/todos/{id}/` `PATCH`: updates an existing todo.
 * `/api/todos/{id}/` `DELETE`: deletes an existing todo.
-* `/api/todos/{id}/update_step/` `POST`: Updates a step in the todo.
+* `/api/todos/{id}/check_step/` `POST`: Toggle a step checked date
 * `/api/todos/{id}/check_todo/` `POST`: Toggle a todo checked date
 
 
