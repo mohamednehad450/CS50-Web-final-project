@@ -100,7 +100,7 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
         getTodosApi(user)
             .then(r => r && setTodos(r))
             .catch((err: any) => { isAuthError(err) && signout() })
-        , [user])
+        , [user, signout])
 
     const updateTodo = (id: Todo['id'], t: Partial<Todo>) =>
         updateTodoApi(id, t, user)
@@ -138,7 +138,7 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
         getTagsApi(user)
             .then(r => r && setTags(r))
             .catch(err => { isAuthError(err) && signout() })
-        , [user])
+        , [user, signout])
 
     const addNewTag = (tag: Partial<Tag>) =>
         addNewTagApi(tag, user)

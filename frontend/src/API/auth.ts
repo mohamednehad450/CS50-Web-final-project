@@ -67,6 +67,18 @@ const useProvideAuth = (): AuthContext => {
     const [user, setUser] = useState<User | undefined>();
     const [lastRefreshed, setLastRefreshed] = useState(0)
 
+    const updateUser = useCallback((user: User | undefined) => {
+        if (user) {
+            setUser(user)
+            setItemToStorage('user', user)
+        }
+        else {
+            setUser(undefined)
+            removeItemFromStorage('user')
+        }
+    }, [setUser])
+
+
     useEffect(() => {
         const user: User = getItemFromStorage('user')
         user && refreshToken(user.token).then(token => {
@@ -75,7 +87,7 @@ const useProvideAuth = (): AuthContext => {
                 updateUser({ ...user, token })
             }
         })
-    }, [])
+    }, [updateUser])
 
     const updateToken = useCallback(() => {
         if (Date.now() > lastRefreshed + AUTH_REFRESH_INTERVAL) {
@@ -91,7 +103,7 @@ const useProvideAuth = (): AuthContext => {
                 })
             }
         }
-    }, [lastRefreshed, user])
+    }, [lastRefreshed, user, updateUser])
 
     // Refreshing Token
     useEffect(() => {
@@ -99,16 +111,6 @@ const useProvideAuth = (): AuthContext => {
         return () => clearInterval(interval)
     }, [updateToken])
 
-    const updateUser = (user: User | undefined) => {
-        if (user) {
-            setUser(user)
-            setItemToStorage('user', user)
-        }
-        else {
-            setUser(undefined)
-            removeItemFromStorage('user')
-        }
-    }
 
 
     const register: Register = async (username, password, cb) => {
@@ -155,10 +157,10 @@ const useProvideAuth = (): AuthContext => {
             }
         }
     };
-    const signout: SignOut = async (cb) => {
+    const signout: SignOut = useCallback(async (cb) => {
         updateUser(undefined)
         cb && cb()
-    };
+    }, [updateUser])
     return {
         user,
         signin,
