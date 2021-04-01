@@ -103,22 +103,22 @@ class TodoViewSet(viewsets.ViewSet):
             return response.Response({"id": [f"'{pk}' is not a valid Todo ID"]}, status=400)
 
     @action(methods=['post'], detail=True)
-    def update_step(self, request, pk=None):
+    def check_step(self, request, pk=None):
         try:
             todo = get_object_or_404(Todo, user=request.user,  pk=pk)
 
             stepPk = request.data.get('stepId', None)
             step = get_object_or_404(Step,  pk=stepPk, todo=todo)
 
-            ser = StepSerializer(
-                instance=step, data=request.data, partial=True)
-            if ser.is_valid():
-                step = ser.save()
-                todo.save()
-                data = TodoSerializer(todo).data
-                return response.Response(data)
+            if todo.user.id == request.user.id:
+                if step.checked is not None:
+                    step.checked = None
+                else:
+                    step.checked = timezone.now()
+                step.save()
+                return response.Response({'checked': step.checked}, status=200)
             else:
-                return response.Response(ser._errors, status=400)
+                return response.Response({'details': 'Not Found'}, status=404)
         except ValidationError:
             return response.Response({"id": [f"'{pk}' is not a valid ID"]}, status=400)
 

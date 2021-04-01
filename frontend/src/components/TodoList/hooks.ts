@@ -5,13 +5,13 @@ import {
     deleteTodo as deleteTodoApi,
     addNewTodo as addNewTodoApi,
     checkTodo as checkTodoApi,
-    updateStep as updateStepApi,
+    checkStep as checkStepApi,
     getTages as getTagsApi,
     addNewTag as addNewTagApi,
     updateTag as updateTagApi,
     deleteTag as deleteTagApi,
 } from '../../API'
-import { removeFromArray, replaceFromArray } from "../../utils";
+import { removeFromArray, replaceFromArray, updateItemInArray } from "../../utils";
 
 import type { Step, Todo, Tag, AuthContext } from "../../API";
 
@@ -20,9 +20,9 @@ interface TodoContext {
     getTodos: () => void
     updateTodo: (id: Todo['id'], t: Partial<Todo>) => Promise<void>
     deleteTodo: (id: Todo['id']) => Promise<void>
-    checkTodo: (id: Todo['id'], todo: Todo) => Promise<{ checked: Todo['checked'] }>
+    checkTodo: (id: Todo['id'], todo: Todo) => Promise<void>
     addNewTodo: (t: Partial<Todo>) => Promise<void>
-    updateStep: (id: Todo['id'], s: Partial<Step>) => Promise<void>
+    checkStep: (todo: Todo, stepId: Step['id']) => Promise<void>
     tags: Tag[]
     getTags: () => void
     getTag: (id?: Tag['id']) => Tag | undefined
@@ -42,7 +42,7 @@ const defaultTodoContext: TodoContext = {
     deleteTodo: todoNotinitialized,
     addNewTodo: todoNotinitialized,
     checkTodo: todoNotinitialized,
-    updateStep: todoNotinitialized,
+    checkStep: todoNotinitialized,
     tags: [],
     getTags: todoNotinitialized,
     getTag: todoNotinitialized,
@@ -117,9 +117,16 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
             .then(t => setTodos(arr => [t, ...arr]))
             .catch(handleTodoErr)
 
-    const updateStep = (id: Step['id'], s: Partial<Step>) =>
-        updateStepApi(id, s, user)
-            .then(todo => setTodos(arr => replaceFromArray(arr, todo)))
+    const checkStep = (todo: Todo, stepId: Step['id']) =>
+        checkStepApi(todo.id, stepId, user)
+            .then(({ checked }) =>
+                setTodos(todos =>
+                    replaceFromArray(todos, {
+                        ...todo,
+                        steps: updateItemInArray(todo.steps, stepId, s => ({ ...s, checked }))
+                    })
+                )
+            )
             .catch((err) => err.isAxiosError ? handleTodoErr(err) : getTodos())
 
     const checkTodo = (id: Todo['id'], todo: Todo) =>
@@ -169,7 +176,7 @@ const useProvideTodo = ({ user, signout }: AuthContext): TodoContext => {
         deleteTodo,
         addNewTodo,
         checkTodo,
-        updateStep,
+        checkStep,
         tags,
         getTags,
         getTag,

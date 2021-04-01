@@ -27,7 +27,7 @@ const TodoRow = (props: TodoRowProps) => {
 
     const expanded = exp && expandable && !editing
 
-    const { updateTodo, updateStep, deleteTodo, getTag, checkTodo } = useTodo()
+    const { updateTodo, checkStep, deleteTodo, getTag, checkTodo } = useTodo()
 
 
     return (
@@ -87,7 +87,7 @@ const TodoRow = (props: TodoRowProps) => {
                         <StepRow
                             key={step.id}
                             step={step}
-                            onChange={(s) => updateStep(id, s)}
+                            onChange={(s) => checkStep(todo, s.id || '')}
                         />
                     ))
                 ) : null}

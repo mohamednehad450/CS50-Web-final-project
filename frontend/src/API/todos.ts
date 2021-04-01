@@ -154,9 +154,9 @@ export const deleteTodo = async (id: Todo['id'], user?: User): Promise<void> => 
     })
 }
 
-export const updateStep = async (id: Todo['id'], step: Partial<Step>, user?: User): Promise<Todo> => {
+export const checkStep = async (id: Todo['id'], stepId: Step['id'], user?: User): Promise<{ checked: Step['checked'] }> => {
     const { data } =
-        await Axios.post<Todo>(`/api/todos/${id}/update_step/`, { ...step, stepId: step.id }, {
+        await Axios.post<Todo>(`/api/todos/${id}/check_step/`, { stepId }, {
             headers: {
                 "Authorization": `JWT ${user?.token}`
             }
