@@ -7,12 +7,12 @@ import SettingRow from "./SettingRow";
 
 const AccountSettings: FC = () => {
 
-    const { signout } = useAuth()
+    const { signout, user } = useAuth()
 
     return (
         <div className="settings-container">
             <span className="settings-header">
-                Account Settings
+                Account Settings {user?.username ? `(${user.username})` : ''}
             </span>
 
             <SettingRow
