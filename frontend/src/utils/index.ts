@@ -113,16 +113,28 @@ export const pushNotifications = (messege: string) => {
     }
 
     // Check whether notification permissions have already been granted
-    if (Notification.permission === "granted") {
+    if (Notification?.permission === "granted") {
         new Notification(messege);
     }
 }
 
 export const requestNotificationPermission = async () => {
-    if (Notification.permission !== 'denied') {
-        const permission = await Notification.requestPermission()
+    // Check if the browser supports notifications
+    if (!("Notification" in window)) {
+        return;
+    }
+    if (Notification?.permission !== 'denied') {
+        const permission = await Notification?.requestPermission()
         return permission === "granted"
     }
 }
 
-export const isNotificationAllowed = () => Notification.permission === 'granted'
+export const isNotificationAllowed = () => {
+    // Check if the browser supports notifications
+    if (!("Notification" in window)) {
+        return false
+    }
+    else {
+        return Notification?.permission === 'granted';
+    }
+}
