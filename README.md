@@ -248,7 +248,9 @@ Contains all the utilities functions.
 5. Build the frontend production
     ```yarn build```
 
-
+Run database migration
+   ``` python3 manage.py migrate```
+   
 And then simply start the server
     ```python3 manage.py runserver```
 
